@@ -73,7 +73,14 @@ def echo_all(message):
     ai_reply = get_ai_response(message.text)
     
     # Send response
-    bot.reply_to(message, ai_reply, parse_mode='Markdown')
+    try:
+        bot.reply_to(message, ai_reply, parse_mode='Markdown')
+    except Exception as e:
+        # Agar Markdown xatosi bo'lsa, oddiy tekst sifatida yuborish
+        try:
+            bot.reply_to(message, ai_reply, parse_mode=None)
+        except Exception as e2:
+            bot.reply_to(message, "Uzr, xatolik yuz berdi.")
 
 def run_bot():
     print("🤖 AI Bot ishga tushdi...")
