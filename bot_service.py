@@ -1,16 +1,18 @@
 import telebot
 import google.generativeai as genai
-from config import TELEGRAM_BOT_TOKEN, GEMINI_API_KEY, GEMINI_MODEL
-import threading
-import time
+from config import TELEGRAM_BOT_TOKEN, GEMINI_API_KEY, GEMINI_MODEL, SITE_URL
 from datetime import datetime
+from flask import request, Blueprint
 
 # Configure Gemini
 genai.configure(api_key=GEMINI_API_KEY)
-# Use model from config
-model = genai.GenerativeModel(GEMINI_MODEL) 
+model = genai.GenerativeModel(GEMINI_MODEL)
 
+# Create bot instance
 bot = telebot.TeleBot(TELEGRAM_BOT_TOKEN)
+
+# Create Blueprint for webhook
+bot_blueprint = Blueprint('bot', __name__)
 
 SYSTEM_PROMPT = """
 Sen TrendoAI loyihasining professional AI assistentisan.
@@ -76,27 +78,42 @@ Yoki menga "Web sayt kerak" deb yozing.
 
 @bot.message_handler(func=lambda message: True)
 def echo_all(message):
-    # Send "Typing..." action
     bot.send_chat_action(message.chat.id, 'typing')
-    
-    # Get response from AI
     ai_reply = get_ai_response(message.text)
     
-    # Send response
     try:
         bot.reply_to(message, ai_reply, parse_mode='Markdown')
     except Exception as e:
-        # Agar Markdown xatosi bo'lsa, oddiy tekst sifatida yuborish
         try:
             bot.reply_to(message, ai_reply, parse_mode=None)
         except Exception as e2:
             bot.reply_to(message, "Uzr, xatolik yuz berdi.")
 
-def run_bot():
-    print("🤖 AI Bot ishga tushdi...")
-    bot.infinity_polling()
+# ========== WEBHOOK ENDPOINT ==========
+@bot_blueprint.route('/webhook', methods=['POST'])
+def webhook():
+    """Telegram Webhook endpoint"""
+    if request.headers.get('content-type') == 'application/json':
+        json_string = request.get_data().decode('utf-8')
+        update = telebot.types.Update.de_json(json_string)
+        bot.process_new_updates([update])
+        return '', 200
+    return 'Bad Request', 400
 
-def start_bot_thread():
-    bot_thread = threading.Thread(target=run_bot)
-    bot_thread.daemon = True
-    bot_thread.start()
+def setup_webhook(app):
+    """Webhook ni sozlash (app start da chaqiriladi)"""
+    # Register blueprint
+    app.register_blueprint(bot_blueprint)
+    
+    # Set webhook URL
+    webhook_url = f"{SITE_URL}/webhook"
+    
+    try:
+        # Eski webhook ni o'chirish
+        bot.remove_webhook()
+        
+        # Yangi webhook o'rnatish
+        bot.set_webhook(url=webhook_url)
+        print(f"✅ Webhook o'rnatildi: {webhook_url}")
+    except Exception as e:
+        print(f"⚠️ Webhook xatosi: {e}")

@@ -755,13 +755,15 @@ with app.app_context():
 # Avtomatlashtirish va Botni ishga tushirish
 try:
     from scheduler import scheduler
-    from bot_service import start_bot_thread
+    from bot_service import setup_webhook
     
-    # Scheduler va Botni faqat bir marta (asosiy jarayonda) ishga tushirish
-    # Production da (Gunicorn) workers=1 bo'lishi shart!
+    # Scheduler ishga tushirish
     scheduler.start()
-    start_bot_thread()
-    print("🚀 TrendoAI xizmatlari (Scheduler + Bot) ishga tushdi!")
+    
+    # Webhook rejimida bot (polling o'rniga)
+    setup_webhook(app)
+    
+    print("🚀 TrendoAI xizmatlari (Scheduler + Webhook Bot) ishga tushdi!")
 except Exception as e:
     print(f"Service startup error: {e}")
 
