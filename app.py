@@ -275,9 +275,9 @@ def submit_order():
     db.session.add(order)
     db.session.commit()
     
-    # Telegram ga yuborish
+    # Telegram Admin ga yuborish
     try:
-        from telegram_poster import send_to_telegram_channel
+        from telegram_poster import send_to_admin
         
         budget_text = budget if budget else "Ko'rsatilmagan"
         message_text = message if message else "Yo'q"
@@ -298,7 +298,14 @@ def submit_order():
 
 🔗 Admin panel: /admin/orders
 """
-        send_to_telegram_channel(order_message)
+        if send_to_admin(order_message):
+            try:
+                # Log to console/file
+                print(f"✅ Order #{order.id} sent to Admin")
+            except:
+                pass
+        else:
+            print(f"❌ Failed to send Order #{order.id} to Admin")
     except Exception as e:
         print(f"Telegram yuborishda xato: {e}")
     
@@ -736,15 +743,29 @@ def server_error(e):
 
 # ========== STARTUP ==========
 
-if __name__ == '__main__':
-    with app.app_context():
+# ========== STARTUP ==========
+
+# Server ishga tushganda bajariladigan amallar (Gunicorn va Local)
+with app.app_context():
+    try:
         db.create_all()
+    except Exception as e:
+        print(f"Database error: {e}")
 
-    # Avtomatlashtirishni ishga tushirish
+# Avtomatlashtirish va Botni ishga tushirish
+try:
     from scheduler import scheduler
+    from bot_service import start_bot_thread
+    
+    # Scheduler va Botni faqat bir marta (asosiy jarayonda) ishga tushirish
+    # Production da (Gunicorn) workers=1 bo'lishi shart!
     scheduler.start()
-    print("🚀 TrendoAI server ishga tushdi!")
-    print("📅 Scheduler belgilangan vaqtlarda ish bajaradi.")
+    start_bot_thread()
+    print("🚀 TrendoAI xizmatlari (Scheduler + Bot) ishga tushdi!")
+except Exception as e:
+    print(f"Service startup error: {e}")
 
+
+if __name__ == '__main__':
     # Flask ilovasini ishga tushirish
     app.run(debug=True, use_reloader=False, port=5000)

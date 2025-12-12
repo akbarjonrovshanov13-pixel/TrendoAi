@@ -9,6 +9,7 @@ import requests
 from config import (
     TELEGRAM_BOT_TOKEN, 
     TELEGRAM_CHANNEL_ID, 
+    TELEGRAM_ADMIN_ID,
     TELEGRAM_MAX_MESSAGE_LENGTH,
     TELEGRAM_RETRY_ATTEMPTS
 )
@@ -117,6 +118,40 @@ def send_photo_to_channel(photo_url, caption=""):
             return False
     except Exception as e:
         print(f"❌ Rasm yuborishda xato: {e}")
+        return False
+
+
+
+def send_to_admin(message, parse_mode="Markdown"):
+    """
+    Raqamli xizmat buyurtmasini Admin ga yuborish.
+    """
+    if not TELEGRAM_BOT_TOKEN or not TELEGRAM_ADMIN_ID:
+        print("❌ Xato: Telegram token yoki Admin ID topilmadi.")
+        return False
+    
+    # Xabarni qisqartirish
+    message = _truncate_message(message)
+    
+    payload = {
+        'chat_id': TELEGRAM_ADMIN_ID,
+        'text': message,
+        'parse_mode': parse_mode,
+        'disable_web_page_preview': True
+    }
+    
+    try:
+        response = requests.post(TELEGRAM_API_URL, data=payload, timeout=30)
+        
+        if response.status_code == 200:
+            print(f"✅ Xabar Adminga muvaffaqiyatli yuborildi.")
+            return True
+        else:
+            print(f"❌ Adminga yuborishda xato: {response.text}")
+            return False
+            
+    except Exception as e:
+        print(f"🔌 Tarmoq xatosi: {e}")
         return False
 
 

@@ -8,3 +8,4 @@ markdown2==2.4.13
 gunicorn==21.2.0
 Werkzeug==3.0.1
 psycopg2-binary==2.9.9
+pyTelegramBotAPI==4.14.0
