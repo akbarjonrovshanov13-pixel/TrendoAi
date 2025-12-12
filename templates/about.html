@@ -1,0 +1,271 @@
+{% extends 'base.html' %}
+
+{% block title %}Biz Haqimizda - TrendoAI{% endblock %}
+
+{% block meta_description %}TrendoAI - O'zbekistondagi yetakchi texnologiya va sun'iy intellekt blog platformasi.
+Trending mavzular va professional IT kontentlar.{% endblock %}
+
+{% block content %}
+<section class="about-hero">
+    <h2>🚀 Biz Haqimizda</h2>
+    <p class="lead">TrendoAI — texnologiya olamidagi eng so'nggi trendlarni sizga yetkazuvchi platforma</p>
+</section>
+
+<section class="about-section">
+    <h3>🎯 Bizning Missiya</h3>
+    <p>
+        Biz O'zbekistondagi texnologiya entuziastlari, dasturchilar va biznes egalari uchun
+        eng yangi va foydali ma'lumotlarni sun'iy intellekt yordamida taqdim etamiz.
+        <strong>TrendoAI</strong> — bu faqat blog emas, bu texnologiya yangiliklar markazidir.
+    </p>
+</section>
+
+<section class="about-section">
+    <h3>🤖 Nima Uchun TrendoAI?</h3>
+    <div class="features-grid">
+        <div class="feature-card">
+            <span class="feature-icon">⚡</span>
+            <h4>Tezkor Yangiliklar</h4>
+            <p>Dunyo bo'ylab texnologiya yangiliklarini birinchilardan bo'lib bilib oling</p>
+        </div>
+        <div class="feature-card">
+            <span class="feature-icon">🤖</span>
+            <h4>AI-Powered Kontent</h4>
+            <p>Sun'iy intellekt yordamida yaratilgan sifatli va SEO-optimallashtirilgan maqolalar</p>
+        </div>
+        <div class="feature-card">
+            <span class="feature-icon">📈</span>
+            <h4>Trending Mavzular</h4>
+            <p>Eng dolzarb va mashhur texnologiya mavzulari har kuni yangilanadi</p>
+        </div>
+        <div class="feature-card">
+            <span class="feature-icon">🇺🇿</span>
+            <h4>O'zbek Tilida</h4>
+            <p>Barcha kontentlar o'zbek tilida, mahalliy auditoriya uchun moslashtirilgan</p>
+        </div>
+    </div>
+</section>
+
+<section class="about-section">
+    <h3>📊 Statistika</h3>
+    <div class="stats-grid">
+        <div class="stat-item">
+            <span class="stat-number">{{ post_count or '50+' }}</span>
+            <span class="stat-label">Maqolalar</span>
+        </div>
+        <div class="stat-item">
+            <span class="stat-number">8+</span>
+            <span class="stat-label">Kategoriyalar</span>
+        </div>
+        <div class="stat-item">
+            <span class="stat-number">24/7</span>
+            <span class="stat-label">AI Ishlaydi</span>
+        </div>
+    </div>
+</section>
+
+<section class="about-section">
+    <h3>📚 Mavzularimiz</h3>
+    <div class="topics-grid">
+        <span class="topic-tag">🖥️ Texnologiya</span>
+        <span class="topic-tag">🤖 Sun'iy Intellekt</span>
+        <span class="topic-tag">💻 Dasturlash</span>
+        <span class="topic-tag">📱 Mobile</span>
+        <span class="topic-tag">🌐 Web Development</span>
+        <span class="topic-tag">🔒 Kiberxavfsizlik</span>
+        <span class="topic-tag">🚀 Startaplar</span>
+        <span class="topic-tag">💼 Biznes</span>
+</section>
+
+<!-- Order Form Section -->
+<section class="order-form-section" id="order">
+    <div class="form-header">
+        <h2>📝 Xizmatga Yozilish</h2>
+        <p>Formani to'ldiring, biz siz bilan 24 soat ichida bog'lanamiz!</p>
+    </div>
+
+    <form class="order-form" action="{{ url_for('submit_order') }}" method="POST">
+        <div class="form-row">
+            <div class="form-group">
+                <label for="name">👤 Ismingiz *</label>
+                <input type="text" id="name" name="name" required placeholder="Masalan: Ali Valiyev">
+            </div>
+            <div class="form-group">
+                <label for="phone">📞 Telefon raqam *</label>
+                <input type="tel" id="phone" name="phone" required placeholder="+998 90 123 45 67">
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group">
+                <label for="service">🛠️ Xizmat turi *</label>
+                <select id="service" name="service" required>
+                    <option value="">Tanlang...</option>
+                    <option value="ai_content">🤖 AI Kontent Generatsiya</option>
+                    <option value="telegram_bot">📱 Telegram Bot</option>
+                    <option value="web_site">🌐 Web Sayt</option>
+                    <option value="consulting">💡 IT Konsalting</option>
+                    <option value="smm">📢 SMM Avtomatlashtirish</option>
+                    <option value="ai_chatbot">🤖 AI Chatbot</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="budget">💰 Byudjet</label>
+                <select id="budget" name="budget">
+                    <option value="">Tanlang...</option>
+                    <option value="500k-1m">500,000 - 1,000,000 so'm</option>
+                    <option value="1m-3m">1,000,000 - 3,000,000 so'm</option>
+                    <option value="3m-5m">3,000,000 - 5,000,000 so'm</option>
+                    <option value="5m+">5,000,000+ so'm</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="message">💬 Loyihangiz haqida</label>
+            <textarea id="message" name="message" rows="4"
+                placeholder="Loyihangiz haqida qisqacha ma'lumot bering..."></textarea>
+        </div>
+
+        <button type="submit" class="submit-btn">
+            🚀 Ariza Yuborish
+        </button>
+    </form>
+</section>
+
+<section class="about-section contact-section">
+    <h3>📧 Biz Bilan Bog'laning</h3>
+    <p>Savollaringiz bormi? Biz bilan bog'laning!</p>
+    <div class="contact-info">
+        <p>🌐 <strong>Sayt:</strong> <a href="https://trendoai.uz" target="_blank">trendoai.uz</a></p>
+        <p>📱 <strong>Telegram:</strong> <a href="https://t.me/trendoai" target="_blank">@trendoai</a></p>
+        <p>📧 <strong>Email:</strong> <a href="mailto:info@trendoai.uz">info@trendoai.uz</a></p>
+    </div>
+</section>
+
+<style>
+    .order-form-section {
+        background: var(--bg-card);
+        border: 1px solid var(--border);
+        border-radius: var(--radius-xl);
+        padding: 50px;
+        margin-bottom: 40px;
+    }
+
+    .form-header {
+        text-align: center;
+        margin-bottom: 40px;
+    }
+
+    .form-header h2 {
+        font-size: 2rem;
+        margin-bottom: 12px;
+        background: var(--gradient-text);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+
+    .form-header p {
+        color: var(--text-secondary);
+    }
+
+    .order-form {
+        max-width: 700px;
+        margin: 0 auto;
+    }
+
+    .form-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+        margin-bottom: 20px;
+    }
+
+    .form-group {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .form-group label {
+        margin-bottom: 8px;
+        font-weight: 600;
+        color: var(--text-primary);
+    }
+
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+        padding: 14px 18px;
+        background: var(--bg-elevated);
+        border: 2px solid var(--border);
+        border-radius: var(--radius-md);
+        color: var(--text-primary);
+        font-size: 1rem;
+        font-family: inherit;
+        transition: var(--transition-smooth);
+    }
+
+    .form-group input::placeholder,
+    .form-group textarea::placeholder {
+        color: var(--text-muted);
+    }
+
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus {
+        outline: none;
+        border-color: var(--primary);
+        box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+    }
+
+    .form-group select {
+        cursor: pointer;
+    }
+
+    .form-group select option {
+        background: var(--bg-dark);
+        color: var(--text-primary);
+    }
+
+    .form-group textarea {
+        resize: vertical;
+        min-height: 120px;
+    }
+
+    .submit-btn {
+        width: 100%;
+        padding: 18px;
+        background: var(--gradient-main);
+        color: white;
+        border: none;
+        border-radius: var(--radius-md);
+        font-size: 1.1rem;
+        font-weight: 700;
+        font-family: inherit;
+        cursor: pointer;
+        transition: var(--transition-smooth);
+        margin-top: 10px;
+    }
+
+    .submit-btn:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 10px 30px rgba(99, 102, 241, 0.4);
+    }
+
+    @media (max-width: 768px) {
+        .order-form-section {
+            padding: 30px 20px;
+        }
+
+        .form-row {
+            grid-template-columns: 1fr;
+            gap: 16px;
+        }
+
+        .form-header h2 {
+            font-size: 1.5rem;
+        }
+    }
+</style>
+{% endblock %}

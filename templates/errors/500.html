@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+
+{% block title %}Server Xatosi - TrendoAI{% endblock %}
+
+{% block content %}
+<div class="error-page">
+    <div class="error-content">
+        <span class="error-icon">⚠️</span>
+        <h1>500</h1>
+        <h2>Server Xatosi</h2>
+        <p>Ichki server xatosi yuz berdi. Iltimos, keyinroq urinib ko'ring.</p>
+        <div class="error-actions">
+            <a href="{{ url_for('index') }}" class="cta-button">🏠 Bosh Sahifaga</a>
+        </div>
+    </div>
+</div>
+
+<style>
+    .error-page {
+        min-height: 60vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+    }
+
+    .error-icon {
+        font-size: 5rem;
+        display: block;
+        margin-bottom: 20px;
+    }
+
+    .error-page h1 {
+        font-size: 6rem;
+        color: #ef4444;
+        margin: 0;
+        line-height: 1;
+    }
+
+    .error-page h2 {
+        font-size: 1.5rem;
+        color: var(--dark-color);
+        margin: 10px 0 20px;
+    }
+
+    .error-page p {
+        color: #666;
+        margin-bottom: 30px;
+    }
+</style>
+{% endblock %}

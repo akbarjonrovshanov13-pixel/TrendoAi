@@ -1,0 +1,106 @@
+{% extends 'admin/base_admin.html' %}
+
+{% block title %}{% if post %}Tahrirlash{% else %}Yangi Post{% endif %} - TrendoAI Admin{% endblock %}
+
+{% block content %}
+<div class="edit-post-page">
+    <div class="page-header">
+        <h1>{% if post %}✏️ Postni Tahrirlash{% else %}✏️ Yangi Post Yaratish{% endif %}</h1>
+    </div>
+
+    <div class="form-container">
+        <form method="POST"
+            action="{% if post %}{{ url_for('admin_edit_post', post_id=post.id) }}{% else %}{{ url_for('admin_new_post') }}{% endif %}">
+
+            <div class="form-row">
+                <div class="form-group" style="flex: 2;">
+                    <label for="title">📌 Sarlavha</label>
+                    <input type="text" id="title" name="title" value="{{ post.title if post else '' }}" required
+                        placeholder="Maqola sarlavhasini kiriting...">
+                </div>
+
+                <div class="form-group" style="flex: 1;">
+                    <label for="category">📂 Kategoriya</label>
+                    <select id="category" name="category">
+                        {% for cat in categories %}
+                        <option value="{{ cat }}" {% if post and post.category==cat %}selected{% endif %}>{{ cat }}
+                        </option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="topic">🎯 Mavzu</label>
+                <input type="text" id="topic" name="topic" value="{{ post.topic if post else '' }}"
+                    placeholder="Maqola mavzusini kiriting...">
+            </div>
+
+            <div class="form-group">
+                <label for="content">📝 Kontent (Markdown)</label>
+                <textarea id="content" name="content"
+                    placeholder="Markdown formatida yozing...">{{ post.content if post else '' }}</textarea>
+                <small class="form-help">Markdown formatlash qo'llab-quvvatlanadi: **qalin**, *kursiv*, ## sarlavha, -
+                    ro'yxat</small>
+            </div>
+
+            <div class="form-group">
+                <label for="keywords">🔑 Kalit so'zlar</label>
+                <input type="text" id="keywords" name="keywords" value="{{ post.keywords if post else '' }}"
+                    placeholder="Vergul bilan ajrating: AI, texnologiya, Python...">
+            </div>
+
+            <div class="form-group checkbox-group">
+                <input type="checkbox" id="is_published" name="is_published" {% if not post or post.is_published
+                    %}checked{% endif %}>
+                <label for="is_published">✅ Chop etish</label>
+            </div>
+
+            <div class="form-actions">
+                <button type="submit" class="btn btn-primary">
+                    {% if post %}💾 Saqlash{% else %}✅ Yaratish{% endif %}
+                </button>
+                <a href="{{ url_for('admin_posts') }}" class="btn btn-secondary">❌ Bekor qilish</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+<style>
+    .form-container {
+        background: white;
+        padding: 30px;
+        border-radius: 16px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+    }
+
+    .form-row {
+        display: flex;
+        gap: 20px;
+    }
+
+    .form-help {
+        display: block;
+        margin-top: 8px;
+        color: var(--gray);
+        font-size: 0.85rem;
+    }
+
+    .form-actions {
+        display: flex;
+        gap: 12px;
+        margin-top: 30px;
+    }
+
+    .btn-secondary {
+        background: var(--light);
+        color: var(--dark);
+    }
+
+    @media (max-width: 768px) {
+        .form-row {
+            flex-direction: column;
+        }
+    }
+</style>
+{% endblock %}

@@ -1,0 +1,590 @@
+{% extends 'base.html' %}
+
+{% block title %}Portfolio - TrendoAI{% endblock %}
+
+{% block meta_description %}TrendoAI portfolio: Bizning loyihalarimiz va muvaffaqiyatli ishlarimiz. Telegram botlar, web
+saytlar, AI yechimlar.{% endblock %}
+
+{% block content %}
+<!-- Portfolio Hero -->
+<section class="portfolio-hero">
+    <div class="hero-content">
+        <h1>🚀 Bizning Portfolio</h1>
+        <p class="hero-subtitle">Muvaffaqiyatli yakunlangan loyihalar va mijozlarimiz uchun yaratilgan yechimlar</p>
+        <div class="hero-stats">
+            <div class="hero-stat">
+                <span class="stat-value">50+</span>
+                <span class="stat-label">Loyihalar</span>
+            </div>
+            <div class="hero-stat">
+                <span class="stat-value">100+</span>
+                <span class="stat-label">Mijozlar</span>
+            </div>
+            <div class="hero-stat">
+                <span class="stat-value">5+</span>
+                <span class="stat-label">Yillik Tajriba</span>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Filter -->
+<section class="portfolio-filter">
+    <button class="filter-btn active" data-filter="all">Barchasi</button>
+    <button class="filter-btn" data-filter="bot">🤖 Telegram Botlar</button>
+    <button class="filter-btn" data-filter="web">🌐 Web Saytlar</button>
+    <button class="filter-btn" data-filter="ai">🧠 AI Yechimlar</button>
+    <button class="filter-btn" data-filter="mobile">📱 Mobile</button>
+</section>
+
+<!-- Portfolio Grid -->
+<section class="portfolio-grid">
+    <!-- Project 1 -->
+    <article class="portfolio-card" data-category="bot">
+        <div class="card-image">
+            <span class="card-emoji">🤖</span>
+            <div class="card-overlay">
+                <span class="view-btn">Ko'rish →</span>
+            </div>
+        </div>
+        <div class="card-content">
+            <span class="card-category">Telegram Bot</span>
+            <h3>E-Commerce Bot</h3>
+            <p>Online do'kon uchun to'liq avtomatlashtirilgan Telegram bot. Buyurtma, to'lov, yetkazib berish.</p>
+            <div class="card-tech">
+                <span>Python</span>
+                <span>Aiogram</span>
+                <span>PostgreSQL</span>
+            </div>
+        </div>
+    </article>
+
+    <!-- Project 2 -->
+    <article class="portfolio-card" data-category="web">
+        <div class="card-image">
+            <span class="card-emoji">🌐</span>
+            <div class="card-overlay">
+                <span class="view-btn">Ko'rish →</span>
+            </div>
+        </div>
+        <div class="card-content">
+            <span class="card-category">Web Sayt</span>
+            <h3>Korporativ Sayt</h3>
+            <p>Zamonaviy dizaynli, SEO-optimallashtirilgan korporativ veb-sayt. Admin panel bilan.</p>
+            <div class="card-tech">
+                <span>React</span>
+                <span>Next.js</span>
+                <span>Tailwind</span>
+            </div>
+        </div>
+    </article>
+
+    <!-- Project 3 -->
+    <article class="portfolio-card featured" data-category="ai">
+        <div class="card-badge">⭐ Featured</div>
+        <div class="card-image">
+            <span class="card-emoji">🧠</span>
+            <div class="card-overlay">
+                <span class="view-btn">Ko'rish →</span>
+            </div>
+        </div>
+        <div class="card-content">
+            <span class="card-category">AI Yechim</span>
+            <h3>TrendoAI Blog</h3>
+            <p>Sun'iy intellekt yordamida avtomatik kontent generatsiya qiluvchi blog platformasi.</p>
+            <div class="card-tech">
+                <span>Python</span>
+                <span>Flask</span>
+                <span>Gemini AI</span>
+            </div>
+        </div>
+    </article>
+
+    <!-- Project 4 -->
+    <article class="portfolio-card" data-category="bot">
+        <div class="card-image">
+            <span class="card-emoji">📊</span>
+            <div class="card-overlay">
+                <span class="view-btn">Ko'rish →</span>
+            </div>
+        </div>
+        <div class="card-content">
+            <span class="card-category">Telegram Bot</span>
+            <h3>CRM Bot</h3>
+            <p>Biznes uchun CRM tizimi Telegram botda. Mijozlar, buyurtmalar, hisobotlar.</p>
+            <div class="card-tech">
+                <span>Python</span>
+                <span>SQLite</span>
+                <span>Charts</span>
+            </div>
+        </div>
+    </article>
+
+    <!-- Project 5 -->
+    <article class="portfolio-card" data-category="web">
+        <div class="card-image">
+            <span class="card-emoji">🛒</span>
+            <div class="card-overlay">
+                <span class="view-btn">Ko'rish →</span>
+            </div>
+        </div>
+        <div class="card-content">
+            <span class="card-category">Web Sayt</span>
+            <h3>Online Do'kon</h3>
+            <p>To'liq funksional e-commerce platforma. To'lov integratsiyasi, inventar boshqaruvi.</p>
+            <div class="card-tech">
+                <span>Next.js</span>
+                <span>Stripe</span>
+                <span>Prisma</span>
+            </div>
+        </div>
+    </article>
+
+    <!-- Project 6 -->
+    <article class="portfolio-card" data-category="ai">
+        <div class="card-image">
+            <span class="card-emoji">💬</span>
+            <div class="card-overlay">
+                <span class="view-btn">Ko'rish →</span>
+            </div>
+        </div>
+        <div class="card-content">
+            <span class="card-category">AI Yechim</span>
+            <h3>AI Chatbot</h3>
+            <p>Mijozlarga 24/7 xizmat ko'rsatuvchi sun'iy intellekt chatbot. Ko'p tilli qo'llab-quvvatlash.</p>
+            <div class="card-tech">
+                <span>OpenAI</span>
+                <span>LangChain</span>
+                <span>React</span>
+            </div>
+        </div>
+    </article>
+
+    <!-- Project 7 -->
+    <article class="portfolio-card" data-category="mobile">
+        <div class="card-image">
+            <span class="card-emoji">📱</span>
+            <div class="card-overlay">
+                <span class="view-btn">Ko'rish →</span>
+            </div>
+        </div>
+        <div class="card-content">
+            <span class="card-category">Mobile App</span>
+            <h3>Fitness Tracker</h3>
+            <p>Sog'liq va fitness kuzatish ilovasi. Kaloriyalar, mashqlar, progress.</p>
+            <div class="card-tech">
+                <span>Flutter</span>
+                <span>Firebase</span>
+                <span>Charts</span>
+            </div>
+        </div>
+    </article>
+
+    <!-- Project 8 -->
+    <article class="portfolio-card" data-category="bot">
+        <div class="card-image">
+            <span class="card-emoji">🎓</span>
+            <div class="card-overlay">
+                <span class="view-btn">Ko'rish →</span>
+            </div>
+        </div>
+        <div class="card-content">
+            <span class="card-category">Telegram Bot</span>
+            <h3>Ta'lim Boti</h3>
+            <p>Online kurslar platformasi Telegram botda. Testlar, sertifikatlar, to'lovlar.</p>
+            <div class="card-tech">
+                <span>Python</span>
+                <span>MongoDB</span>
+                <span>Payme</span>
+            </div>
+        </div>
+    </article>
+</section>
+
+<!-- Testimonials -->
+<section class="testimonials-section">
+    <h2>💬 Mijozlarimiz Fikrlari</h2>
+    <div class="testimonials-grid">
+        <div class="testimonial-card">
+            <div class="testimonial-content">
+                <p>"TrendoAI jamoasi bizning Telegram botimizni mukammal darajada yaratdi. Professionallik va sifat!"
+                </p>
+            </div>
+            <div class="testimonial-author">
+                <span class="author-avatar">👨‍💼</span>
+                <div class="author-info">
+                    <strong>Sardor Aliyev</strong>
+                    <span>CEO, TechStore</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="testimonial-card">
+            <div class="testimonial-content">
+                <p>"Veb-saytimiz endi professional ko'rinishda. SEO natijalari ham a'lo. Tavsiya qilaman!"</p>
+            </div>
+            <div class="testimonial-author">
+                <span class="author-avatar">👩‍💻</span>
+                <div class="author-info">
+                    <strong>Nilufar Karimova</strong>
+                    <span>Founder, EduPlatform</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="testimonial-card">
+            <div class="testimonial-content">
+                <p>"AI chatbot bizning mijozlarga xizmat ko'rsatishni 10 marta tezlashtirdi. Ajoyib yechim!"</p>
+            </div>
+            <div class="testimonial-author">
+                <span class="author-avatar">👨‍🔬</span>
+                <div class="author-info">
+                    <strong>Akmal Toshev</strong>
+                    <span>CTO, FinTech Co</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section">
+    <h3>🚀 Loyihangizni Boshlashga Tayyormisiz?</h3>
+    <p>Bepul konsultatsiya oling va g'oyangizni haqiqatga aylantiring!</p>
+    <div class="cta-buttons">
+        <a href="https://t.me/trendoai" class="cta-button primary" target="_blank">📱 Telegram orqali bog'laning</a>
+        <a href="{{ url_for('services') }}" class="cta-button secondary">🛠️ Xizmatlarimiz</a>
+    </div>
+</section>
+
+<style>
+    /* Portfolio Hero */
+    .portfolio-hero {
+        background: var(--gradient-hero);
+        border: 1px solid var(--border);
+        border-radius: var(--radius-xl);
+        padding: 80px 50px;
+        margin-bottom: 40px;
+        text-align: center;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .portfolio-hero::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background:
+            radial-gradient(circle at 20% 80%, rgba(99, 102, 241, 0.2) 0%, transparent 50%),
+            radial-gradient(circle at 80% 20%, rgba(244, 114, 182, 0.2) 0%, transparent 50%);
+    }
+
+    .portfolio-hero .hero-content {
+        position: relative;
+        z-index: 1;
+    }
+
+    .portfolio-hero h1 {
+        font-size: 3rem;
+        font-weight: 800;
+        margin-bottom: 16px;
+        background: var(--gradient-text);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+
+    /* Filter Buttons */
+    .portfolio-filter {
+        display: flex;
+        justify-content: center;
+        gap: 12px;
+        flex-wrap: wrap;
+        margin-bottom: 40px;
+    }
+
+    .filter-btn {
+        padding: 12px 24px;
+        background: var(--bg-elevated);
+        border: 1px solid var(--border);
+        border-radius: 50px;
+        color: var(--text-secondary);
+        font-weight: 600;
+        font-family: inherit;
+        cursor: pointer;
+        transition: var(--transition-smooth);
+    }
+
+    .filter-btn:hover,
+    .filter-btn.active {
+        background: var(--gradient-main);
+        border-color: transparent;
+        color: white;
+    }
+
+    /* Portfolio Grid */
+    .portfolio-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+        gap: 28px;
+        margin-bottom: 60px;
+    }
+
+    /* Portfolio Card */
+    .portfolio-card {
+        background: var(--bg-card);
+        border: 1px solid var(--border);
+        border-radius: var(--radius-lg);
+        overflow: hidden;
+        transition: var(--transition-smooth);
+        position: relative;
+    }
+
+    .portfolio-card:hover {
+        transform: translateY(-10px);
+        border-color: var(--primary);
+        box-shadow: var(--shadow-glow);
+    }
+
+    .portfolio-card.featured {
+        border-color: var(--accent);
+    }
+
+    .card-badge {
+        position: absolute;
+        top: 16px;
+        right: 16px;
+        background: var(--gradient-main);
+        padding: 6px 14px;
+        border-radius: 50px;
+        font-size: 0.8rem;
+        font-weight: 700;
+        z-index: 10;
+    }
+
+    .card-image {
+        height: 200px;
+        background: var(--bg-elevated);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .card-emoji {
+        font-size: 5rem;
+        filter: drop-shadow(0 0 30px rgba(99, 102, 241, 0.3));
+        transition: var(--transition-smooth);
+    }
+
+    .portfolio-card:hover .card-emoji {
+        transform: scale(1.2);
+    }
+
+    .card-overlay {
+        position: absolute;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.7);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        opacity: 0;
+        transition: var(--transition-smooth);
+    }
+
+    .portfolio-card:hover .card-overlay {
+        opacity: 1;
+    }
+
+    .view-btn {
+        padding: 12px 28px;
+        background: white;
+        color: var(--bg-dark);
+        border-radius: 50px;
+        font-weight: 700;
+    }
+
+    .card-content {
+        padding: 24px;
+    }
+
+    .card-category {
+        display: inline-block;
+        padding: 4px 12px;
+        background: var(--bg-elevated);
+        border-radius: 50px;
+        font-size: 0.75rem;
+        font-weight: 600;
+        color: var(--primary-light);
+        margin-bottom: 12px;
+    }
+
+    .card-content h3 {
+        font-size: 1.25rem;
+        font-weight: 700;
+        margin-bottom: 10px;
+        color: var(--text-primary);
+    }
+
+    .card-content p {
+        color: var(--text-secondary);
+        font-size: 0.95rem;
+        line-height: 1.6;
+        margin-bottom: 16px;
+    }
+
+    .card-tech {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+    }
+
+    .card-tech span {
+        padding: 4px 10px;
+        background: var(--bg-elevated);
+        border: 1px solid var(--border);
+        border-radius: 6px;
+        font-size: 0.75rem;
+        color: var(--text-muted);
+    }
+
+    /* Testimonials */
+    .testimonials-section {
+        background: var(--bg-card);
+        border: 1px solid var(--border);
+        border-radius: var(--radius-xl);
+        padding: 50px;
+        margin-bottom: 40px;
+    }
+
+    .testimonials-section h2 {
+        text-align: center;
+        font-size: 2rem;
+        margin-bottom: 40px;
+        background: var(--gradient-text);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+
+    .testimonials-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: 24px;
+    }
+
+    .testimonial-card {
+        background: var(--bg-elevated);
+        border: 1px solid var(--border);
+        border-radius: var(--radius-lg);
+        padding: 28px;
+        transition: var(--transition-smooth);
+    }
+
+    .testimonial-card:hover {
+        border-color: var(--primary);
+        transform: translateY(-4px);
+    }
+
+    .testimonial-content p {
+        color: var(--text-secondary);
+        font-size: 1rem;
+        line-height: 1.7;
+        margin-bottom: 20px;
+        font-style: italic;
+    }
+
+    .testimonial-author {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+    }
+
+    .author-avatar {
+        width: 50px;
+        height: 50px;
+        background: var(--gradient-main);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.5rem;
+    }
+
+    .author-info strong {
+        display: block;
+        color: var(--text-primary);
+        font-size: 0.95rem;
+    }
+
+    .author-info span {
+        color: var(--text-muted);
+        font-size: 0.85rem;
+    }
+
+    /* CTA Buttons */
+    .cta-buttons {
+        display: flex;
+        gap: 16px;
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+
+    .cta-button.primary {
+        background: white;
+        color: var(--primary-dark);
+    }
+
+    .cta-button.secondary {
+        background: transparent;
+        border: 2px solid white;
+        color: white;
+    }
+
+    .cta-button.secondary:hover {
+        background: white;
+        color: var(--primary-dark);
+    }
+
+    @media (max-width: 768px) {
+        .portfolio-hero {
+            padding: 50px 24px;
+        }
+
+        .portfolio-hero h1 {
+            font-size: 2rem;
+        }
+
+        .portfolio-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .testimonials-section {
+            padding: 30px 20px;
+        }
+    }
+</style>
+
+<script>
+    // Portfolio Filter
+    document.querySelectorAll('.filter-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            // Active state
+            document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+
+            const filter = btn.dataset.filter;
+
+            document.querySelectorAll('.portfolio-card').forEach(card => {
+                if (filter === 'all' || card.dataset.category === filter) {
+                    card.style.display = 'block';
+                    card.style.animation = 'fadeIn 0.5s ease';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        });
+    });
+</script>
+{% endblock %}

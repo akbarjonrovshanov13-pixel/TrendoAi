@@ -1,0 +1,158 @@
+{% extends 'admin/base_admin.html' %}
+
+{% block title %}Postlar - TrendoAI Admin{% endblock %}
+
+{% block content %}
+<div class="posts-page">
+    <div class="page-header">
+        <h1>📝 Barcha Postlar</h1>
+        <div class="header-actions">
+            <a href="{{ url_for('admin_new_post') }}" class="btn btn-primary">✏️ Yangi Post</a>
+            <a href="{{ url_for('admin_generate') }}" class="btn btn-primary">🤖 AI Generatsiya</a>
+        </div>
+    </div>
+
+    {% if posts.items %}
+    <div class="posts-list">
+        <table class="posts-table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Sarlavha</th>
+                    <th>Kategoriya</th>
+                    <th>Ko'rishlar</th>
+                    <th>Holat</th>
+                    <th>Sana</th>
+                    <th>Amallar</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for post in posts.items %}
+                <tr>
+                    <td>{{ post.id }}</td>
+                    <td>
+                        <a href="{{ url_for('post', post_id=post.id) }}" target="_blank">
+                            {{ post.title[:60] }}{% if post.title|length > 60 %}...{% endif %}
+                        </a>
+                    </td>
+                    <td><span class="category-tag">{{ post.category }}</span></td>
+                    <td>👁️ {{ post.views or 0 }}</td>
+                    <td>
+                        {% if post.is_published %}
+                        <span class="status-badge published">✅ Chop etilgan</span>
+                        {% else %}
+                        <span class="status-badge draft">📝 Qoralama</span>
+                        {% endif %}
+                    </td>
+                    <td>{{ post.created_at.strftime('%d.%m.%Y %H:%M') }}</td>
+                    <td class="actions">
+                        <a href="{{ url_for('admin_edit_post', post_id=post.id) }}" class="btn-sm"
+                            title="Tahrirlash">✏️</a>
+                        <form action="{{ url_for('admin_delete_post', post_id=post.id) }}" method="POST"
+                            style="display: inline;" onsubmit="return confirm('Rostdan ham o\'chirmoqchimisiz?');">
+                            <button type="submit" class="btn-sm danger" title="O'chirish">🗑️</button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Pagination -->
+    {% if posts.pages > 1 %}
+    <div class="pagination">
+        {% if posts.has_prev %}
+        <a href="{{ url_for('admin_posts', page=posts.prev_num) }}">← Oldingi</a>
+        {% endif %}
+
+        <span class="page-info">Sahifa {{ posts.page }} / {{ posts.pages }}</span>
+
+        {% if posts.has_next %}
+        <a href="{{ url_for('admin_posts', page=posts.next_num) }}">Keyingi →</a>
+        {% endif %}
+    </div>
+    {% endif %}
+    {% else %}
+    <div class="empty-state">
+        <span class="empty-icon">📭</span>
+        <h3>Hozircha postlar mavjud emas</h3>
+        <p>Yangi post yarating yoki AI bilan generatsiya qiling!</p>
+        <a href="{{ url_for('admin_generate') }}" class="btn btn-primary">🤖 AI bilan Generatsiya</a>
+    </div>
+    {% endif %}
+</div>
+
+<style>
+    .page-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 30px;
+    }
+
+    .header-actions {
+        display: flex;
+        gap: 10px;
+    }
+
+    .posts-list {
+        background: white;
+        border-radius: 16px;
+        overflow: hidden;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+    }
+
+    .status-badge {
+        padding: 4px 10px;
+        border-radius: 20px;
+        font-size: 0.8rem;
+    }
+
+    .status-badge.published {
+        background: #d1fae5;
+        color: #059669;
+    }
+
+    .status-badge.draft {
+        background: #fef3c7;
+        color: #d97706;
+    }
+
+    .actions {
+        display: flex;
+        gap: 8px;
+    }
+
+    .btn-sm.danger {
+        background: #fee2e2;
+        border: none;
+        cursor: pointer;
+    }
+
+    .empty-state {
+        background: white;
+        padding: 60px;
+        text-align: center;
+        border-radius: 16px;
+    }
+
+    .empty-icon {
+        font-size: 4rem;
+    }
+
+    .empty-state h3 {
+        margin: 20px 0 10px;
+    }
+
+    .empty-state p {
+        color: var(--gray);
+        margin-bottom: 20px;
+    }
+
+    .page-info {
+        padding: 10px 16px;
+        color: var(--gray);
+    }
+</style>
+{% endblock %}

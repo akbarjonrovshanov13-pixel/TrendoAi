@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+
+{% block title %}Qidiruv: {{ query }} - TrendoAI{% endblock %}
+
+{% block content %}
+<section class="search-page">
+    <h1>🔍 Qidiruv Natijalari</h1>
+
+    <form action="{{ url_for('search') }}" method="GET" class="search-form large">
+        <input type="text" name="q" placeholder="🔍 Maqola qidirish..." value="{{ query }}">
+        <button type="submit">Qidirish</button>
+    </form>
+
+    {% if query %}
+    {% if posts and posts.items %}
+    <p class="results-count">{{ posts.total }} ta natija topildi: "{{ query }}"</p>
+
+    <div class="posts-grid">
+        {% for post in posts.items %}
+        <article class="post-card">
+            <div class="post-category">{{ post.category or 'Texnologiya' }}</div>
+            <h3><a href="{{ url_for('post', post_id=post.id) }}">{{ post.title }}</a></h3>
+            <div class="post-meta">
+                <span class="post-date">📅 {{ post.created_at.strftime('%d.%m.%Y') }}</span>
+                <span class="post-reading-time">⏱️ {{ post.reading_time or 5 }} daqiqa</span>
+            </div>
+            <p class="post-excerpt">{{ (post.content | markdown) | striptags | truncate(150) }}</p>
+            <a href="{{ url_for('post', post_id=post.id) }}" class="read-more">Davomini o'qish →</a>
+        </article>
+        {% endfor %}
+    </div>
+
+    <!-- Pagination -->
+    {% if posts.pages > 1 %}
+    <div class="pagination">
+        {% if posts.has_prev %}
+        <a href="{{ url_for('search', q=query, page=posts.prev_num) }}" class="page-link">← Oldingi</a>
+        {% endif %}
+
+        <span class="page-info">Sahifa {{ posts.page }} / {{ posts.pages }}</span>
+
+        {% if posts.has_next %}
+        <a href="{{ url_for('search', q=query, page=posts.next_num) }}" class="page-link">Keyingi →</a>
+        {% endif %}
+    </div>
+    {% endif %}
+    {% else %}
+    <div class="empty-state">
+        <span class="empty-icon">🔍</span>
+        <h3>"{{ query }}" bo'yicha hech narsa topilmadi</h3>
+        <p>Boshqa so'zlar bilan qidiring yoki barcha maqolalarni ko'ring</p>
+        <a href="{{ url_for('index') }}" class="cta-button">📝 Barcha Maqolalar</a>
+    </div>
+    {% endif %}
+    {% else %}
+    <div class="empty-state">
+        <span class="empty-icon">🔍</span>
+        <h3>Qidiruv so'zini kiriting</h3>
+        <p>Maqola sarlavhasi, kontent yoki kalit so'zlar bo'yicha qidiring</p>
+    </div>
+    {% endif %}
+</section>
+{% endblock %}

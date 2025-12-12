@@ -1,0 +1,104 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ config.SITE_NAME }} - Trending Texnologiyalar va Sun'iy Intellekt{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero">
+    <div class="hero-content">
+        <h1>🔥 Trending Texnologiyalar</h1>
+        <p class="hero-subtitle">Sun'iy intellekt yordamida yaratilgan professional IT maqolalar</p>
+        <div class="hero-stats">
+            <div class="hero-stat">
+                <span class="stat-value">{{ posts|length }}</span>
+                <span class="stat-label">Maqolalar</span>
+            </div>
+            <div class="hero-stat">
+                <span class="stat-value">AI</span>
+                <span class="stat-label">Powered</span>
+            </div>
+            <div class="hero-stat">
+                <span class="stat-value">24/7</span>
+                <span class="stat-label">Yangilanadi</span>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Search & Filter -->
+<section class="search-section">
+    <form action="{{ url_for('search') }}" method="GET" class="search-form">
+        <input type="text" name="q" placeholder="🔍 Maqola qidirish..." value="{{ request.args.get('q', '') }}">
+        <button type="submit">Qidirish</button>
+    </form>
+
+    <div class="categories-filter">
+        <a href="{{ url_for('index') }}"
+            class="category-tag {% if not request.args.get('category') %}active{% endif %}">Barchasi</a>
+        {% for cat in categories %}
+        <a href="{{ url_for('index', category=cat) }}"
+            class="category-tag {% if request.args.get('category') == cat %}active{% endif %}">{{ cat }}</a>
+        {% endfor %}
+    </div>
+</section>
+
+<!-- Posts Grid -->
+<section class="posts-section">
+    <h2>📝 So'nggi Maqolalar</h2>
+
+    {% if posts %}
+    <div class="posts-grid">
+        {% for post in posts %}
+        <article class="post-card">
+            {% if post.image_url %}
+            <div class="post-image">
+                <a href="{{ url_for('post', post_id=post.id) }}">
+                    <img src="{{ post.image_url }}" alt="{{ post.title }}" loading="lazy">
+                </a>
+            </div>
+            {% endif %}
+            <div class="post-content">
+                <div class="post-category">{{ post.category or 'Texnologiya' }}</div>
+                <h3><a href="{{ url_for('post', post_id=post.id) }}">{{ post.title }}</a></h3>
+                <div class="post-meta">
+                    <span class="post-date">📅 {{ post.created_at.strftime('%d.%m.%Y') }}</span>
+                    <span class="post-reading-time">⏱️ {{ post.reading_time or 5 }} daqiqa</span>
+                    <span class="post-views">👁️ {{ post.views or 0 }}</span>
+                </div>
+                <p class="post-excerpt">{{ (post.content | markdown) | striptags | truncate(150) }}</p>
+                <a href="{{ url_for('post', post_id=post.id) }}" class="read-more">Davomini o'qish →</a>
+            </div>
+        </article>
+        {% endfor %}
+    </div>
+
+    <!-- Pagination -->
+    {% if pagination %}
+    <div class="pagination">
+        {% if pagination.has_prev %}
+        <a href="{{ url_for('index', page=pagination.prev_num) }}" class="page-link">← Oldingi</a>
+        {% endif %}
+
+        <span class="page-info">Sahifa {{ pagination.page }} / {{ pagination.pages }}</span>
+
+        {% if pagination.has_next %}
+        <a href="{{ url_for('index', page=pagination.next_num) }}" class="page-link">Keyingi →</a>
+        {% endif %}
+    </div>
+    {% endif %}
+    {% else %}
+    <div class="empty-state">
+        <span class="empty-icon">📭</span>
+        <h3>Hozircha maqolalar mavjud emas</h3>
+        <p>Tez orada yangi maqolalar paydo bo'ladi!</p>
+    </div>
+    {% endif %}
+</section>
+
+<!-- Newsletter -->
+<section class="newsletter-section">
+    <h3>📬 Yangiliklardan xabardor bo'ling!</h3>
+    <p>Telegram kanalimizga obuna bo'ling va eng so'nggi maqolalarni birinchilardan bo'lib o'qing</p>
+    <a href="https://t.me/trendoai" class="newsletter-button" target="_blank">📱 Telegram Kanalga O'tish</a>
+</section>
+{% endblock %}

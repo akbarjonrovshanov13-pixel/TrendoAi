@@ -1,0 +1,176 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ post.title }} - TrendoAI{% endblock %}
+
+{% block meta_description %}{{ post.content | striptags | truncate(160) }}{% endblock %}
+{% block meta_keywords %}{{ post.keywords }}{% endblock %}
+{% block canonical_url %}https://trendoai.uz/blog/{{ post.slug or post.id }}{% endblock %}
+{% block og_title %}{{ post.title }}{% endblock %}
+{% block og_description %}{{ post.content | striptags | truncate(200) }}{% endblock %}
+
+{% block extra_head %}
+<!-- Open Graph Image -->
+{% if post.image_url %}
+<meta property="og:image" content="{{ post.image_url }}">
+<meta name="twitter:image" content="{{ post.image_url }}">
+{% endif %}
+<meta property="og:type" content="article">
+<meta property="article:published_time" content="{{ post.created_at.isoformat() }}">
+<meta property="article:section" content="{{ post.category }}">
+{% if post.keywords %}
+{% for keyword in post.keywords.split(',')[:5] %}
+<meta property="article:tag" content="{{ keyword.strip() }}">
+{% endfor %}
+{% endif %}
+
+<!-- JSON-LD Article Schema -->
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "{{ post.title }}",
+    "description": "{{ post.content | striptags | truncate(200) }}",
+    {% if post.image_url %}"image": "{{ post.image_url }}",{% endif %}
+    "datePublished": "{{ post.created_at.isoformat() }}",
+    {% if post.updated_at %}"dateModified": "{{ post.updated_at.isoformat() }}",{% endif %}
+    "author": {
+        "@type": "Organization",
+        "name": "TrendoAI",
+        "url": "https://trendoai.uz"
+    },
+    "publisher": {
+        "@type": "Organization",
+        "name": "TrendoAI",
+        "url": "https://trendoai.uz"
+    },
+    "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": "https://trendoai.uz/blog/{{ post.slug or post.id }}"
+    },
+    "articleSection": "{{ post.category }}",
+    "wordCount": {{ post.content.split()|length }},
+    "timeRequired": "PT{{ post.reading_time }}M"
+}
+</script>
+
+<!-- BreadcrumbList Schema -->
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+        {
+            "@type": "ListItem",
+            "position": 1,
+            "name": "Bosh sahifa",
+            "item": "https://trendoai.uz"
+        },
+        {
+            "@type": "ListItem",
+            "position": 2,
+            "name": "{{ post.category }}",
+            "item": "https://trendoai.uz/?category={{ post.category }}"
+        },
+        {
+            "@type": "ListItem",
+            "position": 3,
+            "name": "{{ post.title }}",
+            "item": "https://trendoai.uz/blog/{{ post.slug or post.id }}"
+        }
+    ]
+}
+</script>
+{% endblock %}
+
+{% block content %}
+<article class="article-page">
+    <!-- Article Header -->
+    <header class="article-header">
+        <div class="article-category">{{ post.category or 'Texnologiya' }}</div>
+        <h1>{{ post.title }}</h1>
+        <div class="article-meta">
+            <span class="meta-item">📅 {{ post.created_at.strftime('%d %B, %Y') }}</span>
+            <span class="meta-item">⏱️ {{ post.reading_time or 5 }} daqiqa o'qish</span>
+            <span class="meta-item">👁️ {{ post.views or 0 }} marta ko'rildi</span>
+        </div>
+        {% if post.keywords %}
+        <div class="article-tags">
+            {% for keyword in post.keywords.split(',') %}
+            <span class="tag">{{ keyword.strip() }}</span>
+            {% endfor %}
+        </div>
+        {% endif %}
+    </header>
+
+    <!-- Featured Image -->
+    {% if post.image_url %}
+    <div class="article-image">
+        <img src="{{ post.image_url }}" alt="{{ post.title }}" loading="lazy">
+    </div>
+    {% endif %}
+
+    <!-- Article Content -->
+    <div class="article-content">
+        {{ post.content | markdown | safe }}
+    </div>
+
+    <!-- Share Buttons -->
+    <div class="share-section">
+        <h4>📤 Maqolani ulashing:</h4>
+        <div class="share-buttons">
+            <a href="https://t.me/share/url?url=https://trendoai.uz/post/{{ post.id }}&text={{ post.title }}"
+                class="share-btn telegram" target="_blank">
+                📱 Telegram
+            </a>
+            <a href="https://twitter.com/intent/tweet?url=https://trendoai.uz/post/{{ post.id }}&text={{ post.title }}"
+                class="share-btn twitter" target="_blank">
+                🐦 Twitter
+            </a>
+            <a href="https://www.facebook.com/sharer/sharer.php?u=https://trendoai.uz/post/{{ post.id }}"
+                class="share-btn facebook" target="_blank">
+                📘 Facebook
+            </a>
+            <button class="share-btn copy" onclick="copyLink()">
+                📋 Nusxa olish
+            </button>
+        </div>
+    </div>
+
+    <!-- Author Info -->
+    <div class="author-section">
+        <div class="author-avatar">🤖</div>
+        <div class="author-info">
+            <strong>TrendoAI Bot</strong>
+            <p>Sun'iy intellekt yordamida yaratilgan professional kontent</p>
+        </div>
+    </div>
+
+    <!-- Related Posts -->
+    {% if related_posts %}
+    <section class="related-posts">
+        <h3>📚 O'xshash Maqolalar</h3>
+        <div class="related-grid">
+            {% for related in related_posts %}
+            <a href="{{ url_for('post', post_id=related.id) }}" class="related-card">
+                <span class="related-category">{{ related.category or 'Texnologiya' }}</span>
+                <h4>{{ related.title }}</h4>
+                <span class="related-date">{{ related.created_at.strftime('%d.%m.%Y') }}</span>
+            </a>
+            {% endfor %}
+        </div>
+    </section>
+    {% endif %}
+
+    <!-- Navigation -->
+    <nav class="article-nav">
+        <a href="{{ url_for('index') }}" class="back-link">← Barcha maqolalarga qaytish</a>
+    </nav>
+</article>
+
+<script>
+    function copyLink() {
+        navigator.clipboard.writeText(window.location.href);
+        alert('Havola nusxalandi!');
+    }
+</script>
+{% endblock %}
