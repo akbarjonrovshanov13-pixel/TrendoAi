@@ -6,8 +6,8 @@ import time
 
 # Configure Gemini
 genai.configure(api_key=GEMINI_API_KEY)
-# Use a model that supports chat
-model = genai.GenerativeModel('gemini-2.0-flash-exp') 
+# Use model from config
+model = genai.GenerativeModel('gemini-1.5-flash') 
 
 bot = telebot.TeleBot(TELEGRAM_BOT_TOKEN)
 
@@ -33,6 +33,7 @@ def get_ai_response(user_message):
         response = chat.send_message(user_message)
         return response.text
     except Exception as e:
+        print(f"❌ Gemini AI Error: {e}")
         return "Uzr, hozirda serverda xatolik yuz berdi. Birozdan so'ng urinib ko'ring."
 
 @bot.message_handler(commands=['start', 'help'])
