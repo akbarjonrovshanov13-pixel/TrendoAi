@@ -5,6 +5,7 @@ TrendoAI uchun moslashtirilgan.
 """
 import os
 import json
+import re
 import time
 import google.generativeai as genai
 from config import GEMINI_API_KEY, GEMINI_MODEL, AI_RETRY_ATTEMPTS, AI_RETRY_DELAY
@@ -59,6 +60,14 @@ def _parse_json_response(response_text):
         return json.loads(cleaned)
     except json.JSONDecodeError as e:
         print(f"⚠️ JSON parse xatosi: {e}")
+        # Regex orqali urinib ko'rish
+        try:
+            match = re.search(r"\{.*\}", response_text, re.DOTALL)
+            if match:
+                return json.loads(match.group(0))
+        except:
+            pass
+            
         print(f"📄 Raw javob: {cleaned[:200]}...")
         return None
 

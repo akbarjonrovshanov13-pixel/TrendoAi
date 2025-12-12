@@ -30,7 +30,7 @@ if DATABASE_URI.startswith("postgres://"):
 
 # ========== AI SOZLAMALARI ==========
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
-GEMINI_MODEL = "models/gemini-flash-latest"
+GEMINI_MODEL = "models/gemini-2.0-flash-exp"
 AI_RETRY_ATTEMPTS = 3
 AI_RETRY_DELAY = 2
 
