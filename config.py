@@ -13,10 +13,8 @@ ENV = os.getenv("FLASK_ENV", "development")
 DEBUG = ENV == "development"
 
 # ========== SAYT SOZLAMALARI ==========
-if ENV == "production":
-    SITE_URL = os.getenv("SITE_URL", "https://trendoai.uz")
-else:
-    SITE_URL = "http://127.0.0.1:5000"
+# Render da SITE_URL env o'zgaruvchisini ishlatish
+SITE_URL = os.getenv("SITE_URL", "https://trendoai.onrender.com")
 
 SITE_NAME = "TrendoAI"
 SITE_DESCRIPTION = "O'zbekistonda trending texnologiya yangiliklari va AI-powered blog"
