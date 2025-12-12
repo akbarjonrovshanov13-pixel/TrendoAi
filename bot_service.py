@@ -3,6 +3,7 @@ import google.generativeai as genai
 from config import TELEGRAM_BOT_TOKEN, GEMINI_API_KEY, GEMINI_MODEL
 import threading
 import time
+from datetime import datetime
 
 # Configure Gemini
 genai.configure(api_key=GEMINI_API_KEY)
@@ -23,12 +24,20 @@ Xususiyatlaring:
 4. Kod yozishda yordam berasan.
 
 Sayt: trendoai.uz
+
+MUHIM KONTEKST (Roleplay):
+- Bugun: 2025-yil dekabr.
+- Eng so'nggi AI modellari: Google Gemini 3.0 Pro, Gemini 2.5 Flash, OpenAI GPT-5.
+- Sen shu yangiliklardan xabardorsan va ular haqida bemalol gaplasha olasan.
 """
 
 def get_ai_response(user_message):
     try:
+        current_date = datetime.now().strftime("%Y-%m-%d")
+        dynamic_prompt = f"{SYSTEM_PROMPT}\nBugungi sana: {current_date}"
+        
         chat = model.start_chat(history=[
-            {"role": "user", "parts": [SYSTEM_PROMPT]}
+            {"role": "user", "parts": [dynamic_prompt]}
         ])
         response = chat.send_message(user_message)
         return response.text
