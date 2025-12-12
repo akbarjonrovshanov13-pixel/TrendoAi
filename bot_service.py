@@ -1,13 +1,13 @@
 import telebot
 import google.generativeai as genai
-from config import TELEGRAM_BOT_TOKEN, GEMINI_API_KEY
+from config import TELEGRAM_BOT_TOKEN, GEMINI_API_KEY, GEMINI_MODEL
 import threading
 import time
 
 # Configure Gemini
 genai.configure(api_key=GEMINI_API_KEY)
 # Use model from config
-model = genai.GenerativeModel('gemini-1.5-flash') 
+model = genai.GenerativeModel(GEMINI_MODEL) 
 
 bot = telebot.TeleBot(TELEGRAM_BOT_TOKEN)
 
