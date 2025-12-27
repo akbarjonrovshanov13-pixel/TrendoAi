@@ -55,6 +55,14 @@ MARKETING_POST_MINUTE = 0
 # Tashqi cron xizmatlari uchun secret key
 CRON_SECRET = os.getenv("CRON_SECRET", "trendoai-cron-secret-2025")
 
+# ========== ANALYTICS & REMARKETING ==========
+# Google Analytics 4 (G-XXXXXXXXXX formatida)
+GA4_ID = os.getenv("GA4_ID")
+# Google Ads Remarketing (AW-XXXXXXXXXX formatida)
+GOOGLE_ADS_ID = os.getenv("GOOGLE_ADS_ID")
+# Facebook Pixel ID (faqat raqamlar)
+FACEBOOK_PIXEL_ID = os.getenv("FACEBOOK_PIXEL_ID")
+
 # ========== PAGINATION ==========
 POSTS_PER_PAGE = 10
 

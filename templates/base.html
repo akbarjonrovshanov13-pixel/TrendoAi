@@ -9,14 +9,48 @@
     <!-- Google Search Console Verification -->
     <meta name="google-site-verification" content="__XWNg2bmiWeV5L7zeoJ379shPyzgpIqQpZt6DGC4-g">
 
-    <!-- Google Analytics (GA4) -->
-    <!-- <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+    <!-- Google Analytics 4 (GA4) -->
+    {% if config.get('GA4_ID') %}
+    <script async src="https://www.googletagmanager.com/gtag/js?id={{ config.GA4_ID }}"></script>
     <script>
         window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
+        function gtag() { dataLayer.push(arguments); }
         gtag('js', new Date());
-        gtag('config', 'G-XXXXXXXXXX');
-    </script> -->
+        gtag('config', '{{ config.GA4_ID }}');
+    </script>
+    {% endif %}
+
+    <!-- Google Ads Remarketing Tag -->
+    {% if config.get('GOOGLE_ADS_ID') %}
+    <script async src="https://www.googletagmanager.com/gtag/js?id={{ config.GOOGLE_ADS_ID }}"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+        gtag('config', '{{ config.GOOGLE_ADS_ID }}');
+    </script>
+    {% endif %}
+
+    <!-- Facebook Pixel -->
+    {% if config.get('FACEBOOK_PIXEL_ID') %}
+    <script>
+        !function (f, b, e, v, n, t, s) {
+            if (f.fbq) return; n = f.fbq = function () {
+                n.callMethod ?
+                n.callMethod.apply(n, arguments) : n.queue.push(arguments)
+            };
+            if (!f._fbq) f._fbq = n; n.push = n; n.loaded = !0; n.version = '2.0';
+            n.queue = []; t = b.createElement(e); t.async = !0;
+            t.src = v; s = b.getElementsByTagName(e)[0];
+            s.parentNode.insertBefore(t, s)
+        }(window, document, 'script',
+            'https://connect.facebook.net/en_US/fbevents.js');
+        fbq('init', '{{ config.FACEBOOK_PIXEL_ID }}');
+        fbq('track', 'PageView');
+    </script>
+    <noscript><img height="1" width="1" style="display:none"
+            src="https://www.facebook.com/tr?id={{ config.FACEBOOK_PIXEL_ID }}&ev=PageView&noscript=1" /></noscript>
+    {% endif %}
 
     <!-- SEO Meta Tags -->
     <meta name="description"
