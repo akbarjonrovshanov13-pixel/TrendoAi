@@ -51,6 +51,10 @@ SEO_POST_MINUTE = 0
 MARKETING_POST_HOUR = 12
 MARKETING_POST_MINUTE = 0
 
+# ========== CRON SOZLAMALARI ==========
+# Tashqi cron xizmatlari uchun secret key
+CRON_SECRET = os.getenv("CRON_SECRET", "trendoai-cron-secret-2025")
+
 # ========== PAGINATION ==========
 POSTS_PER_PAGE = 10
 

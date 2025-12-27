@@ -694,6 +694,68 @@ def api_stats():
     })
 
 
+# ========== CRON API ROUTES ==========
+
+@app.route('/api/cron/generate-post', methods=['POST', 'GET'])
+def cron_generate_post():
+    """
+    Tashqi Cron xizmatlari uchun post generatsiya endpoint.
+    cron-job.org yoki boshqa xizmatlar orqali chaqiriladi.
+    """
+    import os
+    import random
+    
+    # Secret key tekshirish (xavfsizlik uchun)
+    cron_secret = os.getenv('CRON_SECRET', 'trendoai-cron-secret-2025')
+    
+    # Header yoki query param orqali secret tekshirish
+    provided_secret = request.headers.get('X-Cron-Secret') or request.args.get('secret')
+    
+    if provided_secret != cron_secret:
+        return jsonify({
+            'error': 'Unauthorized',
+            'message': 'Invalid or missing CRON_SECRET'
+        }), 401
+    
+    try:
+        from scheduler import TOPICS, generate_and_publish_post
+        
+        # Generatsiya qilish
+        generate_and_publish_post()
+        
+        return jsonify({
+            'status': 'success',
+            'message': 'Post muvaffaqiyatli generatsiya qilindi!',
+            'timestamp': datetime.now().isoformat()
+        })
+        
+    except Exception as e:
+        return jsonify({
+            'status': 'error',
+            'message': str(e),
+            'timestamp': datetime.now().isoformat()
+        }), 500
+
+
+@app.route('/api/cron/status')
+def cron_status():
+    """Cron vazifalar statusi"""
+    try:
+        from scheduler import get_scheduled_jobs
+        jobs = get_scheduled_jobs()
+        return jsonify({
+            'status': 'ok',
+            'scheduled_jobs': len(jobs),
+            'jobs': jobs,
+            'timestamp': datetime.now().isoformat()
+        })
+    except Exception as e:
+        return jsonify({
+            'status': 'error',
+            'message': str(e)
+        }), 500
+
+
 # ========== SEO ROUTES ==========
 
 @app.route('/sitemap.xml')
