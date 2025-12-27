@@ -375,7 +375,8 @@
         window.addEventListener('scroll', () => {
             const currentScroll = window.pageYOffset;
             const breadcrumbs = document.querySelector('.breadcrumb-nav');
-            const articleHeader = document.querySelector('.article-header');
+            // Generic selector for all types of detail headers
+            const detailHeader = document.querySelector('.article-header, .service-header-hero, .portfolio-detail-header');
             const featuredImage = document.querySelector('.article-featured-image');
 
             if (currentScroll > lastScroll && currentScroll > 5) {
@@ -383,9 +384,9 @@
                 header.classList.add('header-hidden');
                 document.body.classList.add('is-scrolling-down');
 
-                // Hide article specific distractions
+                // Hide distractions smoothly
                 if (breadcrumbs) breadcrumbs.style.opacity = '0';
-                if (articleHeader) articleHeader.style.opacity = '0';
+                if (detailHeader) detailHeader.style.opacity = '0';
                 if (featuredImage) featuredImage.style.opacity = '0';
             } else if (currentScroll < lastScroll || currentScroll <= 20) {
                 // Scrolling UP - Show Navigation
@@ -393,7 +394,7 @@
                 document.body.classList.remove('is-scrolling-down');
 
                 if (breadcrumbs) breadcrumbs.style.opacity = '1';
-                if (articleHeader) articleHeader.style.opacity = '1';
+                if (detailHeader) detailHeader.style.opacity = '1';
                 if (featuredImage) featuredImage.style.opacity = '1';
             }
 
