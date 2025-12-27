@@ -92,70 +92,102 @@ TOPICS = [
 ]
 
 
-def generate_and_publish_post():
+def generate_and_publish_post(topic=None, category=None):
     """
     Yangi post generatsiya qilib, bazaga saqlaydi va Telegramga yuboradi.
+    
+    topic: Agar berilsa, ushbu mavzuda yozadi. Aks holda random tanlaydi.
+    category: Agar berilsa, ushbu kategoriyani qo'yadi. Aks holda random tanlaydi.
     """
     current_time = datetime.now().strftime('%H:%M')
     print(f"\n{'='*60}")
     print(f"🚀 TrendoAI — Post generatsiyasi boshlandi... [{current_time}]")
     print(f"{'='*60}")
     
-    # Random mavzu va kategoriya tanlash
-    selected_topic = random.choice(TOPICS)
-    selected_category = random.choice(CATEGORIES)
+    # Mavzu va kategoriya tanlash
+    selected_topic = topic if topic else random.choice(TOPICS)
+    selected_category = category if category else random.choice(CATEGORIES)
     
-    print(f"📌 Tanlangan mavzu: {selected_topic}")
+    print(f"📌 Mavzu: {selected_topic}")
     print(f"📂 Kategoriya: {selected_category}")
     
     with app.app_context():
-        post_data = generate_post_for_seo(selected_topic)
-        
-        if post_data:
-            # Rasm olish
-            from image_fetcher import get_image_for_topic
-            image_url = get_image_for_topic(selected_topic)
-            print(f"🖼️ Rasm: {image_url[:50]}...")
+        try:
+            post_data = generate_post_for_seo(selected_topic)
             
-            new_post = Post(
-                title=post_data['title'],
-                content=post_data['content'],
-                topic=selected_topic,
-                category=selected_category,
-                keywords=post_data['keywords'],
-                image_url=image_url,
-                is_published=True
-            )
-            new_post.reading_time = new_post.calculate_reading_time()
-            
-            db.session.add(new_post)
-            db.session.commit()
-            
-            new_post.slug = new_post.generate_slug()
-            db.session.commit()
-            
-            print(f"✅ Yangi post '{new_post.title}' bazaga saqlandi.")
-            
-            # Telegramga rasm bilan yuborish
-            from telegram_poster import send_photo_to_channel
-            post_url = f"{SITE_URL}/post/{new_post.id}"
-            tg_caption = f"""📝 *Yangi Maqola!*
-
-*{new_post.title}*
-
-🏷 Kategoriya: #{selected_category.replace(' ', '_')}
+            if post_data:
+                # Rasm olish
+                from image_fetcher import get_image_for_topic
+                image_url = get_image_for_topic(selected_topic)
+                print(f"🖼️ Rasm: {image_url[:50]}...")
+                
+                new_post = Post(
+                    title=post_data['title'],
+                    content=post_data['content'],
+                    topic=selected_topic,
+                    category=selected_category,
+                    keywords=post_data['keywords'],
+                    image_url=image_url,
+                    is_published=True
+                )
+                new_post.reading_time = new_post.calculate_reading_time()
+                
+                db.session.add(new_post)
+                db.session.commit()
+                
+                new_post.slug = new_post.generate_slug()
+                db.session.commit()
+                
+                print(f"✅ Yangi post '{new_post.title}' bazaga saqlandi.")
+                
+                # Telegramga yuborish
+                from telegram_poster import send_photo_to_channel, send_to_telegram_channel
+                
+                # Markdown maxsus belgilarni escape qilish
+                def escape_md(text):
+                    if not text: return text
+                    # Escape characters that have special meaning in Markdown V2
+                    # _, *, [, ], (, ), ~, `, >, #, +, -, =, |, {, }, ., !
+                    # We only escape those that are likely to appear in titles/categories
+                    # and would cause formatting issues.
+                    for char in ['_', '*', '[', ']', '`', '~', '>', '#', '+', '-', '=', '|', '{', '}', '.', '!']:
+                        text = text.replace(char, '\\' + char)
+                    return text
+                
+                post_url = f"{SITE_URL}/post/{new_post.id}"
+                safe_title = escape_md(new_post.title)
+                safe_category = escape_md(selected_category.replace(' ', '_')) # Replace spaces then escape
+                
+                tg_caption = f"""📝 *Yangi Maqola!*
+    
+*{safe_title}*
+    
+🏷 Kategoriya: #{safe_category}
 ⏱ O'qish vaqti: {new_post.reading_time} daqiqa
-
+    
 🔗 [Maqolani o'qish]({post_url})
-
+    
 #TrendoAI #Texnologiya"""
-            
-            if send_photo_to_channel(image_url, tg_caption):
-                print("✅ Telegram kanalga rasm bilan yuborildi!")
+                
+                # Rasm bilan yoki rasmsiz yuborish
+                success = False
+                if image_url:
+                    success = send_photo_to_channel(image_url, tg_caption)
+                else:
+                    success = send_to_telegram_channel(tg_caption)
+                
+                if success:
+                    print("✅ Telegram kanalga yuborildi!")
+                else:
+                    print("⚠️ Telegram yuborishda muammo yuz berdi")
+                    
+                return True
             else:
-                print("⚠️ Telegram yuborishda muammo")
-        else:
-            print("❌ Post generatsiya qilishda xatolik yuz berdi.")
+                print("❌ Post generatsiya qilishda xatolik yuz berdi (AI javob bermadi).")
+                return False
+        except Exception as e:
+            print(f"❌ Xato yuz berdi: {str(e)}")
+            return False
     
     print(f"{'='*60}\n")
 

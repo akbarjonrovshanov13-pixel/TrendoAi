@@ -8,6 +8,7 @@ import re
 import markdown2
 from datetime import datetime
 from functools import wraps
+import threading
 from flask import Flask, render_template, request, redirect, url_for, flash, session, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from dotenv import load_dotenv
@@ -563,80 +564,24 @@ def admin_delete_post(post_id):
 @app.route('/admin/generate', methods=['GET', 'POST'])
 @login_required
 def admin_generate():
-    """AI bilan post generatsiya qilish"""
+    """AI bilan post generatsiya qilish (Asinxron)"""
     if request.method == 'POST':
         topic = request.form.get('topic')
         category = request.form.get('category', 'Texnologiya')
         
-        from ai_generator import generate_post_for_seo
-        from image_fetcher import get_image_for_topic
+        if not topic:
+            flash('Mavzu kiritilishi shart!', 'error')
+            return redirect(url_for('admin_generate'))
+            
+        from scheduler import generate_and_publish_post
         
-        post_data = generate_post_for_seo(topic)
+        # Orqa fonda generatsiyani boshlash
+        thread = threading.Thread(target=generate_and_publish_post, args=(topic, category))
+        thread.daemon = True
+        thread.start()
         
-        if post_data:
-            # Rasm olish
-            image_url = get_image_for_topic(topic)
-            
-            post = Post(
-                title=post_data['title'],
-                content=post_data['content'],
-                topic=topic,
-                category=category,
-                keywords=post_data['keywords'],
-                image_url=image_url,
-                is_published=True
-            )
-            post.reading_time = post.calculate_reading_time()
-            
-            db.session.add(post)
-            db.session.commit()
-            
-            post.slug = post.generate_slug()
-            db.session.commit()
-            
-            # Telegram kanalga yuborish
-            try:
-                from telegram_poster import send_to_telegram_channel, send_photo_to_channel
-                from config import SITE_URL
-                
-                # Markdown maxsus belgilarni escape qilish
-                def escape_markdown(text):
-                    """Telegram Markdown uchun xavfli belgilarni escape qilish"""
-                    if not text:
-                        return text
-                    for char in ['_', '*', '[', ']', '`', '~']:
-                        text = text.replace(char, '\\' + char)
-                    return text
-                
-                post_url = f"{SITE_URL}/post/{post.id}"
-                safe_title = escape_markdown(post.title)
-                safe_category = category.replace(' ', '_').replace('_', '\\_')
-                
-                tg_caption = f"""📝 *Yangi Maqola!*
-
-{safe_title}
-
-🏷 Kategoriya: #{safe_category}
-⏱ O'qish vaqti: {post.reading_time} daqiqa
-
-🔗 Maqolani o'qish: {post_url}
-
-#TrendoAI #Texnologiya"""
-
-                # Rasm bilan yuborish
-                if image_url:
-                    send_photo_to_channel(image_url, tg_caption)
-                else:
-                    send_to_telegram_channel(tg_caption)
-                    
-                flash(f'"{post.title}" muvaffaqiyatli generatsiya qilindi va Telegramga yuborildi!', 'success')
-            except Exception as e:
-                print(f"Telegram xatosi: {e}")
-                flash(f'"{post.title}" muvaffaqiyatli generatsiya qilindi!', 'success')
-            
-            return redirect(url_for('admin_posts'))
-        else:
-            flash('Generatsiya qilishda xatolik yuz berdi!', 'error')
+        flash(f'"{topic}" mavzusida generatsiya orqa fonda boshlandi. Tez orada Telegramga chiqadi.', 'success')
+        return redirect(url_for('admin_posts'))
     
     return render_template('admin/generate.html', categories=CATEGORIES)
 
@@ -936,42 +881,30 @@ def api_stats():
 @app.route('/api/cron/generate-post', methods=['POST', 'GET'])
 def cron_generate_post():
     """
-    Tashqi Cron xizmatlari uchun post generatsiya endpoint.
+    Tashqi Cron xizmatlari uchun post generatsiya endpoint (Asinxron).
     cron-job.org yoki boshqa xizmatlar orqali chaqiriladi.
     """
     import os
-    import random
     
-    # Secret key tekshirish (xavfsizlik uchun)
+    # Secret key tekshirish
     cron_secret = os.getenv('CRON_SECRET', 'trendoai-cron-secret-2025')
-    
-    # Header yoki query param orqali secret tekshirish
     provided_secret = request.headers.get('X-Cron-Secret') or request.args.get('secret')
     
     if provided_secret != cron_secret:
-        return jsonify({
-            'error': 'Unauthorized',
-            'message': 'Invalid or missing CRON_SECRET'
-        }), 401
+        return jsonify({'error': 'Unauthorized'}), 401
     
-    try:
-        from scheduler import TOPICS, generate_and_publish_post
-        
-        # Generatsiya qilish
-        generate_and_publish_post()
-        
-        return jsonify({
-            'status': 'success',
-            'message': 'Post muvaffaqiyatli generatsiya qilindi!',
-            'timestamp': datetime.now().isoformat()
-        })
-        
-    except Exception as e:
-        return jsonify({
-            'status': 'error',
-            'message': str(e),
-            'timestamp': datetime.now().isoformat()
-        }), 500
+    from scheduler import generate_and_publish_post
+    
+    # Orqa fonda generatsiyani boshlash
+    thread = threading.Thread(target=generate_and_publish_post)
+    thread.daemon = True
+    thread.start()
+    
+    return jsonify({
+        'status': 'accepted',
+        'message': 'Post generatsiyasi orqa fonda boshlandi (Asinxron)',
+        'timestamp': datetime.now().isoformat()
+    }), 202
 
 
 @app.route('/api/init-db')
