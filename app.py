@@ -599,15 +599,27 @@ def admin_generate():
                 from telegram_poster import send_to_telegram_channel, send_photo_to_channel
                 from config import SITE_URL
                 
+                # Markdown maxsus belgilarni escape qilish
+                def escape_markdown(text):
+                    """Telegram Markdown uchun xavfli belgilarni escape qilish"""
+                    if not text:
+                        return text
+                    for char in ['_', '*', '[', ']', '`', '~']:
+                        text = text.replace(char, '\\' + char)
+                    return text
+                
                 post_url = f"{SITE_URL}/post/{post.id}"
+                safe_title = escape_markdown(post.title)
+                safe_category = category.replace(' ', '_').replace('_', '\\_')
+                
                 tg_caption = f"""📝 *Yangi Maqola!*
 
-*{post.title}*
+{safe_title}
 
-🏷 Kategoriya: #{category.replace(' ', '_')}
+🏷 Kategoriya: #{safe_category}
 ⏱ O'qish vaqti: {post.reading_time} daqiqa
 
-🔗 [Maqolani o'qish]({post_url})
+🔗 Maqolani o'qish: {post_url}
 
 #TrendoAI #Texnologiya"""
 
