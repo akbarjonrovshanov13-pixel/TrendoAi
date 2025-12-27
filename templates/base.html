@@ -340,19 +340,22 @@
     </style>
 
     <script>
-        // Smart Header: Hide on scroll, show only at the top
+        // Smart Header: Hide on scroll down, show on scroll up
+        let lastScroll = 0;
         const header = document.querySelector('header');
 
         window.addEventListener('scroll', () => {
             const currentScroll = window.pageYOffset;
 
-            if (currentScroll > 80) {
-                // Scrolling away from top - hide header
+            if (currentScroll > lastScroll && currentScroll > 60) {
+                // Scrolling DOWN - hide header
                 header.classList.add('header-hidden');
             } else {
-                // At the top - show header
+                // Scrolling UP - show header
                 header.classList.remove('header-hidden');
             }
+
+            lastScroll = currentScroll;
         });
 
         // Telegram Popup Logic
