@@ -340,25 +340,19 @@
     </style>
 
     <script>
-        // Auto-hide header on scroll (mobile optimization)
-        let lastScroll = 0;
+        // Smart Header: Hide on scroll, show only at the top
         const header = document.querySelector('header');
 
         window.addEventListener('scroll', () => {
             const currentScroll = window.pageYOffset;
 
-            // Only apply on mobile
-            if (window.innerWidth <= 768) {
-                if (currentScroll > lastScroll && currentScroll > 100) {
-                    // Scrolling down - hide header
-                    header.classList.add('header-hidden');
-                } else {
-                    // Scrolling up - show header
-                    header.classList.remove('header-hidden');
-                }
+            if (currentScroll > 80) {
+                // Scrolling away from top - hide header
+                header.classList.add('header-hidden');
+            } else {
+                // At the top - show header
+                header.classList.remove('header-hidden');
             }
-
-            lastScroll = currentScroll;
         });
 
         // Telegram Popup Logic
