@@ -178,6 +178,34 @@ Professional IT xizmatlar O'zbekistonda.{% endblock %}
     <a href="https://t.me/TrendoAibot" class="cta-button" target="_blank">📱 Bot orqali bog'lanish (@TrendoAibot)</a>
 </section>
 
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const urlParams = new URLSearchParams(window.location.search);
+        const service = urlParams.get('service');
+        if (service) {
+            const select = document.getElementById('service');
+            if (select) {
+                select.value = service;
+                setTimeout(() => {
+                    const el = document.getElementById('order');
+                    if (el) el.scrollIntoView({ behavior: 'smooth' });
+                }, 500);
+            }
+        }
+    });
+
+    const form = document.querySelector('.order-form');
+    if (form) {
+        form.addEventListener('submit', function () {
+            if (typeof fbq !== 'undefined') {
+                fbq('track', 'Lead', {
+                    content_category: document.getElementById('service').value
+                });
+            }
+        });
+    }
+</script>
+
 <style>
     .order-form-section {
         background: var(--bg-card);

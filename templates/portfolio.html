@@ -721,13 +721,17 @@ muvaffaqiyatli loyihalar. Bepul konsultatsiya!{% endblock %}
                     </div>
                 </div>
 
-                <div class="modal-actions">
-                    <a id="modalLink" href="#" target="_blank" class="modal-btn primary">
-                        🌐 Loyihani ko'rish
-                    </a>
-                    <button class="modal-btn secondary" onclick="closeModal()">
-                        Yopish
-                    </button>
+                <div class="modal-cta-box">
+                    <h4>Sizga ham shunday loyiha kerakmi?</h4>
+                    <p>Mutaxassislarimiz bilan bog'laning va bepul konsultatsiya oling!</p>
+                    <div class="modal-actions">
+                        <a id="modalOrderBtn" href="{{ url_for('order_page') }}" class="modal-btn order-now">
+                            🚀 Buyurtma berish
+                        </a>
+                        <a id="modalLink" href="#" target="_blank" class="modal-btn primary">
+                            🌐 Ko'rish
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>
@@ -933,13 +937,48 @@ muvaffaqiyatli loyihalar. Bepul konsultatsiya!{% endblock %}
     }
 
     .modal-btn.primary {
-        background: var(--gradient-main);
+        background: rgba(255, 255, 255, 0.1);
         color: white;
     }
 
-    .modal-btn.secondary {
-        background: rgba(255, 255, 255, 0.1);
+    .modal-btn.order-now {
+        background: var(--gradient-main);
         color: white;
+        animation: pulse-small 2s infinite;
+    }
+
+    .modal-cta-box {
+        margin-top: 40px;
+        padding: 24px;
+        background: rgba(99, 102, 241, 0.1);
+        border: 1px solid rgba(99, 102, 241, 0.2);
+        border-radius: var(--radius-lg);
+        text-align: center;
+    }
+
+    .modal-cta-box h4 {
+        margin-bottom: 8px;
+        font-size: 1.2rem;
+    }
+
+    .modal-cta-box p {
+        font-size: 0.9rem;
+        color: var(--text-secondary);
+        margin-bottom: 20px;
+    }
+
+    @keyframes pulse-small {
+        0% {
+            transform: scale(1);
+        }
+
+        50% {
+            transform: scale(1.03);
+        }
+
+        100% {
+            transform: scale(1);
+        }
     }
 
     .modal-btn:hover {
@@ -984,7 +1023,7 @@ muvaffaqiyatli loyihalar. Bepul konsultatsiya!{% endblock %}
 
 <script>
     const modal = document.getElementById('projectModal');
-    const portfoliosData = [{% for item in portfolios %}{ { item.to_dict() | tojson } } {% if not loop.last %}, {% endif %} {% endfor %}];
+    const portfoliosData = [{% for item in portfolios %}{ { item.to_dict() | tojson | safe } } {% if not loop.last %}, {% endif %} {% endfor %}];
 
     function openModal(projectId) {
         const project = portfoliosData.find(p => p.id === projectId);
@@ -1031,6 +1070,17 @@ muvaffaqiyatli loyihalar. Bepul konsultatsiya!{% endblock %}
         } else {
             detailsSection.style.display = 'none';
         }
+
+        // Pre-fill order link with category
+        const orderBtn = document.getElementById('modalOrderBtn');
+        const categoryMap = {
+            'bot': 'telegram_bot',
+            'web': 'web_site',
+            'ai': 'ai_chatbot',
+            'mobile': 'mobile_app'
+        };
+        const serviceKey = categoryMap[project.category] || '';
+        orderBtn.href = `{{ url_for('order_page') }}?service=${serviceKey}`;
 
         // Link
         const linkBtn = document.getElementById('modalLink');
@@ -1079,6 +1129,28 @@ muvaffaqiyatli loyihalar. Bepul konsultatsiya!{% endblock %}
                 }
             });
         });
+    });
+
+    // Deep Deep Linking: Open modal if hash reflects a project slug
+    window.addEventListener('DOMContentLoaded', () => {
+        const hash = window.location.hash.substring(1);
+        if (hash) {
+            const project = portfoliosData.find(p => p.slug === hash);
+            if (project) {
+                openModal(project.id);
+            }
+        }
+    });
+
+    // Handle back/forward navigation for hash changes
+    window.addEventListener('hashchange', () => {
+        const hash = window.location.hash.substring(1);
+        if (hash) {
+            const project = portfoliosData.find(p => p.slug === hash);
+            if (project) openModal(project.id);
+        } else {
+            closeModal();
+        }
     });
 </script>
 {% endblock %}
