@@ -1,9 +1,20 @@
 {% extends 'base.html' %}
 
-{% block title %}Portfolio - TrendoAI{% endblock %}
+{% block title %}Portfolio - TrendoAI | Telegram Bot, Web Sayt, AI Yechimlar{% endblock %}
 
-{% block meta_description %}TrendoAI portfolio: Bizning loyihalarimiz va muvaffaqiyatli ishlarimiz. Telegram botlar, web
-saytlar, AI yechimlar.{% endblock %}
+{% block meta_description %}TrendoAI portfolio: Professional Telegram botlar, zamonaviy web saytlar, AI yechimlar. 50+
+muvaffaqiyatli loyihalar. Bepul konsultatsiya!{% endblock %}
+
+{% block extra_head %}
+<!-- Facebook Ads Optimization -->
+<meta property="og:title" content="TrendoAI Portfolio - Professional IT Xizmatlari">
+<meta property="og:description"
+    content="50+ muvaffaqiyatli loyihalar: Telegram botlar, web saytlar, AI yechimlar. Bepul konsultatsiya olish uchun bog'laning!">
+<meta property="og:image" content="https://trendoai.uz/static/images/portfolio-og.png">
+<meta property="og:url" content="https://trendoai.uz/portfolio">
+<meta property="og:type" content="website">
+<meta property="product:category" content="IT Services">
+{% endblock %}
 
 {% block content %}
 <!-- Portfolio Hero -->
@@ -41,7 +52,8 @@ saytlar, AI yechimlar.{% endblock %}
 <section class="portfolio-grid">
     {% if portfolios %}
     {% for item in portfolios %}
-    <article class="portfolio-card {% if item.is_featured %}featured{% endif %}" data-category="{{ item.category }}">
+    <article class="portfolio-card {% if item.is_featured %}featured{% endif %}" data-category="{{ item.category }}"
+        onclick="openModal({{ item.id }})" style="cursor: pointer;">
         {% if item.is_featured %}
         <div class="card-badge">⭐ Featured</div>
         {% endif %}
@@ -1031,6 +1043,16 @@ saytlar, AI yechimlar.{% endblock %}
 
         modal.classList.add('active');
         document.body.style.overflow = 'hidden';
+
+        // Facebook Pixel: Track ViewContent event for ads optimization
+        if (typeof fbq !== 'undefined') {
+            fbq('track', 'ViewContent', {
+                content_name: project.title,
+                content_category: project.category,
+                content_type: 'product',
+                content_ids: [project.id]
+            });
+        }
     }
 
     function closeModal() {

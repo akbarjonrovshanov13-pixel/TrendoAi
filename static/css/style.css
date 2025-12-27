@@ -2135,11 +2135,47 @@ footer {
     .posts-grid,
     .services-grid,
     .features-grid,
-    .portfolio-grid,
     .testimonials-grid,
     .related-grid {
         grid-template-columns: 1fr;
         gap: 16px;
+    }
+
+    /* Portfolio - 2 columns on mobile like product catalog */
+    .portfolio-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+    }
+
+    .portfolio-card {
+        padding: 12px;
+    }
+
+    .portfolio-card .card-emoji {
+        font-size: 2rem;
+        margin-bottom: 10px;
+    }
+
+    .portfolio-card h3 {
+        font-size: 0.85rem;
+        margin-bottom: 6px;
+    }
+
+    .portfolio-card p {
+        font-size: 0.7rem;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+
+    .portfolio-card .tech-stack {
+        display: none;
+    }
+
+    .portfolio-card .card-link {
+        padding: 8px 12px;
+        font-size: 0.75rem;
     }
 
     .stats-grid {
