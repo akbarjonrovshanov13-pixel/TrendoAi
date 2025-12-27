@@ -378,14 +378,15 @@
             // Generic selector for all types of detail headers
             const detailHeader = document.querySelector('.article-header, .service-header-hero, .portfolio-detail-header');
             const featuredImage = document.querySelector('.article-featured-image');
+            const sidebar = document.querySelector('.article-sidebar');
 
-            if (currentScroll > lastScroll && currentScroll > 2) {
+            if (currentScroll > lastScroll && currentScroll > 5) {
                 // Scrolling DOWN - Full Immersion Mode (Hide almost immediately)
                 header.classList.add('header-hidden');
                 document.body.classList.add('is-scrolling-down');
 
                 // Hide distractions smoothly
-                [breadcrumbs, detailHeader, featuredImage].forEach(el => {
+                [breadcrumbs, detailHeader, featuredImage, sidebar].forEach(el => {
                     if (el) {
                         el.style.opacity = '0';
                         el.style.pointerEvents = 'none';
@@ -396,7 +397,7 @@
                 header.classList.remove('header-hidden');
                 document.body.classList.remove('is-scrolling-down');
 
-                [breadcrumbs, detailHeader, featuredImage].forEach(el => {
+                [breadcrumbs, detailHeader, featuredImage, sidebar].forEach(el => {
                     if (el) {
                         el.style.opacity = '1';
                         el.style.pointerEvents = 'auto';
