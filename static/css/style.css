@@ -1171,20 +1171,178 @@ main {
 
 @media (max-width: 768px) {
     .article-page {
-        padding: 24px;
+        padding: 16px;
+        border-radius: var(--radius-lg);
+    }
+
+    .breadcrumb-nav {
+        font-size: 0.75rem;
+        gap: 6px;
+        margin-bottom: 20px;
+        flex-wrap: wrap;
+    }
+
+    .article-header {
+        margin-bottom: 24px;
+    }
+
+    .article-category-badge {
+        font-size: 0.7rem;
+        padding: 4px 12px;
+        margin-bottom: 12px;
     }
 
     .article-header h1 {
-        font-size: 1.8rem;
+        font-size: 1.4rem;
+        line-height: 1.35;
+        margin-bottom: 16px;
+    }
+
+    .article-meta {
+        flex-direction: row;
+        flex-wrap: wrap;
+        gap: 12px;
+        font-size: 0.8rem;
+        padding-bottom: 16px;
+    }
+
+    .article-featured-image {
+        margin: 0 -16px 30px;
+        border-radius: 0;
+    }
+
+    .article-featured-image img {
+        max-height: 250px;
+    }
+
+    .mobile-toc-container {
+        margin-bottom: 20px;
+        padding: 12px;
+    }
+
+    .mobile-toc-container summary {
+        font-size: 0.95rem;
+    }
+
+    /* Content Typography - MOBILE */
+    .article-content {
+        font-size: 1.05rem;
+        line-height: 1.85;
+    }
+
+    .article-content h2 {
+        font-size: 1.35rem;
+        margin: 35px 0 16px;
+        padding-bottom: 12px;
+    }
+
+    .article-content h3 {
+        font-size: 1.15rem;
+        margin: 25px 0 12px;
+    }
+
+    .article-content p {
+        margin-bottom: 18px;
+    }
+
+    .article-content ul,
+    .article-content ol {
+        padding-left: 20px;
+        margin: 18px 0;
+    }
+
+    .article-content li {
+        margin-bottom: 10px;
+    }
+
+    .article-content blockquote {
+        margin: 24px 0;
+        padding: 16px 14px;
+        font-size: 1rem;
+    }
+
+    .article-content pre {
+        margin: 24px -16px;
+        padding: 16px;
+        border-radius: 0;
+        font-size: 0.85rem;
+        overflow-x: auto;
+    }
+
+    .article-content code {
+        font-size: 0.85rem;
+        padding: 2px 6px;
+    }
+
+    /* Tags Footer - Mobile */
+    .article-tags-footer {
+        margin: 30px 0;
+        padding-top: 20px;
+        gap: 8px;
+    }
+
+    .tag-link {
+        padding: 6px 12px;
+        font-size: 0.75rem;
+    }
+
+    /* Share Footer - Mobile */
+    .article-share-footer {
+        padding: 20px;
+        margin-top: 30px;
+    }
+
+    .article-share-footer h4 {
+        font-size: 1rem;
+        margin-bottom: 12px;
     }
 
     .share-grid {
         grid-template-columns: 1fr;
+        gap: 10px;
     }
 
-    .article-meta {
-        flex-direction: column;
-        gap: 10px;
+    .share-card {
+        padding: 10px 16px;
+        font-size: 0.9rem;
+    }
+
+    /* Author Card - Mobile */
+    .article-author-card {
+        gap: 14px;
+        margin-top: 30px;
+        padding: 16px;
+    }
+
+    .author-img {
+        font-size: 2rem;
+        width: 50px;
+        height: 50px;
+    }
+
+    .author-text strong {
+        font-size: 1rem;
+    }
+
+    .author-text p {
+        font-size: 0.85rem;
+    }
+
+    /* Sidebar - Mobile */
+    .sidebar-widget {
+        padding: 18px;
+    }
+
+    .sidebar-widget h3 {
+        font-size: 1rem;
+    }
+
+    .cta-inner h3 {
+        font-size: 1.1rem;
+    }
+
+    .cta-inner p {
+        font-size: 0.85rem;
     }
 }
 
