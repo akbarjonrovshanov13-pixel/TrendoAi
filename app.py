@@ -122,14 +122,20 @@ def markdown_filter(s):
 @app.context_processor
 def inject_globals():
     """Barcha template'larga global o'zgaruvchilar"""
+    # Debug log (Render loglarida ko'rinadi)
+    if not hasattr(app, '_log_shown'):
+        print(f"DEBUG: FACEBOOK_PIXEL_ID={FACEBOOK_PIXEL_ID}")
+        print(f"DEBUG: GA4_ID={GA4_ID}")
+        app._log_shown = True
+        
     return {
         'config': {
             'SITE_NAME': SITE_NAME,
             'SITE_DESCRIPTION': SITE_DESCRIPTION,
-            'GA4_ID': GA4_ID,
-            'GOOGLE_ADS_ID': GOOGLE_ADS_ID,
-            'FACEBOOK_PIXEL_ID': FACEBOOK_PIXEL_ID,
         },
+        'GA4_ID': GA4_ID,
+        'GOOGLE_ADS_ID': GOOGLE_ADS_ID,
+        'FACEBOOK_PIXEL_ID': FACEBOOK_PIXEL_ID,
         'categories': CATEGORIES,
         'now': datetime.now()
     }
