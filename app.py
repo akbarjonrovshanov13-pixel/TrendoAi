@@ -20,7 +20,8 @@ app = Flask(__name__)
 # Konfiguratsiya
 from config import (
     SITE_URL, SITE_NAME, SITE_DESCRIPTION, DATABASE_URI, SECRET_KEY,
-    ADMIN_USERNAME, ADMIN_PASSWORD, POSTS_PER_PAGE, CATEGORIES
+    ADMIN_USERNAME, ADMIN_PASSWORD, POSTS_PER_PAGE, CATEGORIES,
+    GA4_ID, GOOGLE_ADS_ID, FACEBOOK_PIXEL_ID
 )
 
 app.config['SQLALCHEMY_DATABASE_URI'] = DATABASE_URI
@@ -125,6 +126,9 @@ def inject_globals():
         'config': {
             'SITE_NAME': SITE_NAME,
             'SITE_DESCRIPTION': SITE_DESCRIPTION,
+            'GA4_ID': GA4_ID,
+            'GOOGLE_ADS_ID': GOOGLE_ADS_ID,
+            'FACEBOOK_PIXEL_ID': FACEBOOK_PIXEL_ID,
         },
         'categories': CATEGORIES,
         'now': datetime.now()
