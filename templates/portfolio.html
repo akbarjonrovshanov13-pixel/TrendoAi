@@ -972,7 +972,7 @@ saytlar, AI yechimlar.{% endblock %}
 
 <script>
     const modal = document.getElementById('projectModal');
-    const portfoliosData = {{ portfolios| map(attribute = 'to_dict') | list | tojson }};
+    const portfoliosData = [{% for item in portfolios %}{ { item.to_dict() | tojson } } {% if not loop.last %}, {% endif %} {% endfor %}];
 
     function openModal(projectId) {
         const project = portfoliosData.find(p => p.id === projectId);

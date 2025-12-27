@@ -141,6 +141,9 @@ class Portfolio(db.Model):
         return f"{slug}-{self.id}"
     
     def to_dict(self):
+        # Use getattr for new columns to handle missing DB columns gracefully
+        details = getattr(self, 'details', None) or ''
+        features = getattr(self, 'features', None) or ''
         return {
             'id': self.id,
             'title': self.title,
@@ -152,9 +155,9 @@ class Portfolio(db.Model):
             'link': self.link,
             'image_url': self.image_url,
             'is_featured': self.is_featured,
-            'details': self.details,
-            'details_html': markdown2.markdown(self.details) if self.details else "",
-            'features': self.features.split(',') if self.features else [],
+            'details': details,
+            'details_html': markdown2.markdown(details) if details else "",
+            'features': features.split(',') if features else [],
             'created_at': self.created_at.isoformat() if self.created_at else None
         }
 
