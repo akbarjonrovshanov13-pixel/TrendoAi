@@ -761,18 +761,14 @@ main {
     font-weight: 500;
 }
 
-/* Sticky Article Header */
+/* Article Header - Static and Clean */
 .article-header {
-    position: sticky;
-    top: 0;
-    z-index: 50;
-    background: var(--glass);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    margin: 0 -40px 40px;
-    padding: 20px 40px;
-    border-radius: var(--radius-lg);
-    border: 1px solid var(--glass-border);
+    margin: 0 0 40px;
+    padding: 0;
+    background: none;
+    backdrop-filter: none;
+    border: none;
+    border-radius: 0;
     transition: var(--transition-smooth);
 }
 
@@ -1192,11 +1188,18 @@ main {
         flex-wrap: wrap;
     }
 
+    .article-page {
+        padding: 0;
+        background: transparent;
+        border: none;
+        box-shadow: none;
+    }
+
     .article-header {
-        margin: 0 -16px 24px;
-        padding: 12px 16px;
-        top: 60px;
-        /* Below mobile header */
+        margin: 0 0 24px;
+        padding: 0;
+        position: static;
+        /* No longer sticky on mobile by default */
     }
 
     .article-category-badge {
@@ -1237,10 +1240,11 @@ main {
         font-size: 0.95rem;
     }
 
-    /* Content Typography - MOBILE */
+    /* Content Typography - MOBILE Focus */
     .article-content {
-        font-size: 1.05rem;
-        line-height: 1.85;
+        font-size: 1.1rem;
+        line-height: 1.8;
+        color: rgba(255, 255, 255, 0.9);
     }
 
     .article-content h2 {
