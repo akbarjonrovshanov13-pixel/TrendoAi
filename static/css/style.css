@@ -1817,7 +1817,7 @@ footer {
 
 /* ========== RESPONSIVE ========== */
 
-/* Tablet */
+/* Tablet & Below */
 @media (max-width: 992px) {
     .hero h1 {
         font-size: 2.5rem;
@@ -1834,41 +1834,70 @@ footer {
     }
 }
 
-/* Mobile */
+/* Mobile & Small Mobile Unified */
 @media (max-width: 768px) {
     header {
         margin: 6px;
-        padding: 10px 14px;
+        padding: 8px 12px;
         position: sticky;
         top: 6px;
         border-radius: var(--radius-lg);
     }
 
     .header-content {
-        flex-wrap: wrap;
-        gap: 8px;
+        flex-wrap: nowrap !important;
+        justify-content: space-between;
+        gap: 12px;
+        align-items: center;
     }
 
     .logo-icon {
-        font-size: 1.4rem;
+        font-size: 1.3rem;
     }
 
     .logo-text {
-        font-size: 1.2rem;
+        font-size: 1.1rem;
     }
 
     nav {
-        width: 100%;
-        justify-content: center;
-        margin-top: 6px;
-        padding-top: 6px;
-        border-top: 1px solid var(--border);
+        display: flex;
+        overflow-x: auto;
+        white-space: nowrap;
+        flex: 1;
+        scrollbar-width: none;
+        -ms-overflow-style: none;
         gap: 4px;
+        margin: 0;
+        padding: 0;
+        border: none;
+        justify-content: center;
+    }
+
+    nav::-webkit-scrollbar {
+        display: none;
     }
 
     nav a {
         padding: 6px 10px;
         font-size: 0.75rem;
+        flex-shrink: 0;
+    }
+
+    .social-icons {
+        display: flex !important;
+        flex-shrink: 0;
+        gap: 6px;
+    }
+
+    .social-icon {
+        width: 32px;
+        height: 32px;
+        flex-shrink: 0;
+    }
+
+    .social-icon svg {
+        width: 16px;
+        height: 16px;
     }
 
     .hero {
@@ -1902,7 +1931,7 @@ footer {
     }
 
     main {
-        padding: 0 10px;
+        padding: 0 8px;
     }
 
     .posts-section,
@@ -1910,7 +1939,8 @@ footer {
     .newsletter-section,
     .article-page,
     .about-section,
-    .testimonials-section {
+    .testimonials-section,
+    .search-page {
         padding: 16px 12px;
         border-radius: var(--radius-lg);
         margin-bottom: 12px;
@@ -1953,7 +1983,7 @@ footer {
 
     .categories-filter,
     .portfolio-filter {
-        justify-content: center;
+        justify-content: center !important;
     }
 
     .category-tag,
@@ -1968,15 +1998,15 @@ footer {
 
     .share-btn {
         width: 100%;
-        text-align: center;
+        justify-content: center;
     }
 
     .cta-section {
-        padding: 40px 20px;
+        padding: 30px 20px;
     }
 
     .cta-section h3 {
-        font-size: 1.5rem;
+        font-size: 1.4rem;
     }
 
     .cta-buttons {
@@ -1987,23 +2017,25 @@ footer {
     .cta-button {
         width: 100%;
         text-align: center;
+        padding: 14px 20px;
+        font-size: 1rem;
     }
 
     .about-hero,
     .services-hero,
     .portfolio-hero {
-        padding: 40px 20px;
+        padding: 30px 16px;
     }
 
     .about-hero h2,
     .services-hero h2,
     .portfolio-hero h1 {
-        font-size: 1.8rem;
+        font-size: 1.5rem;
     }
 
     footer {
-        margin: 20px 10px;
-        padding: 24px 18px;
+        margin: 20px 8px;
+        padding: 24px 16px;
     }
 
     .footer-links {
@@ -2012,96 +2044,14 @@ footer {
     }
 }
 
-/* Small Mobile */
-@media (max-width: 480px) {
-    header {
-        margin: 4px;
-        padding: 8px 10px;
-        top: 4px;
-    }
-
-    .header-content {
-        flex-wrap: nowrap !important;
-        justify-content: space-between;
-        gap: 8px;
-    }
-
-    .logo {
-        flex-shrink: 0;
-    }
-
-    .logo-icon {
-        font-size: 1.2rem;
-    }
-
+/* Very Small Devices */
+@media (max-width: 400px) {
     .logo-text {
-        font-size: 1rem;
-    }
-
-    nav {
-        display: flex;
-        overflow-x: auto;
-        white-space: nowrap;
-        flex: 1;
-        scrollbar-width: none;
-        -ms-overflow-style: none;
-        gap: 2px;
-        padding: 4px 0;
-    }
-
-    nav::-webkit-scrollbar {
         display: none;
     }
 
-    nav a {
-        padding: 6px 8px;
-        font-size: 0.7rem;
-        flex-shrink: 0;
-    }
-
-    .social-icons {
-        display: flex;
-        flex-shrink: 0;
-        gap: 4px;
-    }
-
-    .social-icon {
-        width: 30px;
-        height: 30px;
-        flex-shrink: 0;
-    }
-
-    .social-icon svg {
-        width: 15px;
-        height: 15px;
-    }
-
-    main {
-        padding: 0 6px;
-    }
-
-
-
-    .hero h1 {
-        font-size: 1.5rem;
-    }
-
-    .hero-stat .stat-value {
-        font-size: 1.8rem;
-    }
-
-    .stats-grid {
-        grid-template-columns: 1fr;
-    }
-
-    .post-card,
-    .service-card,
-    .portfolio-card {
-        padding: 20px;
-    }
-
-    .article-page {
-        padding: 20px 16px;
+    header {
+        padding: 6px 10px;
     }
 }
 
