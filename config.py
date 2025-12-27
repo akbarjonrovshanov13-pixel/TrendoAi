@@ -60,12 +60,10 @@ POSTS_PER_PAGE = 10
 
 # ========== KATEGORIYALAR ==========
 CATEGORIES = [
-    "Texnologiya",
-    "Sun'iy Intellekt",
-    "Dasturlash",
-    "Biznes",
-    "Startaplar",
-    "Kiberxavfsizlik",
-    "Mobile",
-    "Web"
+    "Web Saytlar",
+    "Telegram Botlar", 
+    "AI Chatbotlar",
+    "Avtomatlashtirish",
+    "Case Studies",
+    "Texnik Yo'riqnomalar"
 ]

@@ -12,82 +12,83 @@ from config import SITE_URL, TIMEZONE, CATEGORIES
 import random
 from datetime import datetime
 
-# Mavzular ro'yxati — har xil kategoriyalarda
+# 80/20 QOIDASI BO'YICHA MAVZULAR
+# 80% - Mijozga qiymat beradigan foydali ma'lumotlar
+# 20% - Xizmatlarimiz haqida yengil eslatmalar
+
 TOPICS = [
-    # Texnologiya
-    "2025 yilda eng mashhur texnologiya trendlari",
-    "Kvant kompyuterlari: Kelajak hozirdan boshlanadi",
-    "5G va 6G texnologiyalari orasidagi farq",
-    "Metaverse nima va u biznesga qanday ta'sir qiladi",
-    "IoT - Internet of Things: Aqlli uylar",
-    "Bulutli hisoblash (Cloud Computing) asoslari",
-    "Edge Computing nima va nima uchun kerak",
-    "Blockchain texnologiyasi haqida hamma narsa",
+    # ============ WEB SAYTLAR (80% QIYMAT) ============
+    # Landing Page va Konversiya
+    "Landing page yaratishda 7 ta muhim element: Konversiyani oshirish sirlari",
+    "Veb-sayt tezligini 2 barobar oshirish usullari: Google Core Web Vitals",
+    "Responsive dizayn: Mobil qurilmalar uchun sayt optimizatsiyasi",
+    "Veb-saytda SEO optimizatsiya: Google'da birinchi o'ringa chiqish yo'llari",
+    "E-commerce sayt yaratish: Online do'kon uchun to'liq qo'llanma",
+    "WordPress vs Custom sayt: Qaysi birini tanlash kerak?",
+    "Veb-sayt xavfsizligi: SSL, HTTPS va himoya usullari",
+    "Contact forma yaratish: Mijozlarni yo'qotmaslik sirlari",
+    "Veb-saytda A/B testing: Konversiyani 50% oshirish",
+    "Single Page Application (SPA) nima va qachon kerak?",
     
-    # Sun'iy intellekt
-    "ChatGPT vs Gemini vs Claude: Taqqoslash",
-    "Sun'iy intellekt ish o'rinlarini qanday o'zgartirmoqda",
-    "AI yordamida kontentni avtomatlashtirish",
-    "Generativ AI: Rasm va video yaratish",
-    "Machine Learning asoslari boshlang'ichlar uchun",
-    "AI chatbotlar biznes uchun",
-    "Computer Vision va uning qo'llanilishi",
-    "Natural Language Processing (NLP) nima",
-    "AI Agent nima va qanday ishlaydi",
-    "Gemini 2.0 yangiliklari",
+    # ============ TELEGRAM BOTLAR (80% QIYMAT) ============
+    # Bot yaratish va funksiyalar
+    "Telegram bot yaratish: Boshlang'ichlar uchun to'liq qo'llanma 2025",
+    "Telegram botda to'lov qabul qilish: Click, Payme, Uzcard integratsiyasi",
+    "Telegram Mini App yaratish: Web ilovalarni botga ulash",
+    "Aiogram 3.0 bilan professional bot yaratish",
+    "Telegram bot orqali avtomatik xabar yuborish: Marketing strategiyasi",
+    "Telegram kanal va guruh uchun admin bot yaratish",
+    "Telegram botda inline tugmalar: Foydalanuvchi tajribasini yaxshilash",
+    "CRM bot yaratish: Mijozlarni boshqarish avtomatlashtirish",
+    "Telegram botda webhook vs polling: Qaysi biri yaxshi?",
+    "Bot monetizatsiya: Telegram bot orqali pul ishlash yo'llari",
     
-    # Dasturlash
-    "Python yordamida web scraping qilish",
-    "React vs Vue vs Angular: Qaysi birini tanlash",
-    "FastAPI bilan REST API yaratish",
-    "Git va GitHub: Boshlang'ichlar uchun",
-    "Clean Code yozish prinsiplari",
-    "Docker bilan konteynerizatsiya",
-    "Kubernetes asoslari",
-    "TypeScript nima uchun kerak",
-    "Next.js 15 yangiliklari",
-    "Node.js vs Python: Backend uchun",
-    "PostgreSQL vs MongoDB: Ma'lumotlar bazasi tanlash",
+    # ============ AI CHATBOTLAR (80% QIYMAT) ============
+    # Chatbot yaratish va qo'llash
+    "AI chatbot nima: Biznes uchun sun'iy intellekt yordamchisi",
+    "ChatGPT API bilan o'zbek tilida chatbot yaratish",
+    "Mijozlarga 24/7 xizmat ko'rsatuvchi AI chatbot",
+    "AI chatbot vs oddiy bot: Farqlari va afzalliklari",
+    "Chatbot orqali sotuvni 3 barobar oshirish strategiyasi",
+    "Gemini API bilan aqlli chatbot integratsiyasi",
+    "AI chatbot uchun to'g'ri prompt yozish san'ati",
+    "Chatbotda NLP: Tabiiy tilni qayta ishlash asoslari",
+    "Voice chatbot: Ovozli AI yordamchi yaratish",
+    "Chatbot analytics: Samaradorlikni o'lchash va yaxshilash",
     
-    # Telegram botlar
-    "Python'da Telegram bot yaratish",
-    "Telegram bot monetizatsiya qilish",
-    "Aiogram kutubxonasi bilan ishlash",
-    "Telegram Mini Apps yaratish",
-    "Telegram bot uchun to'lov integratsiyasi",
+    # ============ AVTOMATLASHTIRISH (80% QIYMAT) ============
+    # Biznes jarayonlarini avtomatlashtirish
+    "Biznes avtomatlashtirish: Vaqt va pulni tejash yo'llari",
+    "Zapier alternativlari: Make, n8n, va bepul variantlar",
+    "Email marketing avtomatlashtirish: Drip kampaniyalar",
+    "CRM avtomatlashtirish: Mijoz bilan ishlashni soddalashtirish",
+    "Social media avtomatlashtirish: Content scheduling tools",
+    "Invoice va hisob-faktura avtomatlashtirish",
+    "HR jarayonlarini avtomatlashtirish: Ishga qabul va onboarding",
+    "Avtomatik hisobot yaratish: Google Sheets va API integratsiya",
+    "Webhook va API orqali ilovalarni bog'lash",
+    "No-code avtomatlashtirish: Dasturlashsiz yechimlar",
     
-    # Biznes va Startaplar
-    "Startap uchun MVP yaratish strategiyasi",
-    "IT freelancer sifatida ishlash",
-    "Texnologiya startaplar uchun fund raising",
-    "SaaS biznes modeli",
-    "Product-Market Fit topish",
+    # ============ AMALIY QIYMAT (Case Studies) ============
+    "Kichik biznes uchun Telegram bot: Real natijalar",
+    "Online do'kon uchun chatbot: Savdo 200% oshdi",
+    "Avtomatlashtirish bilan oyiga 40 soat tejash",
+    "Landing page + bot = Konversiya 5 barobarga ko'tarildi",
+    "AI chatbot mijoz xizmatida: 90% so'rovlar avtomatik javob",
     
-    # Kiberxavfsizlik
-    "Kiberxavfsizlik asoslari: O'zingizni himoya qiling",
-    "Parollarni xavfsiz saqlash usullari",
-    "Phishing hujumlaridan himoyalanish",
-    "VPN nima va qanday ishlaydi",
-    "Ikki faktorli autentifikatsiya (2FA)",
+    # ============ TEXNIK YO'RIQNOMALAR ============
+    "Python bilan Telegram bot: Kod misollari",
+    "Next.js bilan zamonaviy sayt yaratish",
+    "FastAPI + Telegram bot integratsiyasi",
+    "Docker bilan bot deploy qilish: Render, Railway",
+    "PostgreSQL ma'lumotlar bazasi: Bot uchun saqlash",
     
-    # Web Development
-    "Landing page yaratish sirlari",
-    "SEO optimizatsiya asoslari",
-    "Progressive Web Apps (PWA)",
-    "Web Performance optimizatsiya",
-    "Responsive dizayn prinsiplari",
-    
-    # Mobile
-    "Flutter vs React Native: 2025",
-    "iOS vs Android dasturlash",
-    "Mobile app monetizatsiya strategiyalari",
-    
-    # Yangi texnologiyalar
-    "AR va VR texnologiyalari 2025",
-    "Robototexnika sohasidagi yangiliklar",
-    "Aqlli shaharlar texnologiyasi",
-    "Elektromobillar va texnologiya",
-    "Kosmik texnologiyalar trendlari",
+    # ============ TRENDLAR VA YANGILIKLAR ============
+    "2025 yil web development trendlari",
+    "Telegram Bot API yangiliklari 2025",
+    "AI chatbot trendlari: Gemini 2.0, GPT-5",
+    "O'zbekistonda IT xizmatlar bozori",
+    "Freelance dasturchilar uchun imkoniyatlar",
 ]
 
 
