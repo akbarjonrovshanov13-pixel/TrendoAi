@@ -1945,6 +1945,33 @@ footer {
     color: var(--primary-light);
 }
 
+/* Footer Social Icons */
+.footer-social {
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+    margin: 20px 0;
+}
+
+.footer-social-icon {
+    width: 44px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--bg-elevated);
+    border: 1px solid var(--border);
+    border-radius: 50%;
+    color: var(--text-secondary);
+    transition: var(--transition-smooth);
+}
+
+.footer-social-icon:hover {
+    transform: translateY(-3px);
+    border-color: var(--primary);
+    color: var(--primary-light);
+}
+
 .copyright {
     color: var(--text-muted);
     font-size: 0.85rem;
@@ -2041,21 +2068,9 @@ footer {
         flex-shrink: 0;
     }
 
+    /* Hide social icons in header on mobile - they're in footer */
     .social-icons {
-        display: flex !important;
-        flex-shrink: 0;
-        gap: 6px;
-    }
-
-    .social-icon {
-        width: 32px;
-        height: 32px;
-        flex-shrink: 0;
-    }
-
-    .social-icon svg {
-        width: 16px;
-        height: 16px;
+        display: none !important;
     }
 
     .hero {
