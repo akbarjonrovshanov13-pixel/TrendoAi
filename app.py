@@ -1028,6 +1028,29 @@ with app.app_context():
     except Exception as e:
         print(f"Database error: {e}")
 
+# Database Migration - Add missing columns at startup
+def migrate_portfolio_columns():
+    """Add missing columns to Portfolio table if they don't exist"""
+    try:
+        from sqlalchemy import text, inspect
+        inspector = inspect(db.engine)
+        columns = [col['name'] for col in inspector.get_columns('portfolio')]
+        
+        with db.engine.connect() as conn:
+            if 'details' not in columns:
+                conn.execute(text("ALTER TABLE portfolio ADD COLUMN details TEXT"))
+                print("✅ Added 'details' column to Portfolio")
+            if 'features' not in columns:
+                conn.execute(text("ALTER TABLE portfolio ADD COLUMN features TEXT"))
+                print("✅ Added 'features' column to Portfolio")
+            conn.commit()
+    except Exception as e:
+        print(f"Migration note: {e}")
+
+# Run migration
+with app.app_context():
+    migrate_portfolio_columns()
+
 # Avtomatlashtirish va Botni ishga tushirish
 try:
     from scheduler import scheduler
