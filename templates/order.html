@@ -238,4 +238,19 @@ qiling.{% endblock %}
         }
     }
 </style>
+
+<script>
+    // URL'dan service parametrni olish va avtomatik tanlash
+    document.addEventListener('DOMContentLoaded', function () {
+        const urlParams = new URLSearchParams(window.location.search);
+        const serviceParam = urlParams.get('service');
+
+        if (serviceParam) {
+            const serviceSelect = document.getElementById('service');
+            if (serviceSelect) {
+                serviceSelect.value = serviceParam;
+            }
+        }
+    });
+</script>
 {% endblock %}

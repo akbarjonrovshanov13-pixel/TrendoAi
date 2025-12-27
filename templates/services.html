@@ -27,6 +27,7 @@ Professional IT xizmatlar O'zbekistonda.{% endblock %}
         <div class="service-price">
             <span>dan</span> <strong>500,000 so'm/oy</strong>
         </div>
+        <a href="{{ url_for('order_page') }}?service=ai_content" class="service-order-btn">🚀 Buyurtma berish</a>
     </article>
 
     <!-- Telegram Botlar -->
@@ -43,6 +44,7 @@ Professional IT xizmatlar O'zbekistonda.{% endblock %}
         <div class="service-price">
             <span>dan</span> <strong>1,500,000 so'm</strong>
         </div>
+        <a href="{{ url_for('order_page') }}?service=telegram_bot" class="service-order-btn">🚀 Buyurtma berish</a>
     </article>
 
     <!-- Web Saytlar -->
@@ -59,6 +61,7 @@ Professional IT xizmatlar O'zbekistonda.{% endblock %}
         <div class="service-price">
             <span>dan</span> <strong>2,000,000 so'm</strong>
         </div>
+        <a href="{{ url_for('order_page') }}?service=web_site" class="service-order-btn">🚀 Buyurtma berish</a>
     </article>
 
     <!-- Konsalting -->
@@ -75,6 +78,7 @@ Professional IT xizmatlar O'zbekistonda.{% endblock %}
         <div class="service-price">
             <span>dan</span> <strong>300,000 so'm/soat</strong>
         </div>
+        <a href="{{ url_for('order_page') }}?service=consulting" class="service-order-btn">🚀 Buyurtma berish</a>
     </article>
 
     <!-- SMM Avtomatlashtirish -->
@@ -91,6 +95,7 @@ Professional IT xizmatlar O'zbekistonda.{% endblock %}
         <div class="service-price">
             <span>dan</span> <strong>800,000 so'm/oy</strong>
         </div>
+        <a href="{{ url_for('order_page') }}?service=smm" class="service-order-btn">🚀 Buyurtma berish</a>
     </article>
 
     <!-- AI Chatbot -->
@@ -107,6 +112,7 @@ Professional IT xizmatlar O'zbekistonda.{% endblock %}
         <div class="service-price">
             <span>dan</span> <strong>2,000,000 so'm</strong>
         </div>
+        <a href="{{ url_for('order_page') }}?service=ai_chatbot" class="service-order-btn">🚀 Buyurtma berish</a>
     </article>
 </div>
 
@@ -295,6 +301,27 @@ Professional IT xizmatlar O'zbekistonda.{% endblock %}
         .form-header h2 {
             font-size: 1.5rem;
         }
+    }
+
+    /* Service Order Button */
+    .service-order-btn {
+        display: block;
+        width: 100%;
+        padding: 14px 20px;
+        margin-top: 16px;
+        background: var(--gradient-main);
+        color: white;
+        text-align: center;
+        border-radius: var(--radius-md);
+        font-weight: 700;
+        font-size: 0.95rem;
+        transition: var(--transition-smooth);
+        text-decoration: none;
+    }
+
+    .service-order-btn:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 25px rgba(99, 102, 241, 0.4);
     }
 </style>
 {% endblock %}
