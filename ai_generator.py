@@ -2,20 +2,21 @@
 """
 Gemini AI yordamida SEO-optimallashtirilgan kontent generatsiya qilish moduli.
 TrendoAI uchun moslashtirilgan.
-Zaxira API kalit bilan fallback qo'llab-quvvatlash.
+Zaxira API kalit va model bilan fallback qo'llab-quvvatlash.
 """
 import os
 import json
 import re
 import time
 import google.generativeai as genai
-from config import GEMINI_API_KEY, GEMINI_MODEL, AI_RETRY_ATTEMPTS, AI_RETRY_DELAY
+from config import GEMINI_API_KEY, GEMINI_MODEL, GEMINI_MODEL_BACKUP, AI_RETRY_ATTEMPTS, AI_RETRY_DELAY
 
 # Zaxira API kalit
 GEMINI_API_KEY2 = os.getenv("GEMINI_API_KEY2")
 
-# Hozirgi faol API kalit
+# Hozirgi faol API kalit va model
 current_api_key = GEMINI_API_KEY
+current_model_name = GEMINI_MODEL
 
 def _configure_api(api_key):
     """API kalitni sozlash"""
@@ -26,17 +27,25 @@ def _configure_api(api_key):
         return True
     return False
 
-def _switch_to_backup_key():
-    """Zaxira API kalitga o'tish"""
-    global current_api_key
+def _switch_to_backup():
+    """Zaxira API kalitga yoki modelga o'tish"""
+    global current_api_key, current_model_name, model
+    
+    # Avval zaxira modelga o'tish
+    if current_model_name != GEMINI_MODEL_BACKUP:
+        print(f"🔄 Zaxira modelga o'tilmoqda: {GEMINI_MODEL_BACKUP}...")
+        current_model_name = GEMINI_MODEL_BACKUP
+        model = genai.GenerativeModel(current_model_name)
+        return True
+    
+    # Keyin zaxira API kalitga o'tish
     if GEMINI_API_KEY2 and current_api_key != GEMINI_API_KEY2:
         print("🔄 Zaxira API kalitga o'tilmoqda (GEMINI_API_KEY2)...")
         _configure_api(GEMINI_API_KEY2)
+        current_model_name = GEMINI_MODEL  # Asosiy model bilan
+        model = genai.GenerativeModel(current_model_name)
         return True
-    elif GEMINI_API_KEY and current_api_key != GEMINI_API_KEY:
-        print("🔄 Asosiy API kalitga qaytilmoqda (GEMINI_API_KEY)...")
-        _configure_api(GEMINI_API_KEY)
-        return True
+    
     return False
 
 # Dastlabki API kalitni sozlash
@@ -50,7 +59,7 @@ def _retry_with_backoff(func, *args, **kwargs):
     """
     Funksiyani retry mehanizmi bilan ishga tushiradi.
     Exponential backoff: 2s, 4s, 8s
-    Agar barcha urinishlar muvaffaqiyatsiz bo'lsa, zaxira API kalitga o'tadi.
+    Agar barcha urinishlar muvaffaqiyatsiz bo'lsa, zaxira model/API kalitga o'tadi.
     """
     global model
     last_exception = None
@@ -65,11 +74,9 @@ def _retry_with_backoff(func, *args, **kwargs):
             print(f"⏳ {wait_time} soniya kutilmoqda...")
             time.sleep(wait_time)
     
-    # Asosiy kalit bilan muvaffaqiyatsiz - zaxira kalitga urinish
-    if _switch_to_backup_key():
-        # Modelni qayta yaratish
-        model = genai.GenerativeModel(GEMINI_MODEL)
-        print("🔄 Zaxira API kalit bilan qayta urinilmoqda...")
+    # Asosiy model/kalit bilan muvaffaqiyatsiz - zaxiraga o'tish
+    if _switch_to_backup():
+        print("🔄 Zaxira sozlama bilan qayta urinilmoqda...")
         
         for attempt in range(AI_RETRY_ATTEMPTS):
             try:
@@ -77,8 +84,18 @@ def _retry_with_backoff(func, *args, **kwargs):
             except Exception as e:
                 last_exception = e
                 wait_time = AI_RETRY_DELAY * (2 ** attempt)
-                print(f"🔄 Zaxira kalit xatolik (urinish {attempt + 1}/{AI_RETRY_ATTEMPTS}): {e}")
+                print(f"🔄 Zaxira sozlama xatolik (urinish {attempt + 1}/{AI_RETRY_ATTEMPTS}): {e}")
                 time.sleep(wait_time)
+        
+        # Yana bir urinish - ikkinchi zaxira variantga o'tish
+        if _switch_to_backup():
+            print("🔄 Ikkinchi zaxira sozlama bilan urinilmoqda...")
+            for attempt in range(AI_RETRY_ATTEMPTS):
+                try:
+                    return func(*args, **kwargs)
+                except Exception as e:
+                    last_exception = e
+                    time.sleep(AI_RETRY_DELAY)
     
     print(f"❌ Barcha urinishlar muvaffaqiyatsiz. Oxirgi xato: {last_exception}")
     return None
