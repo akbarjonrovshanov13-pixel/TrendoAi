@@ -1445,35 +1445,38 @@ footer {
 /* Mobile */
 @media (max-width: 768px) {
     header {
-        margin: 10px;
-        padding: 16px 20px;
+        margin: 6px;
+        padding: 10px 14px;
         position: sticky;
-        top: 10px;
+        top: 6px;
+        border-radius: var(--radius-lg);
     }
 
     .header-content {
         flex-wrap: wrap;
+        gap: 8px;
     }
 
     .logo-icon {
-        font-size: 1.8rem;
+        font-size: 1.4rem;
     }
 
     .logo-text {
-        font-size: 1.4rem;
+        font-size: 1.2rem;
     }
 
     nav {
         width: 100%;
         justify-content: center;
-        margin-top: 12px;
-        padding-top: 12px;
+        margin-top: 6px;
+        padding-top: 6px;
         border-top: 1px solid var(--border);
+        gap: 4px;
     }
 
     nav a {
-        padding: 8px 14px;
-        font-size: 0.85rem;
+        padding: 6px 10px;
+        font-size: 0.75rem;
     }
 
     .hero {
@@ -1611,21 +1614,26 @@ footer {
 /* Small Mobile */
 @media (max-width: 480px) {
     header {
-        margin: 8px;
-        padding: 14px 16px;
+        margin: 4px;
+        padding: 8px 10px;
+        top: 4px;
     }
 
     .logo-icon {
-        font-size: 1.5rem;
-    }
-
-    .logo-text {
         font-size: 1.2rem;
     }
 
+    .logo-text {
+        font-size: 1rem;
+    }
+
     nav a {
-        padding: 8px 12px;
-        font-size: 0.8rem;
+        padding: 5px 8px;
+        font-size: 0.7rem;
+    }
+    
+    main {
+        padding: 0 6px;
     }
 
     .hero h1 {

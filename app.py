@@ -148,7 +148,13 @@ def login_required(f):
 
 @app.route('/')
 def index():
-    """Bosh sahifa — barcha postlar ro'yxati"""
+    """Bosh sahifa — xizmatlar sahifasiga redirect"""
+    return redirect(url_for('services'))
+
+
+@app.route('/blog')
+def blog():
+    """Blog sahifasi — barcha postlar ro'yxati"""
     page = request.args.get('page', 1, type=int)
     category = request.args.get('category', None)
     
