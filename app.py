@@ -32,6 +32,101 @@ app.config['SECRET_KEY'] = SECRET_KEY
 db = SQLAlchemy(app)
 
 
+# ========== SERVICE DATA (For Landing Pages) ==========
+SERVICES_DATA = {
+    'ai_content': {
+        'key': 'ai_content',
+        'title': 'AI Kontent Generatsiya',
+        'icon': '🤖',
+        'description': "Sun'iy intellekt yordamida SEO-optimallashtirilgan blog maqolalari va marketing kontentlari.",
+        'features': [
+            'Avtomatik blog postlar va maqolalar',
+            'SEO kalit so\'zlar tahlili va integratsiyasi',
+            'Telegram kanallarga avtomatik yuborish',
+            'Ko\'p tilli kontent yaratish (Uz, Ru, En)'
+        ],
+        'price': '500,000 so\'m/oy dan',
+        'full_description': "TrendoAI taklif etayotgan AI Kontent Generatsiya xizmati sizning biznesingiz uchun avtomatik, sifatli va SEO-optimallashtirilgan kontent yaratishga yordam beradi. Bizning tizim Google-ning eng so'nggi Gemini AI texnologiyasi asosida ishlaydi va o'zbek tilidagi eng mukammal, inson tomonidan yozishga o'xshash kontentni taqdim etadi.",
+        'meta_desc': "AI yordamida professional blog va marketing kontentlari yaratish. TrendoAI AI-agentlari biznesingiz uchun 24/7 ishlaydi."
+    },
+    'telegram_bot': {
+        'key': 'telegram_bot',
+        'title': 'Telegram Botlar',
+        'icon': '📱',
+        'description': "Biznesingiz uchun murakkab funksional va foydalanuvchilarga qulay Telegram botlar.",
+        'features': [
+            'Telegram Mini App (Web App) yaratish',
+            'To\'lov tizimlari (Click, Payme) integratsiyasi',
+            'Boshqaruv paneli (Admin Panel)',
+            'Mijozlar bazasi va statistika'
+        ],
+        'price': '1,500,000 so\'m dan',
+        'full_description': "Sizning biznes jarayonlaringizni avtomatlashtirish uchun murakkab va foydali Telegram botlarni ishlab chiqamiz. Savdo botlari, mijozlarni qo'llab-quvvatlash botlari, e-commerce Mini Applar va maxsus tizimlar - barchasini TrendoAI jamoasi taqdim etadi.",
+        'meta_desc': "Telegram botlar va Mini Applar ishlab chiqish. Biznesingizni Telegram orqali avtomatlashtiring va savdoni oshiring."
+    },
+    'web_site': {
+        'key': 'web_site',
+        'title': 'Web Saytlar',
+        'icon': '🌐',
+        'description': "Zamonaviy, o'ta tez va SEO-optimallashtirilgan professional veb-saytlar.",
+        'features': [
+            'Landing Page (Bir sahifali sayt)',
+            'Korporativ va brend saytlari',
+            'E-commerce (Internet do\'konlar)',
+            'Zamonaviy UI/UX va mobil moslashuv'
+        ],
+        'price': '2,000,000 so\'m dan',
+        'full_description': "Biz zamonaviy texnologiyalar (Next.js, React, Flask, Node.js) yordamida har qanday murakkablikdagi veb-saytlarni yaratamiz. Saytlarimiz tezligi, Google qidiruv tizimi uchun to'liq optimalligi va brendingizga mos dizayni bilan ajralib turadi.",
+        'meta_desc': "Professional veb-saytlar yaratish. Landing page, korporativ saytlar va internet do'konlar. SEO va mobil adaptiv."
+    },
+    'ai_chatbot': {
+        'key': 'ai_chatbot',
+        'title': 'AI Chatbot Yaratish',
+        'icon': '🧠',
+        'description': "Mijozlaringizga sun'iy intellekt orqali 24/7 xizmat ko'rsatish tizimi.",
+        'features': [
+            'Intellektual javoblar (LLM asosida)',
+            'Mavjud ma\'lumotlar bazasi bilan integratsiya',
+            'Telegram, WhatsApp va Sayt uchun yagona bot',
+            'Mijozlar bilan insondek muloqot'
+        ],
+        'price': '2,500,000 so\'m dan',
+        'full_description': "Mijozlaringiz bilan kechayu-kunduz muloqot qiladigan, ularning savollariga aniq va aqlli javob beradigan AI chatbotlarni yarating. Gemini yoki ChatGPT asosidagi ushbu tizimlar xodimlar xarajatini kamaytiradi va mijozlar talabiga tezkor javob beradi.",
+        'meta_desc': "Aqlli AI Chatbotlar va virtual assistentlar yaratish. Biznesingiz uchun sun'iy intellektli mijozlar xizmati."
+    },
+    'smm': {
+        'key': 'smm',
+        'title': 'SMM Avtomatlashtirish',
+        'icon': '📢',
+        'description': "Ijtimoiy tarmoqlar uchun AI agentlar yordamida avtomatik boshqaruv.",
+        'features': [
+            'Postlarni AI yordamida rejalashtirish',
+            'Kreativ rasm va matnlar generatsiyasi',
+            'Avtomatik ijtimoiy tarmoq tahlili',
+            'Kross-platforma posting (TG, FB, IG)'
+        ],
+        'price': '800,000 so\'m/oy dan',
+        'full_description': "Ijtimoiy tarmoqlardagi faolligingizni aqlli avtomatlashtirish orqali yanada samarali qiling. Bizning AI tizimlarimiz trendlarni kuzatadi, matn yozadi va brendingiz uchun foydali auditoriyani jalb qilishga yordam beradi.",
+        'meta_desc': "AI SMM avtomatlashtirish xizmatlari. Kontent yaratish va ijtimoiy tarmoqlarni avtomatik boshqarish."
+    },
+    'consulting': {
+        'key': 'consulting',
+        'title': 'IT Konsalting',
+        'icon': '💡',
+        'description': "Raqamli transformatsiya va sun'iy intellektni joriy qilish bo'yicha maslahatlar.",
+        'features': [
+            'Biznes jarayonlarni texnik audit qilish',
+            'AI texnologiyalarini rejalashtirish',
+            'Dasturiy mahsulotlar arxitekturasi',
+            'Top-menejment uchun texnik treninglar'
+        ],
+        'price': '500,000 so\'m/soat dan',
+        'full_description': "Sizning g'oyangizni qanday qilib texnologiya orqali amalga oshirish yoki mavjud tizimingizni qanday optimallashtirish bo'yicha professional maslahat beramiz. AI asrida biznesingizni yangi bosqichga olib chiqishda yo'l ko'rsatamiz.",
+        'meta_desc': "Professional IT konsalting va AI audit xizmatlari. Biznesingizni raqamli transformatsiya qiling."
+    }
+}
+
+
 # ========== DATABASE MODELS ==========
 
 class Post(db.Model):
@@ -301,7 +396,16 @@ def about():
 @app.route('/services')
 def services():
     """Xizmatlar sahifasi"""
-    return render_template('services.html')
+    return render_template('services.html', services=SERVICES_DATA)
+
+
+@app.route('/services/<service_key>')
+def service_detail(service_key):
+    """Xizmat batafsil sahifasi (Ads Landing Page)"""
+    service = SERVICES_DATA.get(service_key)
+    if not service:
+        abort(404)
+    return render_template('service_detail.html', service=service)
 
 
 @app.route('/portfolio')
@@ -309,6 +413,21 @@ def portfolio():
     """Portfolio sahifasi"""
     portfolios = Portfolio.query.filter_by(is_published=True).order_by(Portfolio.created_at.desc()).all()
     return render_template('portfolio.html', portfolios=portfolios)
+
+
+@app.route('/portfolio/project/<slug>')
+def portfolio_item(slug):
+    """Loyiha batafsil sahifasi (Ads Landing Page)"""
+    item = Portfolio.query.filter_by(slug=slug, is_published=True).first_or_404()
+    
+    # O'xshash loyihalar (same category)
+    related_items = Portfolio.query.filter(
+        Portfolio.id != item.id,
+        Portfolio.category == item.category,
+        Portfolio.is_published == True
+    ).limit(3).all()
+    
+    return render_template('portfolio_detail.html', item=item, related_items=related_items)
 
 
 @app.route('/order')

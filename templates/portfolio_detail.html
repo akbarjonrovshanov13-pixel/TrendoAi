@@ -1,0 +1,258 @@
+{% extends "base.html" %}
+
+{% block title %}{{ item.title }} - TrendoAI Portfolio{% endblock %}
+
+{% block meta_description %}{{ item.description | truncate(160) }}{% endblock %}
+
+{% block extra_head %}
+<!-- Facebook Ads Optimization -->
+<meta property="og:title" content="{{ item.title }} - TrendoAI">
+<meta property="og:description" content="{{ item.description | truncate(160) }}">
+<meta property="og:image" content="{{ item.image_url }}">
+<meta property="og:type" content="article">
+<meta property="product:category" content="{{ item.category }}">
+
+<script>
+    fbq('track', 'ViewContent', {
+        content_name: '{{ item.title }}',
+        content_category: '{{ item.category }}',
+        content_ids: ['{{ item.id }}'],
+        content_type: 'product'
+    });
+</script>
+{% endblock %}
+
+{% block content %}
+<div class="article-container">
+    <main class="article-main">
+        <article class="article-page portfolio-detail">
+            <!-- Breadcrumbs -->
+            <nav class="breadcrumb-nav">
+                <a href="{{ url_for('index') }}">Bosh sahifa</a>
+                <span class="sep">/</span>
+                <a href="{{ url_for('portfolio') }}">Portfolio</a>
+                <span class="sep">/</span>
+                <span class="current">{{ item.title }}</span>
+            </nav>
+
+            <header class="portfolio-detail-header">
+                <div class="portfolio-cat-badge">{{ item.category | upper }}</div>
+                <h1>{{ item.title }}</h1>
+                <div class="portfolio-meta-tags">
+                    {% for tech in item.technologies.split(',') %}
+                    <span class="tech-tag">{{ tech.strip() }}</span>
+                    {% endfor %}
+                </div>
+            </header>
+
+            <div class="article-featured-image">
+                <img src="{{ item.image_url }}" alt="{{ item.title }}" class="main-project-img">
+            </div>
+
+            <div class="article-content">
+                <div class="project-brief">
+                    <h3>Loyiha haqida</h3>
+                    <p>{{ item.description }}</p>
+                </div>
+
+                {% if item.details %}
+                <div class="project-details-content">
+                    <h3>Batafsil ma'lumot</h3>
+                    {{ item.details_html | safe }}
+                </div>
+                {% endif %}
+
+                {% if item.features %}
+                <div class="project-features-list">
+                    <h3>Imkoniyatlar</h3>
+                    <div class="features-grid-landing">
+                        {% for feature in item.features.split(',') %}
+                        <div class="feature-landing-card">
+                            <i class="fas fa-check-circle"></i>
+                            <span>{{ feature.strip() }}</span>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% endif %}
+
+                <div class="service-cta-box portfolio-cta">
+                    <h3>Sizga ham shunday loyiha kerakmi?</h3>
+                    <p>Biz aynan sizning biznesingiz uchun moslashtirilgan yechimni ishlab chiqamiz.</p>
+                    <div class="cta-actions">
+                        <a href="{{ url_for('order_page') }}?service={{ item.category }}"
+                            class="primary-btn pulse-glow">
+                            🚀 Buyurtma berish
+                        </a>
+                        {% if item.link %}
+                        <a href="{{ item.link }}" target="_blank" class="secondary-btn">
+                            🌐 Loyihani ko'rish
+                        </a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </article>
+    </main>
+
+    <aside class="article-sidebar">
+        <div class="sidebar-card">
+            <h3>O'xshash loyihalar</h3>
+            <div class="related-portfolio-sidebar">
+                {% for related in related_items %}
+                <a href="{{ url_for('portfolio_item', slug=related.slug) }}" class="related-project-sidebar">
+                    <img src="{{ related.image_url }}" alt="{{ related.title }}">
+                    <div class="rp-info">
+                        <span class="rp-title">{{ related.title }}</span>
+                        <span class="rp-cat">{{ related.category }}</span>
+                    </div>
+                </a>
+                {% endfor %}
+            </div>
+        </div>
+
+        <div class="sidebar-card contact-sidebar">
+            <h3>Maxsus yechim kerakmi?</h3>
+            <p>Biz har bir loyihaga individual yondashamiz.</p>
+            <a href="https://t.me/rovshanov_me" class="tg-contact-btn">
+                <i class="fab fa-telegram"></i> Savol berish
+            </a>
+        </div>
+    </aside>
+</div>
+
+<style>
+    .portfolio-detail-header {
+        margin-bottom: 30px;
+    }
+
+    .portfolio-cat-badge {
+        display: inline-block;
+        padding: 4px 12px;
+        background: var(--bg-elevated);
+        border: 1px solid var(--primary);
+        color: var(--primary-light);
+        border-radius: 4px;
+        font-size: 0.8rem;
+        font-weight: 700;
+        margin-bottom: 12px;
+    }
+
+    .portfolio-meta-tags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-top: 16px;
+    }
+
+    .tech-tag {
+        padding: 4px 10px;
+        background: var(--bg-elevated);
+        border-radius: 4px;
+        font-size: 0.8rem;
+        color: var(--text-muted);
+    }
+
+    .main-project-img {
+        width: 100%;
+        border-radius: var(--radius-lg);
+        box-shadow: var(--shadow-lg);
+    }
+
+    .project-brief {
+        background: var(--bg-elevated);
+        padding: 25px;
+        border-radius: var(--radius-md);
+        margin-bottom: 40px;
+        border-left: 4px solid var(--primary);
+    }
+
+    .project-brief h3 {
+        margin-bottom: 12px;
+    }
+
+    .project-details-content ul {
+        list-style: none;
+        padding: 0;
+        margin: 20px 0;
+    }
+
+    .project-details-content li {
+        padding: 8px 0;
+        padding-left: 25px;
+        position: relative;
+    }
+
+    .project-details-content li::before {
+        content: '•';
+        color: var(--primary);
+        position: absolute;
+        left: 0;
+        font-weight: bold;
+    }
+
+    .related-portfolio-sidebar {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+    }
+
+    .related-project-sidebar {
+        display: flex;
+        gap: 12px;
+        text-decoration: none;
+        color: var(--text-primary);
+        padding: 8px;
+        border-radius: var(--radius-sm);
+        transition: background 0.3s;
+    }
+
+    .related-project-sidebar:hover {
+        background: var(--bg-elevated);
+    }
+
+    .related-project-sidebar img {
+        width: 70px;
+        height: 70px;
+        object-fit: cover;
+        border-radius: 8px;
+    }
+
+    .rp-info {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+
+    .rp-title {
+        font-size: 0.9rem;
+        font-weight: 600;
+        line-height: 1.2;
+    }
+
+    .rp-cat {
+        font-size: 0.75rem;
+        color: var(--text-muted);
+        margin-top: 4px;
+    }
+
+    .cta-actions {
+        display: flex;
+        gap: 15px;
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+
+    @media (max-width: 480px) {
+        .cta-actions {
+            flex-direction: column;
+        }
+
+        .cta-actions .primary-btn,
+        .cta-actions .secondary-btn {
+            width: 100%;
+            text-align: center;
+        }
+    }
+</style>
+{% endblock %}

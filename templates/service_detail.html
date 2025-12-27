@@ -1,0 +1,217 @@
+{% extends "base.html" %}
+
+{% block title %}{{ service.title }} - TrendoAI{% endblock %}
+
+{% block meta_description %}{{ service.meta_desc }}{% endblock %}
+
+{% block extra_head %}
+<!-- Facebook Ads Optimization -->
+<meta property="og:title" content="{{ service.title }} - TrendoAI">
+<meta property="og:description" content="{{ service.meta_desc }}">
+<meta property="og:type" content="product">
+<meta property="product:category" content="Software > IT Services">
+
+<script>
+    fbq('track', 'ViewContent', {
+        content_name: '{{ service.title }}',
+        content_category: 'Service',
+        content_ids: ['{{ service.key }}'],
+        content_type: 'product'
+    });
+</script>
+{% endblock %}
+
+{% block content %}
+<div class="article-container">
+    <main class="article-main">
+        <article class="article-page service-detail">
+            <!-- Breadcrumbs -->
+            <nav class="breadcrumb-nav">
+                <a href="{{ url_for('index') }}">Bosh sahifa</a>
+                <span class="sep">/</span>
+                <a href="{{ url_for('services') }}">Xizmatlar</a>
+                <span class="sep">/</span>
+                <span class="current">{{ service.title }}</span>
+            </nav>
+
+            <header class="service-header-hero">
+                <div class="service-icon-large">{{ service.icon }}</div>
+                <h1>{{ service.title }}</h1>
+                <p class="service-tagline">{{ service.description }}</p>
+                <div class="service-price-badge">Narxi: {{ service.price }}</div>
+            </header>
+
+            <div class="article-featured-image">
+                <div class="service-hero-pattern"></div>
+            </div>
+
+            <div class="article-content">
+                <h2>Xizmat haqida batafsil</h2>
+                <p>{{ service.full_description }}</p>
+
+                <div class="features-grid-landing">
+                    {% for feature in service.features %}
+                    <div class="feature-landing-card">
+                        <i class="fas fa-check-circle"></i>
+                        <span>{{ feature }}</span>
+                    </div>
+                    {% endfor %}
+                </div>
+
+                <div class="service-cta-box">
+                    <h3>Ushbu xizmat bo'yicha buyurtma bermoqchimisiz?</h3>
+                    <p>Mutaxassislarimiz siz bilan bog'lanib, loyihangizni batafsil muhokama qilishadi.</p>
+                    <a href="{{ url_for('order_page') }}?service={{ service.key }}" class="primary-btn pulse-glow">
+                        🚀 Hozirroq buyurtma berish
+                    </a>
+                </div>
+            </div>
+        </article>
+    </main>
+
+    <aside class="article-sidebar">
+        <div class="sidebar-card">
+            <h3>Boshqa xizmatlar</h3>
+            <div class="related-services-sidebar">
+                {% for key, s in services.items() if key != service.key %}
+                <a href="{{ url_for('service_detail', service_key=key) }}" class="related-service-item">
+                    <span class="rs-icon">{{ s.icon }}</span>
+                    <span class="rs-title">{{ s.title }}</span>
+                </a>
+                {% endfor %}
+            </div>
+        </div>
+
+        <div class="sidebar-card contact-sidebar">
+            <h3>Yordam kerakmi?</h3>
+            <p>Xizmatlarimiz bo'yicha savollaringiz bo'lsa, mutaxassisimizga yozing.</p>
+            <a href="https://t.me/rovshanov_me" class="tg-contact-btn">
+                <i class="fab fa-telegram"></i> Telegram orqali bog'lanish
+            </a>
+        </div>
+    </aside>
+</div>
+
+<style>
+    .service-header-hero {
+        text-align: center;
+        padding: 40px 0;
+        border-bottom: 1px solid var(--border);
+        margin-bottom: 40px;
+    }
+
+    .service-icon-large {
+        font-size: 5rem;
+        margin-bottom: 20px;
+        filter: drop-shadow(0 0 20px var(--primary-light));
+    }
+
+    .service-tagline {
+        font-size: 1.3rem;
+        color: var(--text-secondary);
+        max-width: 700px;
+        margin: 0 auto 24px;
+    }
+
+    .service-price-badge {
+        display: inline-block;
+        padding: 10px 24px;
+        background: var(--gradient-main);
+        border-radius: 50px;
+        color: white;
+        font-weight: 700;
+        font-size: 1.1rem;
+        box-shadow: var(--shadow-primary);
+    }
+
+    .service-hero-pattern {
+        height: 200px;
+        background: linear-gradient(135deg, var(--bg-card) 0%, var(--bg-dark) 100%);
+        background-image: radial-gradient(var(--primary-light) 0.5px, transparent 0.5px);
+        background-size: 20px 20px;
+        border-radius: var(--radius-lg);
+    }
+
+    .features-grid-landing {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 20px;
+        margin: 40px 0;
+    }
+
+    .feature-landing-card {
+        background: var(--bg-elevated);
+        padding: 20px;
+        border-radius: var(--radius-md);
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        border: 1px solid var(--border);
+    }
+
+    .feature-landing-card i {
+        color: var(--primary-light);
+        font-size: 1.2rem;
+    }
+
+    .service-cta-box {
+        margin-top: 60px;
+        padding: 40px;
+        background: var(--bg-elevated);
+        border: 2px solid var(--primary);
+        border-radius: var(--radius-xl);
+        text-align: center;
+    }
+
+    .service-cta-box h3 {
+        margin-bottom: 16px;
+    }
+
+    .service-cta-box p {
+        margin-bottom: 30px;
+        color: var(--text-muted);
+    }
+
+    .related-services-sidebar {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    .related-service-item {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 12px;
+        background: var(--bg-elevated);
+        border-radius: var(--radius-md);
+        transition: var(--transition-smooth);
+        text-decoration: none;
+        color: var(--text-primary);
+    }
+
+    .related-service-item:hover {
+        transform: translateX(5px);
+        background: var(--border);
+    }
+
+    .rs-icon {
+        font-size: 1.5rem;
+    }
+
+    .rs-title {
+        font-size: 0.95rem;
+        font-weight: 500;
+    }
+
+    @media (max-width: 768px) {
+        .features-grid-landing {
+            grid-template-columns: 1fr;
+        }
+
+        .service-cta-box {
+            padding: 30px 20px;
+        }
+    }
+</style>
+{% endblock %}

@@ -12,108 +12,27 @@ Professional IT xizmatlar O'zbekistonda.{% endblock %}
 </section>
 
 <div class="services-grid">
-    <!-- AI Kontent -->
-    <article class="service-card featured">
-        <div class="service-badge">⭐ Asosiy</div>
-        <div class="service-icon">🤖</div>
-        <h3>AI Kontent Generatsiya</h3>
-        <p>Sun'iy intellekt yordamida SEO-optimallashtirilgan blog maqolalari va marketing kontentlari.</p>
+    {% for key, s in services.items() %}
+    <article class="service-card {% if s.key == 'ai_content' %}featured{% endif %}">
+        {% if s.key == 'ai_content' %}<div class="service-badge">⭐ Asosiy</div>{% endif %}
+        <div class="service-icon">{{ s.icon }}</div>
+        <h3>{{ s.title }}</h3>
+        <p>{{ s.description }}</p>
         <ul class="service-features">
-            <li>✓ Avtomatik blog postlar</li>
-            <li>✓ SEO kalit so'zlar</li>
-            <li>✓ Telegram kanalga yuborish</li>
-            <li>✓ Ko'p tilli qo'llab-quvvatlash</li>
+            {% for feature in s.features %}
+            <li>✓ {{ feature }}</li>
+            {% endfor %}
         </ul>
         <div class="service-price">
-            <span>dan</span> <strong>500,000 so'm/oy</strong>
+            <span>dan</span> <strong>{{ s.price }}</strong>
         </div>
-        <a href="{{ url_for('order_page') }}?service=ai_content" class="service-order-btn">🚀 Buyurtma berish</a>
-    </article>
-
-    <!-- Telegram Botlar -->
-    <article class="service-card">
-        <div class="service-icon">📱</div>
-        <h3>Telegram Botlar</h3>
-        <p>Biznesingiz uchun funksional va foydalanuvchilarga qulay Telegram botlar.</p>
-        <ul class="service-features">
-            <li>✓ Buyurtma qabul qilish</li>
-            <li>✓ Avtomatik javob berish</li>
-            <li>✓ To'lov integratsiyasi</li>
-            <li>✓ Admin panel</li>
-        </ul>
-        <div class="service-price">
-            <span>dan</span> <strong>1,500,000 so'm</strong>
+        <div class="service-actions-grid">
+            <a href="{{ url_for('order_page') }}?service={{ s.key }}" class="service-order-btn">🚀 Buyurtma berish</a>
+            <a href="{{ url_for('service_detail', service_key=s.key) }}" class="service-detail-link">Batafsil ma'lumot
+                →</a>
         </div>
-        <a href="{{ url_for('order_page') }}?service=telegram_bot" class="service-order-btn">🚀 Buyurtma berish</a>
     </article>
-
-    <!-- Web Saytlar -->
-    <article class="service-card">
-        <div class="service-icon">🌐</div>
-        <h3>Web Saytlar</h3>
-        <p>Zamonaviy, tez va SEO-optimallashtirilgan veb-saytlar.</p>
-        <ul class="service-features">
-            <li>✓ Landing page</li>
-            <li>✓ Korporativ saytlar</li>
-            <li>✓ E-commerce</li>
-            <li>✓ Admin panel</li>
-        </ul>
-        <div class="service-price">
-            <span>dan</span> <strong>2,000,000 so'm</strong>
-        </div>
-        <a href="{{ url_for('order_page') }}?service=web_site" class="service-order-btn">🚀 Buyurtma berish</a>
-    </article>
-
-    <!-- Konsalting -->
-    <article class="service-card">
-        <div class="service-icon">💡</div>
-        <h3>IT Konsalting</h3>
-        <p>Texnologiya bo'yicha professional maslahat va yo'l-yo'riq.</p>
-        <ul class="service-features">
-            <li>✓ AI integratsiya</li>
-            <li>✓ Avtomatlashtirish</li>
-            <li>✓ Texnik audit</li>
-            <li>✓ Trening</li>
-        </ul>
-        <div class="service-price">
-            <span>dan</span> <strong>300,000 so'm/soat</strong>
-        </div>
-        <a href="{{ url_for('order_page') }}?service=consulting" class="service-order-btn">🚀 Buyurtma berish</a>
-    </article>
-
-    <!-- SMM Avtomatlashtirish -->
-    <article class="service-card">
-        <div class="service-icon">📢</div>
-        <h3>SMM Avtomatlashtirish</h3>
-        <p>Ijtimoiy tarmoqlarni AI yordamida avtomatik boshqarish va kontent yaratish.</p>
-        <ul class="service-features">
-            <li>✓ Instagram auto-posting</li>
-            <li>✓ Telegram kanalni boshqarish</li>
-            <li>✓ AI bilan kontent yaratish</li>
-            <li>✓ Analitika va hisobotlar</li>
-        </ul>
-        <div class="service-price">
-            <span>dan</span> <strong>800,000 so'm/oy</strong>
-        </div>
-        <a href="{{ url_for('order_page') }}?service=smm" class="service-order-btn">🚀 Buyurtma berish</a>
-    </article>
-
-    <!-- AI Chatbot -->
-    <article class="service-card">
-        <div class="service-icon">🤖</div>
-        <h3>AI Chatbot Yaratish</h3>
-        <p>Biznesingiz uchun sun'iy intellektli chatbotlar va virtual assistentlar.</p>
-        <ul class="service-features">
-            <li>✓ 24/7 mijozlarga xizmat</li>
-            <li>✓ Telegram / WhatsApp bot</li>
-            <li>✓ Gemini / ChatGPT integratsiya</li>
-            <li>✓ Avtomatik javob berish</li>
-        </ul>
-        <div class="service-price">
-            <span>dan</span> <strong>2,000,000 so'm</strong>
-        </div>
-        <a href="{{ url_for('order_page') }}?service=ai_chatbot" class="service-order-btn">🚀 Buyurtma berish</a>
-    </article>
+    {% endfor %}
 </div>
 
 <!-- Order Form Section -->
@@ -331,25 +250,52 @@ Professional IT xizmatlar O'zbekistonda.{% endblock %}
         }
     }
 
-    /* Service Order Button */
+    /* Service Actions Layout */
+    .service-actions-grid {
+        display: grid;
+        grid-template-columns: 1.5fr 1fr;
+        gap: 12px;
+        margin-top: 16px;
+        align-items: center;
+    }
+
     .service-order-btn {
         display: block;
-        width: 100%;
-        padding: 14px 20px;
-        margin-top: 16px;
+        padding: 12px 16px;
         background: var(--gradient-main);
         color: white;
         text-align: center;
         border-radius: var(--radius-md);
         font-weight: 700;
-        font-size: 0.95rem;
+        font-size: 0.9rem;
         transition: var(--transition-smooth);
         text-decoration: none;
     }
 
+    .service-detail-link {
+        color: var(--primary-light);
+        text-decoration: none;
+        font-size: 0.8rem;
+        font-weight: 600;
+        text-align: center;
+        transition: var(--transition-fast);
+    }
+
+    .service-detail-link:hover {
+        text-decoration: underline;
+        opacity: 0.8;
+    }
+
     .service-order-btn:hover {
-        transform: translateY(-3px);
-        box-shadow: 0 8px 25px rgba(99, 102, 241, 0.4);
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(99, 102, 241, 0.4);
+    }
+
+    @media (max-width: 480px) {
+        .service-actions-grid {
+            grid-template-columns: 1fr;
+            gap: 12px;
+        }
     }
 </style>
 {% endblock %}

@@ -717,6 +717,43 @@ main {
     margin-bottom: 30px;
 }
 
+.card-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    width: 80%;
+}
+
+.view-btn {
+    width: 100%;
+    padding: 10px 16px;
+    border: 2px solid white;
+    background: transparent;
+    color: white;
+    font-weight: 700;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 0.9rem;
+    text-decoration: none;
+    text-align: center;
+}
+
+.view-btn:hover {
+    background: white;
+    color: var(--primary-dark);
+}
+
+.full-page-btn {
+    border-color: var(--primary-light);
+    color: var(--primary-light);
+}
+
+.full-page-btn:hover {
+    background: var(--primary-light);
+    color: white;
+}
+
 /* ========== ARTICLE PAGE ========== */
 .article-container {
     display: grid;
@@ -1388,6 +1425,7 @@ main {
     gap: 12px;
     flex-wrap: wrap;
 }
+
 
 .share-btn {
     padding: 12px 24px;

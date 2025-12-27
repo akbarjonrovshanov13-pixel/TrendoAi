@@ -60,9 +60,11 @@ muvaffaqiyatli loyihalar. Bepul konsultatsiya!{% endblock %}
         <div class="card-image">
             <span class="card-emoji">{{ item.emoji }}</span>
             <div class="card-overlay">
-                <button class="view-btn" onclick="openModal({{ item.id }})" style="cursor: pointer; border: none;">
-                    Ko'rish →
-                </button>
+                <div class="card-actions">
+                    <button class="view-btn" onclick="openModal({{ item.id }})">Modalda Ko'rish</button>
+                    <a href="{{ url_for('portfolio_item', slug=item.slug) }}" class="view-btn full-page-btn"
+                        onclick="event.stopPropagation()">To'liq Sahifa →</a>
+                </div>
             </div>
         </div>
         <div class="card-content">
