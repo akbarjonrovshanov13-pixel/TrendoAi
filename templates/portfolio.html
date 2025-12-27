@@ -549,19 +549,91 @@ saytlar, AI yechimlar.{% endblock %}
 
     @media (max-width: 768px) {
         .portfolio-hero {
-            padding: 50px 24px;
+            padding: 24px 16px;
+            margin-bottom: 16px;
         }
 
         .portfolio-hero h1 {
-            font-size: 2rem;
+            font-size: 1.4rem;
+            margin-bottom: 8px;
+        }
+
+        .portfolio-hero .hero-subtitle {
+            font-size: 0.85rem;
+            margin-bottom: 16px;
+        }
+
+        .portfolio-hero .hero-stats {
+            flex-direction: row;
+            gap: 12px;
+            justify-content: center;
+        }
+
+        .portfolio-hero .hero-stat .stat-value {
+            font-size: 1.4rem;
+        }
+
+        .portfolio-hero .hero-stat .stat-label {
+            font-size: 0.65rem;
+        }
+
+        .portfolio-filter {
+            gap: 6px;
+            margin-bottom: 16px;
+        }
+
+        .filter-btn {
+            padding: 8px 14px;
+            font-size: 0.75rem;
         }
 
         .portfolio-grid {
             grid-template-columns: 1fr;
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+
+        .card-image {
+            height: 120px;
+        }
+
+        .card-emoji {
+            font-size: 3rem;
+        }
+
+        .card-content {
+            padding: 16px;
+        }
+
+        .card-content h3 {
+            font-size: 1rem;
+        }
+
+        .card-content p {
+            font-size: 0.85rem;
+            margin-bottom: 10px;
         }
 
         .testimonials-section {
-            padding: 30px 20px;
+            padding: 20px 14px;
+            margin-bottom: 16px;
+        }
+
+        .testimonials-section h2 {
+            font-size: 1.3rem;
+            margin-bottom: 20px;
+        }
+
+        .testimonial-card {
+            padding: 16px;
+        }
+
+        .cta-section {
+            padding: 24px 16px;
+        }
+
+        .cta-section h3 {
+            font-size: 1.2rem;
         }
     }
 </style>

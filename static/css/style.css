@@ -1480,25 +1480,33 @@ footer {
     }
 
     .hero {
-        padding: 40px 20px;
-        margin-bottom: 20px;
+        padding: 20px 16px;
+        margin-bottom: 12px;
+        border-radius: var(--radius-lg);
     }
 
     .hero h1 {
-        font-size: 1.8rem;
+        font-size: 1.3rem;
+        margin-bottom: 6px;
     }
 
     .hero-subtitle {
-        font-size: 1rem;
+        font-size: 0.85rem;
+        margin-bottom: 12px;
     }
 
     .hero-stats {
-        flex-direction: column;
-        gap: 20px;
+        flex-direction: row;
+        gap: 16px;
+        justify-content: center;
     }
 
     .hero-stat .stat-value {
-        font-size: 2rem;
+        font-size: 1.3rem;
+    }
+
+    .hero-stat .stat-label {
+        font-size: 0.65rem;
     }
 
     main {
@@ -1511,8 +1519,9 @@ footer {
     .article-page,
     .about-section,
     .testimonials-section {
-        padding: 24px 18px;
+        padding: 16px 12px;
         border-radius: var(--radius-lg);
+        margin-bottom: 12px;
     }
 
     .posts-grid,
@@ -1631,7 +1640,7 @@ footer {
         padding: 5px 8px;
         font-size: 0.7rem;
     }
-    
+
     main {
         padding: 0 6px;
     }
