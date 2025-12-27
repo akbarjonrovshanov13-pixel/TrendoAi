@@ -1,0 +1,241 @@
+{% extends 'base.html' %}
+
+{% block title %}Buyurtma - TrendoAI{% endblock %}
+
+{% block meta_description %}TrendoAI xizmatlariga buyurtma berish formasi. Telegram bot, web sayt, AI chatbot buyurtma
+qiling.{% endblock %}
+
+{% block content %}
+<section class="order-page">
+    <div class="order-hero">
+        <h1>📝 Xizmatga Buyurtma</h1>
+        <p>Formani to'ldiring, biz siz bilan 24 soat ichida bog'lanamiz!</p>
+    </div>
+
+    <form class="order-form" action="{{ url_for('submit_order') }}" method="POST">
+        <div class="form-row">
+            <div class="form-group">
+                <label for="name">👤 Ismingiz *</label>
+                <input type="text" id="name" name="name" required placeholder="Masalan: Ali Valiyev">
+            </div>
+            <div class="form-group">
+                <label for="phone">📞 Telefon raqam *</label>
+                <input type="tel" id="phone" name="phone" required placeholder="+998 90 123 45 67">
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group">
+                <label for="service">🛠️ Xizmat turi *</label>
+                <select id="service" name="service" required>
+                    <option value="">Tanlang...</option>
+                    <option value="ai_content">🤖 AI Kontent Generatsiya</option>
+                    <option value="telegram_bot">📱 Telegram Bot</option>
+                    <option value="web_site">🌐 Web Sayt</option>
+                    <option value="consulting">💡 IT Konsalting</option>
+                    <option value="smm">📢 SMM Avtomatlashtirish</option>
+                    <option value="ai_chatbot">🤖 AI Chatbot</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="budget">💰 Byudjet</label>
+                <select id="budget" name="budget">
+                    <option value="">Tanlang...</option>
+                    <option value="500k-1m">500,000 - 1,000,000 so'm</option>
+                    <option value="1m-3m">1,000,000 - 3,000,000 so'm</option>
+                    <option value="3m-5m">3,000,000 - 5,000,000 so'm</option>
+                    <option value="5m+">5,000,000+ so'm</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="message">💬 Loyihangiz haqida</label>
+            <textarea id="message" name="message" rows="5"
+                placeholder="Nima turdagi loyiha? Qanday funksiyalar kerak? Qachon tayyor bo'lishi kerak?"></textarea>
+        </div>
+
+        <button type="submit" class="submit-btn">
+            🚀 Ariza Yuborish
+        </button>
+    </form>
+
+    <div class="order-info">
+        <div class="info-card">
+            <span class="info-icon">⚡</span>
+            <h3>Tez javob</h3>
+            <p>24 soat ichida bog'lanamiz</p>
+        </div>
+        <div class="info-card">
+            <span class="info-icon">💯</span>
+            <h3>Bepul konsultatsiya</h3>
+            <p>Dastlabki maslahat bepul</p>
+        </div>
+        <div class="info-card">
+            <span class="info-icon">🔒</span>
+            <h3>Xavfsiz</h3>
+            <p>Ma'lumotlaringiz himoyalangan</p>
+        </div>
+    </div>
+</section>
+
+<style>
+    .order-page {
+        max-width: 800px;
+        margin: 0 auto;
+    }
+
+    .order-hero {
+        text-align: center;
+        margin-bottom: 32px;
+    }
+
+    .order-hero h1 {
+        font-size: 2rem;
+        margin-bottom: 8px;
+        background: var(--gradient-text);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+
+    .order-hero p {
+        color: var(--text-secondary);
+    }
+
+    .order-form {
+        background: var(--bg-card);
+        border: 1px solid var(--border);
+        border-radius: var(--radius-xl);
+        padding: 40px;
+        margin-bottom: 32px;
+    }
+
+    .form-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+        margin-bottom: 20px;
+    }
+
+    .form-group {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .form-group label {
+        margin-bottom: 8px;
+        font-weight: 600;
+        color: var(--text-primary);
+    }
+
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+        padding: 14px 18px;
+        background: var(--bg-elevated);
+        border: 2px solid var(--border);
+        border-radius: var(--radius-md);
+        color: var(--text-primary);
+        font-size: 1rem;
+        font-family: inherit;
+        transition: var(--transition-smooth);
+    }
+
+    .form-group input::placeholder,
+    .form-group textarea::placeholder {
+        color: var(--text-muted);
+    }
+
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus {
+        outline: none;
+        border-color: var(--primary);
+        box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+    }
+
+    .form-group select option {
+        background: var(--bg-dark);
+    }
+
+    .form-group textarea {
+        resize: vertical;
+        min-height: 120px;
+    }
+
+    .submit-btn {
+        width: 100%;
+        padding: 18px;
+        background: var(--gradient-main);
+        color: white;
+        border: none;
+        border-radius: var(--radius-md);
+        font-size: 1.1rem;
+        font-weight: 700;
+        font-family: inherit;
+        cursor: pointer;
+        transition: var(--transition-smooth);
+        margin-top: 10px;
+    }
+
+    .submit-btn:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 10px 30px rgba(99, 102, 241, 0.4);
+    }
+
+    .order-info {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 16px;
+    }
+
+    .info-card {
+        background: var(--bg-card);
+        border: 1px solid var(--border);
+        border-radius: var(--radius-lg);
+        padding: 24px;
+        text-align: center;
+    }
+
+    .info-icon {
+        font-size: 2rem;
+        display: block;
+        margin-bottom: 12px;
+    }
+
+    .info-card h3 {
+        font-size: 1rem;
+        color: var(--text-primary);
+        margin-bottom: 4px;
+    }
+
+    .info-card p {
+        font-size: 0.85rem;
+        color: var(--text-muted);
+    }
+
+    @media (max-width: 768px) {
+        .order-form {
+            padding: 24px 16px;
+        }
+
+        .form-row {
+            grid-template-columns: 1fr;
+        }
+
+        .order-hero h1 {
+            font-size: 1.5rem;
+        }
+
+        .order-info {
+            grid-template-columns: 1fr;
+            gap: 12px;
+        }
+
+        .info-card {
+            padding: 16px;
+        }
+    }
+</style>
+{% endblock %}

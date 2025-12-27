@@ -247,6 +247,12 @@ def portfolio():
     return render_template('portfolio.html')
 
 
+@app.route('/order')
+def order_page():
+    """Alohida buyurtma sahifasi"""
+    return render_template('order.html')
+
+
 @app.route('/submit-order', methods=['POST'])
 def submit_order():
     """Xizmatga yozilish formasi"""
