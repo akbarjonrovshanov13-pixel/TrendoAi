@@ -74,6 +74,18 @@
                     placeholder="https://example.com/image.jpg">
             </div>
         </div>
+
+        <div class="form-group">
+            <label for="features">Loyiha Imkoniyatlari (Features)</label>
+            <input type="text" id="features" name="features" value="{{ portfolio.features if portfolio else '' }}"
+                placeholder="To'lov tizimi, Admin panel, Push xabarlar (vergul bilan ajrating)">
+        </div>
+
+        <div class="form-group">
+            <label for="details">Loyiha Haqida Batafsil (Markdown qo'llab-quvvatlanadi)</label>
+            <textarea id="details" name="details" rows="10"
+                placeholder="Loyiha qanday muammoni hal qildi? Qanday natijaga erishildi?">{{ portfolio.details if portfolio else '' }}</textarea>
+        </div>
     </div>
 
     <div class="form-section">

@@ -126,6 +126,8 @@ class Portfolio(db.Model):
     # SEO fields
     meta_description = db.Column(db.String(160))  # SEO tavsifi
     meta_keywords = db.Column(db.String(250))  # SEO kalit so'zlar
+    details = db.Column(db.Text)  # Batafsil ma'lumot (Markdown)
+    features = db.Column(db.Text)  # Loyiha imkoniyatlari (vergul bilan ajratilgan)
     created_at = db.Column(db.DateTime, server_default=db.func.now())
     
     def __repr__(self):
@@ -150,6 +152,10 @@ class Portfolio(db.Model):
             'link': self.link,
             'image_url': self.image_url,
             'is_featured': self.is_featured,
+            'details': self.details,
+            'details_html': markdown2.markdown(self.details) if self.details else "",
+            'features': self.features.split(',') if self.features else [],
+            'created_at': self.created_at.isoformat() if self.created_at else None
         }
 
 
@@ -631,6 +637,8 @@ def admin_portfolio_new():
             is_published=request.form.get('is_published') == 'on',
             meta_description=request.form.get('meta_description'),
             meta_keywords=request.form.get('meta_keywords'),
+            details=request.form.get('details'),
+            features=request.form.get('features')
         )
         db.session.add(portfolio)
         db.session.commit()
@@ -663,6 +671,8 @@ def admin_portfolio_edit(portfolio_id):
         portfolio.is_published = request.form.get('is_published') == 'on'
         portfolio.meta_description = request.form.get('meta_description')
         portfolio.meta_keywords = request.form.get('meta_keywords')
+        portfolio.details = request.form.get('details')
+        portfolio.features = request.form.get('features')
         
         # Slug yangilash
         if not portfolio.slug:

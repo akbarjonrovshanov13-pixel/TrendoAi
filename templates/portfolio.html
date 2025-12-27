@@ -48,11 +48,9 @@ saytlar, AI yechimlar.{% endblock %}
         <div class="card-image">
             <span class="card-emoji">{{ item.emoji }}</span>
             <div class="card-overlay">
-                {% if item.link %}
-                <a href="{{ item.link }}" target="_blank" class="view-btn">Ko'rish →</a>
-                {% else %}
-                <span class="view-btn">Ko'rish →</span>
-                {% endif %}
+                <button class="view-btn" onclick="openModal({{ item.id }})" style="cursor: pointer; border: none;">
+                    Ko'rish →
+                </button>
             </div>
         </div>
         <div class="card-content">
@@ -677,20 +675,383 @@ saytlar, AI yechimlar.{% endblock %}
     }
 </style>
 
+<!-- Project Detail Modal -->
+<div id="projectModal" class="modal-overlay">
+    <div class="modal-content glass">
+        <button class="modal-close" onclick="closeModal()">&times;</button>
+        <div class="modal-layout">
+            <div class="modal-image-side">
+                <span id="modalEmoji" class="modal-emoji">🚀</span>
+                <div id="modalCategory" class="modal-category-badge">Web Sayt</div>
+            </div>
+            <div class="modal-info-side">
+                <h2 id="modalTitle">Loyiha Nomi</h2>
+                <div id="modalTech" class="modal-tech-list">
+                    <!-- Tech badges here -->
+                </div>
+
+                <div class="modal-description-section">
+                    <h3>📝 Ma'lumot</h3>
+                    <p id="modalDescription">Loyiha haqida qisqacha tavsif...</p>
+                </div>
+
+                <div id="modalFeaturesSection" class="modal-features-section">
+                    <h3>✅ Imkoniyatlar</h3>
+                    <ul id="modalFeatures">
+                        <!-- Features list here -->
+                    </ul>
+                </div>
+
+                <div id="modalDetailsSection" class="modal-details-section">
+                    <h3>🔍 Batafsil</h3>
+                    <div id="modalDetails" class="modal-details-content">
+                        <!-- Full details here -->
+                    </div>
+                </div>
+
+                <div class="modal-actions">
+                    <a id="modalLink" href="#" target="_blank" class="modal-btn primary">
+                        🌐 Loyihani ko'rish
+                    </a>
+                    <button class="modal-btn secondary" onclick="closeModal()">
+                        Yopish
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    /* Modal Styles */
+    .modal-overlay {
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.85);
+        backdrop-filter: blur(8px);
+        -webkit-backdrop-filter: blur(8px);
+        display: none;
+        align-items: center;
+        justify-content: center;
+        z-index: 1000;
+        padding: 20px;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+    }
+
+    .modal-overlay.active {
+        display: flex;
+        opacity: 1;
+    }
+
+    .modal-content {
+        width: 100%;
+        max-width: 900px;
+        max-height: 90vh;
+        background: var(--glass);
+        border: 1px solid var(--glass-border);
+        border-radius: var(--radius-xl);
+        position: relative;
+        overflow-y: auto;
+        transform: scale(0.9);
+        transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        scrollbar-width: thin;
+        scrollbar-color: var(--primary) transparent;
+    }
+
+    .modal-overlay.active .modal-content {
+        transform: scale(1);
+    }
+
+    .modal-close {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        background: rgba(255, 255, 255, 0.1);
+        border: none;
+        color: white;
+        font-size: 2rem;
+        cursor: pointer;
+        width: 44px;
+        height: 44px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: var(--transition-fast);
+        z-index: 10;
+    }
+
+    .modal-close:hover {
+        background: var(--primary);
+        transform: rotate(90deg);
+    }
+
+    .modal-layout {
+        display: grid;
+        grid-template-columns: 350px 1fr;
+        min-height: 500px;
+    }
+
+    .modal-image-side {
+        background: var(--bg-elevated);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 40px;
+        border-right: 1px solid var(--border);
+        position: relative;
+    }
+
+    .modal-emoji {
+        font-size: 8rem;
+        filter: drop-shadow(0 0 40px rgba(99, 102, 241, 0.4));
+        margin-bottom: 20px;
+    }
+
+    .modal-category-badge {
+        padding: 6px 16px;
+        background: var(--gradient-main);
+        border-radius: 50px;
+        font-weight: 700;
+        font-size: 0.9rem;
+    }
+
+    .modal-info-side {
+        padding: 40px;
+    }
+
+    .modal-info-side h2 {
+        font-size: 2.2rem;
+        font-weight: 800;
+        margin-bottom: 16px;
+        background: var(--gradient-text);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+
+    .modal-tech-list {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+        margin-bottom: 30px;
+    }
+
+    .modal-tech-list span {
+        padding: 6px 14px;
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        font-size: 0.85rem;
+        color: var(--text-muted);
+    }
+
+    .modal-info-side h3 {
+        font-size: 1.1rem;
+        font-weight: 700;
+        margin-bottom: 12px;
+        color: var(--text-primary);
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .modal-description-section p {
+        color: var(--text-secondary);
+        line-height: 1.7;
+        margin-bottom: 30px;
+        font-size: 1.05rem;
+    }
+
+    .modal-features-section {
+        margin-bottom: 30px;
+    }
+
+    .modal-features-section ul {
+        list-style: none;
+        padding: 0;
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        gap: 10px;
+    }
+
+    .modal-features-section li {
+        color: var(--text-secondary);
+        font-size: 0.95rem;
+        padding-left: 24px;
+        position: relative;
+    }
+
+    .modal-features-section li::before {
+        content: '✓';
+        position: absolute;
+        left: 0;
+        color: var(--accent);
+        font-weight: bold;
+    }
+
+    .modal-details-section {
+        margin-bottom: 40px;
+        padding-top: 20px;
+        border-top: 1px solid var(--border);
+    }
+
+    .modal-details-content {
+        color: var(--text-secondary);
+        line-height: 1.7;
+    }
+
+    .modal-actions {
+        display: flex;
+        gap: 16px;
+    }
+
+    .modal-btn {
+        padding: 14px 28px;
+        border-radius: 12px;
+        font-weight: 700;
+        font-size: 1rem;
+        cursor: pointer;
+        transition: var(--transition-smooth);
+        border: none;
+        text-align: center;
+        flex: 1;
+    }
+
+    .modal-btn.primary {
+        background: var(--gradient-main);
+        color: white;
+    }
+
+    .modal-btn.secondary {
+        background: rgba(255, 255, 255, 0.1);
+        color: white;
+    }
+
+    .modal-btn:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+    }
+
+    @media (max-width: 992px) {
+        .modal-layout {
+            grid-template-columns: 1fr;
+        }
+
+        .modal-image-side {
+            padding: 30px;
+            border-right: none;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .modal-emoji {
+            font-size: 5rem;
+        }
+
+        .modal-info-side {
+            padding: 30px;
+        }
+    }
+
+    @media (max-width: 600px) {
+        .modal-info-side h2 {
+            font-size: 1.6rem;
+        }
+
+        .modal-actions {
+            flex-direction: column;
+        }
+
+        .modal-features-section ul {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>
+
 <script>
+    const modal = document.getElementById('projectModal');
+    const portfoliosData = {{ portfolios| map(attribute = 'to_dict') | list | tojson }};
+
+    function openModal(projectId) {
+        const project = portfoliosData.find(p => p.id === projectId);
+        if (!project) return;
+
+        document.getElementById('modalEmoji').textContent = project.emoji || '🚀';
+        document.getElementById('modalTitle').textContent = project.title;
+        document.getElementById('modalDescription').textContent = project.description;
+
+        // Category
+        const catMap = { 'bot': '🤖 Telegram Bot', 'web': '🌐 Web Sayt', 'ai': '🧠 AI Yechim', 'mobile': '📱 Mobile App' };
+        document.getElementById('modalCategory').textContent = catMap[project.category] || project.category;
+
+        // Tech
+        const techBox = document.getElementById('modalTech');
+        techBox.innerHTML = '';
+        project.technologies.forEach(tech => {
+            const span = document.createElement('span');
+            span.textContent = tech;
+            techBox.appendChild(span);
+        });
+
+        // Features
+        const featuresSection = document.getElementById('modalFeaturesSection');
+        const featuresList = document.getElementById('modalFeatures');
+        if (project.features && project.features.length > 0) {
+            featuresSection.style.display = 'block';
+            featuresList.innerHTML = '';
+            project.features.forEach(f => {
+                const li = document.createElement('li');
+                li.textContent = f;
+                featuresList.appendChild(li);
+            });
+        } else {
+            featuresSection.style.display = 'none';
+        }
+
+        // Details
+        const detailsSection = document.getElementById('modalDetailsSection');
+        const detailsContent = document.getElementById('modalDetails');
+        if (project.details_html) {
+            detailsSection.style.display = 'block';
+            detailsContent.innerHTML = project.details_html;
+        } else {
+            detailsSection.style.display = 'none';
+        }
+
+        // Link
+        const linkBtn = document.getElementById('modalLink');
+        if (project.link) {
+            linkBtn.style.display = 'block';
+            linkBtn.href = project.link;
+        } else {
+            linkBtn.style.display = 'none';
+        }
+
+        modal.classList.add('active');
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeModal() {
+        modal.classList.remove('active');
+        document.body.style.overflow = 'auto';
+    }
+
+    // Close on backdrop click
+    modal.addEventListener('click', (e) => {
+        if (e.target === modal) closeModal();
+    });
+
     // Portfolio Filter
     document.querySelectorAll('.filter-btn').forEach(btn => {
         btn.addEventListener('click', () => {
-            // Active state
             document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
-
             const filter = btn.dataset.filter;
-
             document.querySelectorAll('.portfolio-card').forEach(card => {
                 if (filter === 'all' || card.dataset.category === filter) {
                     card.style.display = 'block';
-                    card.style.animation = 'fadeIn 0.5s ease';
                 } else {
                     card.style.display = 'none';
                 }
