@@ -419,6 +419,10 @@
                     class="{% if request.endpoint == 'admin_generate' %}active{% endif %}">
                     🤖 AI Generatsiya
                 </a>
+                <a href="{{ url_for('admin_portfolio') }}"
+                    class="{% if request.endpoint in ['admin_portfolio', 'admin_portfolio_new', 'admin_portfolio_edit'] %}active{% endif %}">
+                    🎨 Portfolio
+                </a>
                 <a href="{{ url_for('index') }}" target="_blank">
                     🌐 Saytni Ko'rish
                 </a>

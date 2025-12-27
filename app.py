@@ -109,6 +109,49 @@ class Order(db.Model):
         }
 
 
+class Portfolio(db.Model):
+    """Portfolio loyihalar modeli (SEO-optimized)"""
+    id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.String(200), nullable=False)
+    slug = db.Column(db.String(250), unique=True, nullable=True)  # SEO URL
+    description = db.Column(db.Text, nullable=False)
+    category = db.Column(db.String(50), default='web')  # bot, web, ai, mobile
+    emoji = db.Column(db.String(10), default='🚀')
+    technologies = db.Column(db.String(250))  # vergul bilan ajratilgan
+    link = db.Column(db.String(500))
+    image_url = db.Column(db.String(500))  # Rasm URL
+    is_featured = db.Column(db.Boolean, default=False)
+    is_published = db.Column(db.Boolean, default=True)
+    # SEO fields
+    meta_description = db.Column(db.String(160))  # SEO tavsifi
+    meta_keywords = db.Column(db.String(250))  # SEO kalit so'zlar
+    created_at = db.Column(db.DateTime, server_default=db.func.now())
+    
+    def __repr__(self):
+        return f'<Portfolio {self.title}>'
+    
+    def generate_slug(self):
+        """URL uchun slug yaratish"""
+        slug = self.title.lower()
+        slug = re.sub(r'[^\w\s-]', '', slug)
+        slug = re.sub(r'[-\s]+', '-', slug).strip('-')
+        return f"{slug}-{self.id}"
+    
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'title': self.title,
+            'slug': self.slug,
+            'description': self.description,
+            'category': self.category,
+            'emoji': self.emoji,
+            'technologies': self.technologies.split(',') if self.technologies else [],
+            'link': self.link,
+            'image_url': self.image_url,
+            'is_featured': self.is_featured,
+        }
+
+
 # ========== TEMPLATE FILTERS ==========
 
 @app.template_filter('markdown')
@@ -254,7 +297,8 @@ def services():
 @app.route('/portfolio')
 def portfolio():
     """Portfolio sahifasi"""
-    return render_template('portfolio.html')
+    portfolios = Portfolio.query.filter_by(is_published=True).order_by(Portfolio.created_at.desc()).all()
+    return render_template('portfolio.html', portfolios=portfolios)
 
 
 @app.route('/order')
@@ -601,6 +645,89 @@ def admin_migrate_slugs():
     db.session.commit()
     flash(f'{count} ta postga slug qo\'shildi!', 'success')
     return redirect(url_for('admin_posts'))
+
+
+# ========== PORTFOLIO ADMIN ROUTES ==========
+
+@app.route('/admin/portfolio')
+@login_required
+def admin_portfolio():
+    """Portfolio ro'yxati"""
+    portfolios = Portfolio.query.order_by(Portfolio.created_at.desc()).all()
+    return render_template('admin/portfolio.html', portfolios=portfolios)
+
+
+@app.route('/admin/portfolio/new', methods=['GET', 'POST'])
+@login_required
+def admin_portfolio_new():
+    """Yangi portfolio qo'shish"""
+    if request.method == 'POST':
+        portfolio = Portfolio(
+            title=request.form.get('title'),
+            description=request.form.get('description'),
+            category=request.form.get('category', 'web'),
+            emoji=request.form.get('emoji', '🚀'),
+            technologies=request.form.get('technologies'),
+            link=request.form.get('link'),
+            image_url=request.form.get('image_url'),
+            is_featured=request.form.get('is_featured') == 'on',
+            is_published=request.form.get('is_published') == 'on',
+            meta_description=request.form.get('meta_description'),
+            meta_keywords=request.form.get('meta_keywords'),
+        )
+        db.session.add(portfolio)
+        db.session.commit()
+        
+        # Slug yaratish
+        portfolio.slug = portfolio.generate_slug()
+        db.session.commit()
+        
+        flash(f'"{portfolio.title}" muvaffaqiyatli qo\'shildi!', 'success')
+        return redirect(url_for('admin_portfolio'))
+    
+    return render_template('admin/portfolio_form.html', portfolio=None)
+
+
+@app.route('/admin/portfolio/<int:portfolio_id>/edit', methods=['GET', 'POST'])
+@login_required
+def admin_portfolio_edit(portfolio_id):
+    """Portfolio tahrirlash"""
+    portfolio = Portfolio.query.get_or_404(portfolio_id)
+    
+    if request.method == 'POST':
+        portfolio.title = request.form.get('title')
+        portfolio.description = request.form.get('description')
+        portfolio.category = request.form.get('category', 'web')
+        portfolio.emoji = request.form.get('emoji', '🚀')
+        portfolio.technologies = request.form.get('technologies')
+        portfolio.link = request.form.get('link')
+        portfolio.image_url = request.form.get('image_url')
+        portfolio.is_featured = request.form.get('is_featured') == 'on'
+        portfolio.is_published = request.form.get('is_published') == 'on'
+        portfolio.meta_description = request.form.get('meta_description')
+        portfolio.meta_keywords = request.form.get('meta_keywords')
+        
+        # Slug yangilash
+        if not portfolio.slug:
+            portfolio.slug = portfolio.generate_slug()
+        
+        db.session.commit()
+        flash(f'"{portfolio.title}" yangilandi!', 'success')
+        return redirect(url_for('admin_portfolio'))
+    
+    return render_template('admin/portfolio_form.html', portfolio=portfolio)
+
+
+@app.route('/admin/portfolio/<int:portfolio_id>/delete', methods=['POST'])
+@login_required
+def admin_portfolio_delete(portfolio_id):
+    """Portfolio o'chirish"""
+    portfolio = Portfolio.query.get_or_404(portfolio_id)
+    title = portfolio.title
+    db.session.delete(portfolio)
+    db.session.commit()
+    flash(f'"{title}" o\'chirildi!', 'success')
+    return redirect(url_for('admin_portfolio'))
 
 
 # ========== SEO ROUTES ==========

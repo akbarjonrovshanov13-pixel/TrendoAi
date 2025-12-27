@@ -1,0 +1,169 @@
+{% extends 'admin/base_admin.html' %}
+
+{% block title %}Portfolio Boshqaruvi - TrendoAI Admin{% endblock %}
+
+{% block content %}
+<div class="admin-header">
+    <h1>🎨 Portfolio Boshqaruvi</h1>
+    <a href="{{ url_for('admin_portfolio_new') }}" class="btn btn-primary">
+        ➕ Yangi Loyiha Qo'shish
+    </a>
+</div>
+
+{% with messages = get_flashed_messages(with_categories=true) %}
+{% if messages %}
+{% for category, message in messages %}
+<div class="alert alert-{{ category }}">{{ message }}</div>
+{% endfor %}
+{% endif %}
+{% endwith %}
+
+<div class="admin-table-container">
+    <table class="admin-table">
+        <thead>
+            <tr>
+                <th>Emoji</th>
+                <th>Nomi</th>
+                <th>Kategoriya</th>
+                <th>Texnologiyalar</th>
+                <th>Holati</th>
+                <th>Amallar</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in portfolios %}
+            <tr>
+                <td class="emoji-cell">{{ item.emoji }}</td>
+                <td>
+                    <strong>{{ item.title }}</strong>
+                    {% if item.is_featured %}
+                    <span class="badge badge-featured">⭐ Featured</span>
+                    {% endif %}
+                </td>
+                <td>
+                    <span class="category-badge category-{{ item.category }}">
+                        {{ item.category|capitalize }}
+                    </span>
+                </td>
+                <td>
+                    {% if item.technologies %}
+                    {% for tech in item.technologies.split(',') %}
+                    <span class="tech-tag">{{ tech.strip() }}</span>
+                    {% endfor %}
+                    {% endif %}
+                </td>
+                <td>
+                    {% if item.is_published %}
+                    <span class="status-badge status-active">✅ Faol</span>
+                    {% else %}
+                    <span class="status-badge status-draft">📝 Draft</span>
+                    {% endif %}
+                </td>
+                <td class="actions-cell">
+                    <a href="{{ url_for('admin_portfolio_edit', portfolio_id=item.id) }}" class="btn btn-sm btn-edit">
+                        ✏️ Tahrirlash
+                    </a>
+                    <form action="{{ url_for('admin_portfolio_delete', portfolio_id=item.id) }}" method="POST"
+                        style="display:inline;" onsubmit="return confirm('Rostdan ham o\'chirmoqchimisiz?');">
+                        <button type="submit" class="btn btn-sm btn-danger">🗑️ O'chirish</button>
+                    </form>
+                </td>
+            </tr>
+            {% else %}
+            <tr>
+                <td colspan="6" class="empty-state">
+                    <p>Hech qanday loyiha topilmadi.</p>
+                    <a href="{{ url_for('admin_portfolio_new') }}" class="btn btn-primary">Birinchi loyihani
+                        qo'shing</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<style>
+    .admin-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 24px;
+    }
+
+    .admin-header h1 {
+        font-size: 1.8rem;
+        background: var(--gradient-text);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+
+    .emoji-cell {
+        font-size: 2rem;
+        text-align: center;
+    }
+
+    .badge-featured {
+        background: var(--accent);
+        color: white;
+        padding: 2px 8px;
+        border-radius: 10px;
+        font-size: 0.7rem;
+        margin-left: 8px;
+    }
+
+    .category-badge {
+        padding: 4px 12px;
+        border-radius: 20px;
+        font-size: 0.8rem;
+        font-weight: 600;
+    }
+
+    .category-bot {
+        background: #10B981;
+        color: white;
+    }
+
+    .category-web {
+        background: #3B82F6;
+        color: white;
+    }
+
+    .category-ai {
+        background: #8B5CF6;
+        color: white;
+    }
+
+    .category-mobile {
+        background: #F59E0B;
+        color: white;
+    }
+
+    .tech-tag {
+        display: inline-block;
+        padding: 2px 8px;
+        background: var(--bg-elevated);
+        border: 1px solid var(--border);
+        border-radius: 4px;
+        font-size: 0.75rem;
+        margin: 2px;
+    }
+
+    .status-active {
+        color: #10B981;
+    }
+
+    .status-draft {
+        color: #F59E0B;
+    }
+
+    .actions-cell {
+        white-space: nowrap;
+    }
+
+    .empty-state {
+        text-align: center;
+        padding: 40px;
+        color: var(--text-muted);
+    }
+</style>
+{% endblock %}
