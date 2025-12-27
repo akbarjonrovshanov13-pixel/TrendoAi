@@ -1182,11 +1182,8 @@ main {
     }
 
     .breadcrumb-nav {
-        font-size: 0.72rem;
-        gap: 4px;
-        margin-bottom: 12px;
-        flex-wrap: wrap;
-        opacity: 0.8;
+        display: none;
+        /* Hide on mobile to save space and move title up */
     }
 
     .article-page {
@@ -1194,20 +1191,20 @@ main {
         background: transparent;
         border: none;
         box-shadow: none;
-        margin-top: -10px;
-        /* Subtle lift */
+        margin-top: -30px;
+        /* Stronger lift to pull content higher */
     }
 
     .article-header {
-        margin: 0 0 16px;
+        margin: 0 0 12px;
         padding: 0;
         position: static;
     }
 
     .article-category-badge {
-        font-size: 0.7rem;
-        padding: 3px 10px;
-        margin-bottom: 8px;
+        font-size: 0.65rem;
+        padding: 2px 8px;
+        margin-bottom: 6px;
     }
 
     .article-header h1 {
