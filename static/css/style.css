@@ -1678,6 +1678,16 @@ footer {
         top: 4px;
     }
 
+    .header-content {
+        flex-wrap: nowrap !important;
+        justify-content: space-between;
+        gap: 8px;
+    }
+
+    .logo {
+        flex-shrink: 0;
+    }
+
     .logo-icon {
         font-size: 1.2rem;
     }
@@ -1686,28 +1696,49 @@ footer {
         font-size: 1rem;
     }
 
+    nav {
+        display: flex;
+        overflow-x: auto;
+        white-space: nowrap;
+        flex: 1;
+        scrollbar-width: none;
+        -ms-overflow-style: none;
+        gap: 2px;
+        padding: 4px 0;
+    }
+
+    nav::-webkit-scrollbar {
+        display: none;
+    }
+
     nav a {
-        padding: 5px 8px;
+        padding: 6px 8px;
         font-size: 0.7rem;
+        flex-shrink: 0;
     }
 
     .social-icons {
-        gap: 6px;
+        display: flex;
+        flex-shrink: 0;
+        gap: 4px;
     }
 
     .social-icon {
-        width: 28px;
-        height: 28px;
+        width: 30px;
+        height: 30px;
+        flex-shrink: 0;
     }
 
     .social-icon svg {
-        width: 14px;
-        height: 14px;
+        width: 15px;
+        height: 15px;
     }
 
     main {
         padding: 0 6px;
     }
+
+
 
     .hero h1 {
         font-size: 1.5rem;
