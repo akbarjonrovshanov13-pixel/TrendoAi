@@ -778,6 +778,7 @@ main {
     margin-bottom: 30px;
     font-size: 0.85rem;
     color: var(--text-muted);
+    transition: opacity 0.4s ease, transform 0.4s ease;
 }
 
 .breadcrumb-nav a {

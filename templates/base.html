@@ -374,13 +374,24 @@
 
         window.addEventListener('scroll', () => {
             const currentScroll = window.pageYOffset;
+            const breadcrumbs = document.querySelector('.breadcrumb-nav');
 
-            if (currentScroll > lastScroll && currentScroll > 60) {
-                // Scrolling DOWN - hide header
+            if (currentScroll > lastScroll && currentScroll > 100) {
+                // Scrolling DOWN - hide everything distracting
                 header.classList.add('header-hidden');
-            } else {
-                // Scrolling UP - show header
+                document.body.classList.add('is-scrolling-down');
+                if (breadcrumbs) {
+                    breadcrumbs.style.opacity = '0';
+                    breadcrumbs.style.transform = 'translateY(-10px)';
+                }
+            } else if (currentScroll < lastScroll || currentScroll <= 20) {
+                // Scrolling UP or at top - show navigation
                 header.classList.remove('header-hidden');
+                document.body.classList.remove('is-scrolling-down');
+                if (breadcrumbs) {
+                    breadcrumbs.style.opacity = '1';
+                    breadcrumbs.style.transform = 'translateY(0)';
+                }
             }
 
             lastScroll = currentScroll;
