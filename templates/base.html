@@ -375,23 +375,26 @@
         window.addEventListener('scroll', () => {
             const currentScroll = window.pageYOffset;
             const breadcrumbs = document.querySelector('.breadcrumb-nav');
+            const articleHeader = document.querySelector('.article-header');
+            const featuredImage = document.querySelector('.article-featured-image');
 
-            if (currentScroll > lastScroll && currentScroll > 100) {
-                // Scrolling DOWN - hide everything distracting
+            if (currentScroll > lastScroll && currentScroll > 5) {
+                // Scrolling DOWN - Full Immersion Mode (Hide early)
                 header.classList.add('header-hidden');
                 document.body.classList.add('is-scrolling-down');
-                if (breadcrumbs) {
-                    breadcrumbs.style.opacity = '0';
-                    breadcrumbs.style.transform = 'translateY(-10px)';
-                }
+
+                // Hide article specific distractions
+                if (breadcrumbs) breadcrumbs.style.opacity = '0';
+                if (articleHeader) articleHeader.style.opacity = '0';
+                if (featuredImage) featuredImage.style.opacity = '0';
             } else if (currentScroll < lastScroll || currentScroll <= 20) {
-                // Scrolling UP or at top - show navigation
+                // Scrolling UP - Show Navigation
                 header.classList.remove('header-hidden');
                 document.body.classList.remove('is-scrolling-down');
-                if (breadcrumbs) {
-                    breadcrumbs.style.opacity = '1';
-                    breadcrumbs.style.transform = 'translateY(0)';
-                }
+
+                if (breadcrumbs) breadcrumbs.style.opacity = '1';
+                if (articleHeader) articleHeader.style.opacity = '1';
+                if (featuredImage) featuredImage.style.opacity = '1';
             }
 
             lastScroll = currentScroll;
