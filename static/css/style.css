@@ -1691,6 +1691,37 @@ footer {
         font-size: 0.7rem;
     }
 
+    .header-content {
+        flex-wrap: wrap;
+    }
+
+    .social-icons {
+        order: 1;
+        margin-left: auto;
+        gap: 8px;
+    }
+
+    .social-icon {
+        width: 32px;
+        height: 32px;
+    }
+
+    .social-icon svg {
+        width: 16px;
+        height: 16px;
+    }
+
+    .logo {
+        order: 0;
+    }
+
+    nav {
+        order: 2;
+        width: 100%;
+        margin-top: 8px;
+        justify-content: center;
+    }
+
     main {
         padding: 0 6px;
     }
