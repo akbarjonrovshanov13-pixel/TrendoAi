@@ -789,6 +789,64 @@ def sitemap_xml():
     return Response(xml, mimetype='application/xml')
 
 
+@app.route('/api/catalog.xml')
+def facebook_catalog():
+    """Facebook Product Catalog Feed (RSS 2.0 formatda)"""
+    from flask import Response
+    
+    base_url = SITE_URL
+    portfolios = Portfolio.query.filter_by(is_published=True).all()
+    
+    # RSS 2.0 format - Facebook Commerce Manager uchun
+    xml = '<?xml version="1.0" encoding="UTF-8"?>\n'
+    xml += '<rss version="2.0" xmlns:g="http://base.google.com/ns/1.0">\n'
+    xml += '<channel>\n'
+    xml += f'  <title>TrendoAI Portfolio - IT Xizmatlari</title>\n'
+    xml += f'  <link>{base_url}/portfolio</link>\n'
+    xml += f'  <description>TrendoAI professional IT xizmatlari va loyihalar katalogi</description>\n'
+    
+    for item in portfolios:
+        # Kategoriya nomlari
+        category_names = {
+            'bot': 'Telegram Bot',
+            'web': 'Web Sayt',
+            'ai': 'AI Yechim',
+            'mobile': 'Mobile App'
+        }
+        category_name = category_names.get(item.category, item.category)
+        
+        # Rasm URL
+        image_url = item.image_url if item.image_url else f'{base_url}/static/favicon.svg'
+        
+        # Loyiha URL
+        item_url = f'{base_url}/portfolio#{item.slug}' if item.slug else f'{base_url}/portfolio'
+        
+        xml += '  <item>\n'
+        xml += f'    <g:id>{item.id}</g:id>\n'
+        xml += f'    <title>{item.title}</title>\n'
+        xml += f'    <link>{item_url}</link>\n'
+        xml += f'    <description><![CDATA[{item.description}]]></description>\n'
+        xml += f'    <g:image_link>{image_url}</g:image_link>\n'
+        xml += f'    <g:brand>TrendoAI</g:brand>\n'
+        xml += f'    <g:condition>new</g:condition>\n'
+        xml += f'    <g:availability>in stock</g:availability>\n'
+        xml += f'    <g:price>0 UZS</g:price>\n'  # Bepul konsultatsiya
+        xml += f'    <g:product_type>{category_name}</g:product_type>\n'
+        xml += f'    <g:google_product_category>Software > Computer Software > Business &amp; Productivity Software</g:google_product_category>\n'
+        
+        # SEO kalit so'zlar
+        if item.meta_keywords:
+            for keyword in item.meta_keywords.split(',')[:5]:
+                xml += f'    <g:custom_label_0>{keyword.strip()}</g:custom_label_0>\n'
+        
+        xml += '  </item>\n'
+    
+    xml += '</channel>\n'
+    xml += '</rss>'
+    
+    return Response(xml, mimetype='application/xml')
+
+
 @app.route('/robots.txt')
 def robots_txt():
     """robots.txt fayli"""
