@@ -569,6 +569,24 @@ def admin_generate():
     return render_template('admin/generate.html', categories=CATEGORIES)
 
 
+@app.route('/admin/migrate-slugs', methods=['POST'])
+@login_required
+def admin_migrate_slugs():
+    """Barcha postlarga slug qo'shish (SEO uchun)"""
+    posts_without_slug = Post.query.filter(
+        (Post.slug == None) | (Post.slug == '')
+    ).all()
+    
+    count = 0
+    for post in posts_without_slug:
+        post.slug = post.generate_slug()
+        count += 1
+    
+    db.session.commit()
+    flash(f'{count} ta postga slug qo\'shildi!', 'success')
+    return redirect(url_for('admin_posts'))
+
+
 # ========== SEO ROUTES ==========
 
 @app.route('/sitemap.xml')

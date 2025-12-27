@@ -122,6 +122,13 @@ header {
     top: 20px;
     z-index: 100;
     overflow: hidden;
+    transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+/* Auto-hide header on mobile scroll */
+header.header-hidden {
+    transform: translateY(-120%);
+    opacity: 0;
 }
 
 header::before {
