@@ -379,23 +379,29 @@
             const detailHeader = document.querySelector('.article-header, .service-header-hero, .portfolio-detail-header');
             const featuredImage = document.querySelector('.article-featured-image');
 
-            if (currentScroll > lastScroll && currentScroll > 5) {
-                // Scrolling DOWN - Full Immersion Mode (Hide early)
+            if (currentScroll > lastScroll && currentScroll > 2) {
+                // Scrolling DOWN - Full Immersion Mode (Hide almost immediately)
                 header.classList.add('header-hidden');
                 document.body.classList.add('is-scrolling-down');
 
                 // Hide distractions smoothly
-                if (breadcrumbs) breadcrumbs.style.opacity = '0';
-                if (detailHeader) detailHeader.style.opacity = '0';
-                if (featuredImage) featuredImage.style.opacity = '0';
-            } else if (currentScroll < lastScroll || currentScroll <= 20) {
-                // Scrolling UP - Show Navigation
+                [breadcrumbs, detailHeader, featuredImage].forEach(el => {
+                    if (el) {
+                        el.style.opacity = '0';
+                        el.style.pointerEvents = 'none';
+                    }
+                });
+            } else if (currentScroll < lastScroll - 10 || currentScroll <= 5) {
+                // Scrolling UP significantly or at very top - Show Navigation
                 header.classList.remove('header-hidden');
                 document.body.classList.remove('is-scrolling-down');
 
-                if (breadcrumbs) breadcrumbs.style.opacity = '1';
-                if (detailHeader) detailHeader.style.opacity = '1';
-                if (featuredImage) featuredImage.style.opacity = '1';
+                [breadcrumbs, detailHeader, featuredImage].forEach(el => {
+                    if (el) {
+                        el.style.opacity = '1';
+                        el.style.pointerEvents = 'auto';
+                    }
+                });
             }
 
             lastScroll = currentScroll;
