@@ -562,11 +562,17 @@ def admin_edit_post(post_id):
 @login_required
 def admin_delete_post(post_id):
     """Postni o'chirish"""
-    post = Post.query.get_or_404(post_id)
-    db.session.delete(post)
-    db.session.commit()
+    try:
+        post = Post.query.get_or_404(post_id)
+        post_title = post.title
+        db.session.delete(post)
+        db.session.commit()
+        flash(f'"{post_title}" muvaffaqiyatli o\'chirildi!', 'success')
+    except Exception as e:
+        db.session.rollback()
+        flash(f'Xatolik yuz berdi: {str(e)}', 'error')
+        print(f"Post deletion error: {e}")
     
-    flash('Post o\'chirildi!', 'success')
     return redirect(url_for('admin_posts'))
 
 
@@ -692,11 +698,17 @@ def admin_portfolio_edit(portfolio_id):
 @login_required
 def admin_portfolio_delete(portfolio_id):
     """Portfolio o'chirish"""
-    portfolio = Portfolio.query.get_or_404(portfolio_id)
-    title = portfolio.title
-    db.session.delete(portfolio)
-    db.session.commit()
-    flash(f'"{title}" o\'chirildi!', 'success')
+    try:
+        portfolio = Portfolio.query.get_or_404(portfolio_id)
+        title = portfolio.title
+        db.session.delete(portfolio)
+        db.session.commit()
+        flash(f'"{title}" muvaffaqiyatli o\'chirildi!', 'success')
+    except Exception as e:
+        db.session.rollback()
+        flash(f'Xatolik yuz berdi: {str(e)}', 'error')
+        print(f"Portfolio deletion error: {e}")
+        
     return redirect(url_for('admin_portfolio'))
 
 

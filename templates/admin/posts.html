@@ -47,10 +47,11 @@
                     <td>{{ post.created_at.strftime('%d.%m.%Y %H:%M') }}</td>
                     <td class="actions">
                         <a href="{{ url_for('admin_edit_post', post_id=post.id) }}" class="btn-sm"
-                            title="Tahrirlash">✏️</a>
+                            style="background: #dbeafe; color: #2563eb; margin-right: 5px;" title="Tahrirlash">✏️</a>
                         <form action="{{ url_for('admin_delete_post', post_id=post.id) }}" method="POST"
                             style="display: inline;" onsubmit="return confirm('Rostdan ham o\'chirmoqchimisiz?');">
-                            <button type="submit" class="btn-sm danger" title="O'chirish">🗑️</button>
+                            <button type="submit" class="btn-sm danger" style="padding: 6px 10px;"
+                                title="O'chirish">🗑️</button>
                         </form>
                     </td>
                 </tr>
