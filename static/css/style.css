@@ -1228,26 +1228,28 @@ main {
         background: transparent;
         border: none;
         box-shadow: none;
-        margin-top: -30px;
-        /* Stronger lift to pull content higher */
+        margin-top: -50px;
+        /* Even stronger lift to bring title to the top */
     }
 
     .article-header {
-        margin: 0 0 12px;
+        margin: 0 0 8px;
+        /* Further reduced margin below header */
         padding: 0;
         position: static;
     }
 
     .article-category-badge {
-        font-size: 0.65rem;
-        padding: 2px 8px;
-        margin-bottom: 6px;
+        font-size: 0.6rem;
+        padding: 1px 6px;
+        margin-bottom: 4px;
     }
 
     .article-header h1 {
-        font-size: 1.4rem;
-        line-height: 1.35;
-        margin-bottom: 12px;
+        font-size: 1.25rem;
+        /* Slightly smaller to fit higher */
+        line-height: 1.3;
+        margin-bottom: 8px;
     }
 
     .article-meta {
@@ -2165,13 +2167,20 @@ footer {
     .posts-section,
     .search-section,
     .newsletter-section,
-    .article-page,
     .about-section,
     .testimonials-section,
     .search-page {
         padding: 16px 12px;
         border-radius: var(--radius-lg);
         margin-bottom: 12px;
+    }
+
+    .article-page {
+        padding: 0;
+        /* Remove padding to raise title */
+        margin-bottom: 12px;
+        margin-top: -50px;
+        /* Consistent lift */
     }
 
     .posts-grid,
@@ -2207,6 +2216,7 @@ footer {
         font-size: 0.7rem;
         display: -webkit-box;
         -webkit-line-clamp: 2;
+        line-clamp: 2;
         -webkit-box-orient: vertical;
         overflow: hidden;
     }
@@ -2230,7 +2240,8 @@ footer {
     }
 
     .article-header h1 {
-        font-size: 1.5rem;
+        font-size: 1.25rem;
+        /* Reduced to fit higher */
     }
 
     .article-content {
