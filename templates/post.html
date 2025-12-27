@@ -83,89 +83,180 @@
 {% endblock %}
 
 {% block content %}
-<article class="article-page">
-    <!-- Article Header -->
-    <header class="article-header">
-        <div class="article-category">{{ post.category or 'Texnologiya' }}</div>
-        <h1>{{ post.title }}</h1>
-        <div class="article-meta">
-            <span class="meta-item">📅 {{ post.created_at.strftime('%d %B, %Y') }}</span>
-            <span class="meta-item">⏱️ {{ post.reading_time or 5 }} daqiqa o'qish</span>
-            <span class="meta-item">👁️ {{ post.views or 0 }} marta ko'rildi</span>
+<!-- Reading Progress Bar -->
+<div class="reading-progress-container">
+    <div id="reading-progress-bar" class="reading-progress-fill"></div>
+</div>
+
+<div class="article-container">
+    <main class="article-main">
+        <article class="article-page">
+            <!-- Breadcrumbs -->
+            <nav class="breadcrumb-nav">
+                <a href="{{ url_for('index') }}">Bosh sahifa</a>
+                <span class="sep">/</span>
+                <a href="{{ url_for('index', category=post.category) }}">{{ post.category or 'Texnologiya' }}</a>
+                <span class="sep">/</span>
+                <span class="current">{{ post.title | truncate(30) }}</span>
+            </nav>
+
+            <!-- Article Header -->
+            <header class="article-header">
+                <div class="article-category-badge">{{ post.category or 'Texnologiya' }}</div>
+                <h1>{{ post.title }}</h1>
+                <div class="article-meta">
+                    <span class="meta-item"><i class="far fa-calendar-alt"></i> {{ post.created_at.strftime('%d %B, %Y')
+                        }}</span>
+                    <span class="meta-item"><i class="far fa-clock"></i> {{ post.reading_time or 5 }} daqiqa
+                        o'qish</span>
+                    <span class="meta-item"><i class="far fa-eye"></i> {{ post.views or 0 }} marta</span>
+                </div>
+            </header>
+
+            <!-- Featured Image -->
+            {% if post.image_url %}
+            <div class="article-featured-image">
+                <img src="{{ post.image_url }}" alt="{{ post.title }}" loading="lazy">
+            </div>
+            {% endif %}
+
+            <!-- Table of Contents (Mobile Only / Top) -->
+            <div class="mobile-toc-container">
+                <details>
+                    <summary>📌 Mundarija</summary>
+                    <div id="mobile-toc-content"></div>
+                </details>
+            </div>
+
+            <!-- Article Content -->
+            <div class="article-content" id="article-body">
+                {{ post.content | markdown | safe }}
+            </div>
+
+            <!-- Tags -->
+            {% if post.keywords %}
+            <div class="article-tags-footer">
+                {% for keyword in post.keywords.split(',') %}
+                <a href="{{ url_for('search', q=keyword.strip()) }}" class="tag-link">#{{ keyword.strip() }}</a>
+                {% endfor %}
+            </div>
+            {% endif %}
+
+            <!-- Share Buttons -->
+            <div class="article-share-footer">
+                <h4>Maqolani ulashing:</h4>
+                <div class="share-grid">
+                    <a href="https://t.me/share/url?url=https://trendoai.uz/blog/{{ post.slug or post.id }}&text={{ post.title }}"
+                        class="share-card tg" target="_blank">
+                        <i class="fab fa-telegram-plane"></i> Telegram
+                    </a>
+                    <a href="https://www.facebook.com/sharer/sharer.php?u=https://trendoai.uz/blog/{{ post.slug or post.id }}"
+                        class="share-card fb" target="_blank">
+                        <i class="fab fa-facebook-f"></i> Facebook
+                    </a>
+                    <button class="share-card copy" onclick="copyLink()">
+                        <i class="far fa-copy"></i> Nusxa olish
+                    </button>
+                </div>
+            </div>
+
+            <!-- Author Info -->
+            <div class="article-author-card">
+                <div class="author-img">🤖</div>
+                <div class="author-text">
+                    <strong>TrendoAI Editorial</strong>
+                    <p>Sun'iy intellekt va texnologiyalar olamidagi eng muhim xabarlar hamda tahlillar.</p>
+                </div>
+            </div>
+        </article>
+    </main>
+
+    <!-- Sidebar -->
+    <aside class="article-sidebar">
+        <!-- Progress Widget -->
+        <div class="sidebar-widget toc-widget" id="sidebar-toc-widget">
+            <h3>📌 Mundarija</h3>
+            <div id="sidebar-toc-content"></div>
         </div>
-        {% if post.keywords %}
-        <div class="article-tags">
-            {% for keyword in post.keywords.split(',') %}
-            <span class="tag">{{ keyword.strip() }}</span>
-            {% endfor %}
+
+        <!-- Related Posts Widget -->
+        {% if related_posts %}
+        <div class="sidebar-widget">
+            <h3>📚 O'xshash Maqolalar</h3>
+            <div class="related-sidebar-list">
+                {% for related in related_posts %}
+                <a href="{{ url_for('post_by_slug', slug=related.slug) if related.slug else url_for('post', post_id=related.id) }}"
+                    class="related-item">
+                    <div class="related-info">
+                        <h4>{{ related.title }}</h4>
+                        <span>{{ related.created_at.strftime('%d.%m.%Y') }}</span>
+                    </div>
+                </a>
+                {% endfor %}
+            </div>
         </div>
         {% endif %}
-    </header>
 
-    <!-- Featured Image -->
-    {% if post.image_url %}
-    <div class="article-image">
-        <img src="{{ post.image_url }}" alt="{{ post.title }}" loading="lazy">
-    </div>
-    {% endif %}
-
-    <!-- Article Content -->
-    <div class="article-content">
-        {{ post.content | markdown | safe }}
-    </div>
-
-    <!-- Share Buttons -->
-    <div class="share-section">
-        <h4>📤 Maqolani ulashing:</h4>
-        <div class="share-buttons">
-            <a href="https://t.me/share/url?url=https://trendoai.uz/post/{{ post.id }}&text={{ post.title }}"
-                class="share-btn telegram" target="_blank">
-                📱 Telegram
-            </a>
-            <a href="https://twitter.com/intent/tweet?url=https://trendoai.uz/post/{{ post.id }}&text={{ post.title }}"
-                class="share-btn twitter" target="_blank">
-                🐦 Twitter
-            </a>
-            <a href="https://www.facebook.com/sharer/sharer.php?u=https://trendoai.uz/post/{{ post.id }}"
-                class="share-btn facebook" target="_blank">
-                📘 Facebook
-            </a>
-            <button class="share-btn copy" onclick="copyLink()">
-                📋 Nusxa olish
-            </button>
+        <!-- CTA Widget -->
+        <div class="sidebar-widget cta-widget">
+            <div class="cta-inner">
+                <h3>Sizga sayt yoki bot kerakmi? 🚀</h3>
+                <p>TrendoAI jamoasi sizning biznesingiz uchun professional yechimlarni taklif etadi.</p>
+                <a href="{{ url_for('services') }}" class="cta-sidebar-btn">Xizmatlarni ko'rish</a>
+            </div>
         </div>
-    </div>
+    </aside>
+</div>
 
-    <!-- Author Info -->
-    <div class="author-section">
-        <div class="author-avatar">🤖</div>
-        <div class="author-info">
-            <strong>TrendoAI Bot</strong>
-            <p>Sun'iy intellekt yordamida yaratilgan professional kontent</p>
-        </div>
-    </div>
+<script>
+    // Progress Bar Logic
+    window.onscroll = function () { updateProgressBar() };
+    function updateProgressBar() {
+        var winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+        var height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+        var scrolled = (winScroll / height) * 100;
+        document.getElementById("reading-progress-bar").style.width = scrolled + "%";
+    }
 
-    <!-- Related Posts -->
-    {% if related_posts %}
-    <section class="related-posts">
-        <h3>📚 O'xshash Maqolalar</h3>
-        <div class="related-grid">
-            {% for related in related_posts %}
-            <a href="{{ url_for('post', post_id=related.id) }}" class="related-card">
-                <span class="related-category">{{ related.category or 'Texnologiya' }}</span>
-                <h4>{{ related.title }}</h4>
-                <span class="related-date">{{ related.created_at.strftime('%d.%m.%Y') }}</span>
-            </a>
-            {% endfor %}
-        </div>
-    </section>
-    {% endif %}
+    // TOC Generation Logic
+    document.addEventListener('DOMContentLoaded', function () {
+        const articleBody = document.getElementById('article-body');
+        const sidebarToc = document.getElementById('sidebar-toc-content');
+        const mobileToc = document.getElementById('mobile-toc-content');
+        const headings = articleBody.querySelectorAll('h2, h3');
 
-    <!-- Navigation -->
-    <nav class="article-nav">
-        <a href="{{ url_for('index') }}" class="back-link">← Barcha maqolalarga qaytish</a>
-    </nav>
-</article>
+        if (headings.length === 0) {
+            document.getElementById('sidebar-toc-widget').style.display = 'none';
+            document.querySelector('.mobile-toc-container').style.display = 'none';
+            return;
+        }
+
+        const tocList = document.createElement('ul');
+        headings.forEach((heading, index) => {
+            const id = 'heading-' + index;
+            heading.id = id;
+
+            const li = document.createElement('li');
+            li.className = 'toc-item ' + heading.tagName.toLowerCase();
+            const a = document.createElement('a');
+            a.href = '#' + id;
+            a.textContent = heading.textContent;
+            li.appendChild(a);
+            tocList.appendChild(li);
+        });
+
+        if (sidebarToc) sidebarToc.appendChild(tocList.cloneNode(true));
+        if (mobileToc) mobileToc.appendChild(tocList);
+    });
+
+    function copyLink() {
+        navigator.clipboard.writeText(window.location.href);
+        const btn = document.querySelector('.share-card.copy');
+        const originalText = btn.innerHTML;
+        btn.innerHTML = '<i class="fas fa-check"></i> Nusxalandi!';
+        setTimeout(() => { btn.innerHTML = originalText; }, 2000);
+    }
+</script>
 
 <script>
     function copyLink() {
