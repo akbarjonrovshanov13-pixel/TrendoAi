@@ -767,6 +767,37 @@ def cron_generate_post():
         }), 500
 
 
+@app.route('/api/init-db')
+def init_database():
+    """
+    Database jadvallarini yaratish va tekshirish.
+    Order jadvali yo'q bo'lsa yaratadi.
+    """
+    try:
+        # Barcha jadvallarni yaratish
+        db.create_all()
+        
+        # Order jadvalini tekshirish
+        order_count = Order.query.count()
+        post_count = Post.query.count()
+        
+        return jsonify({
+            'status': 'success',
+            'message': 'Database jadvallar muvaffaqiyatli yaratildi/yangilandi',
+            'tables': {
+                'orders': order_count,
+                'posts': post_count
+            },
+            'timestamp': datetime.now().isoformat()
+        })
+    except Exception as e:
+        return jsonify({
+            'status': 'error',
+            'message': str(e),
+            'timestamp': datetime.now().isoformat()
+        }), 500
+
+
 @app.route('/api/cron/status')
 def cron_status():
     """Cron vazifalar statusi"""
