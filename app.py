@@ -345,6 +345,7 @@ class Portfolio(db.Model):
     meta_keywords = db.Column(db.String(250))  # SEO kalit so'zlar
     details = db.Column(db.Text)  # Batafsil ma'lumot (Markdown)
     features = db.Column(db.Text)  # Loyiha imkoniyatlari (vergul bilan ajratilgan)
+    price = db.Column(db.String(100))  # Narxi (masalan: "2,500,000 so'm")
     created_at = db.Column(db.DateTime, server_default=db.func.now())
     
     def __repr__(self):
@@ -1069,7 +1070,8 @@ def admin_portfolio_new():
             meta_description=request.form.get('meta_description'),
             meta_keywords=request.form.get('meta_keywords'),
             details=request.form.get('details'),
-            features=request.form.get('features')
+            features=request.form.get('features'),
+            price=request.form.get('price')
         )
         db.session.add(portfolio)
         db.session.commit()
@@ -1104,6 +1106,7 @@ def admin_portfolio_edit(portfolio_id):
         portfolio.meta_keywords = request.form.get('meta_keywords')
         portfolio.details = request.form.get('details')
         portfolio.features = request.form.get('features')
+        portfolio.price = request.form.get('price')
         
         # Slug yangilash
         if not portfolio.slug:
@@ -1700,7 +1703,12 @@ def facebook_feed():
         SubElement(item, 'g:brand').text = "TrendoAI"
         SubElement(item, 'g:condition').text = "new"
         SubElement(item, 'g:availability').text = "in stock"
-        SubElement(item, 'g:price').text = "0 UZS" # Portfolios usually don't have a direct price, use 0
+        
+        # Price from database
+        raw_price = getattr(p, 'price', None) or '0'
+        price_numeric = re.sub(r'[^0-9]', '', raw_price)
+        if not price_numeric: price_numeric = "0"
+        SubElement(item, 'g:price').text = f"{price_numeric} UZS"
         SubElement(item, 'g:custom_label_0').text = p.category # Use custom label for filtering
         SubElement(item, 'g:google_product_category').text = "Software > Business & Productivity Software"
 
