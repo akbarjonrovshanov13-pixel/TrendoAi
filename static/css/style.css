@@ -1291,19 +1291,20 @@ main {
 
     /* Content Typography - MOBILE Focus */
     .article-content {
-        font-size: 1.1rem;
-        line-height: 1.8;
-        color: rgba(255, 255, 255, 0.9);
+        font-size: 1.15rem;
+        /* Increased from 1.1rem for better readability */
+        line-height: 1.75;
+        color: rgba(255, 255, 255, 0.95);
     }
 
     .article-content h2 {
-        font-size: 1.35rem;
+        font-size: 1.45rem;
         margin: 35px 0 16px;
         padding-bottom: 12px;
     }
 
     .article-content h3 {
-        font-size: 1.15rem;
+        font-size: 1.25rem;
         margin: 25px 0 12px;
     }
 
@@ -1324,7 +1325,7 @@ main {
     .article-content blockquote {
         margin: 24px 0;
         padding: 16px 14px;
-        font-size: 1rem;
+        font-size: 1.05rem;
     }
 
     .article-content pre {
