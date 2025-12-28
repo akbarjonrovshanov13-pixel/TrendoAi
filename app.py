@@ -729,6 +729,52 @@ def admin_dashboard():
 
 # ========== SERVICE ADMIN ROUTES ==========
 
+@app.route('/admin/services/generate', methods=['POST'])
+@login_required
+def admin_service_generate():
+    """AI yordamida xizmat ma'lumotlarini generatsiya qilish"""
+    try:
+        from ai_generator import model
+        import json
+        
+        title = request.json.get('title', '')
+        if not title:
+            return jsonify({'error': 'Sarlavha (title) kiritilmagan'}), 400
+        
+        prompt = f"""
+Sen professional IT xizmatlar uchun kontent yozuvchisan. O'zbek tilida yoz.
+Quyidagi xizmat uchun kontent yarat:
+
+Xizmat nomi: {title}
+
+Quyidagi formatda JSON qaytaring (faqat JSON, boshqa matn yo'q):
+{{
+    "description": "1-2 gaplik jozibali qisqa tavsif (tagline)",
+    "full_description": "3-4 gaplik to'liq professional tavsif. Mijozga qanday foyda keltirishini yoz.",
+    "features": ["Xususiyat 1", "Xususiyat 2", "Xususiyat 3", "Xususiyat 4"],
+    "meta_desc": "SEO uchun 150 belgidan kam meta description",
+    "icon": "Mos emoji (bitta)",
+    "slug": "english-slug-format"
+}}
+"""
+        
+        response = model.generate_content(prompt)
+        text = response.text.strip()
+        
+        # JSON ni ajratib olish
+        if '```json' in text:
+            text = text.split('```json')[1].split('```')[0]
+        elif '```' in text:
+            text = text.split('```')[1].split('```')[0]
+        
+        data = json.loads(text)
+        return jsonify(data)
+        
+    except Exception as e:
+        print(f"AI Generation Error: {e}")
+        return jsonify({'error': str(e)}), 500
+
+
 @app.route('/admin/services')
 @login_required
 def admin_services():

@@ -4,18 +4,23 @@
 
 {% block content %}
 <div class="quick-actions">
-    <div style="margin-bottom: 20px;">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
         <h2>{{ 'Yangi Xizmat Qo\'shish' if not service else 'Tahrirlash: ' + service.title }}</h2>
+        <button type="button" id="ai-generate-btn" class="btn btn-primary"
+            style="display: flex; align-items: center; gap: 8px;">
+            🤖 AI bilan to'ldirish
+        </button>
     </div>
 
-    <form method="POST" style="max-width: 800px;">
+    <form method="POST" id="service-form" style="max-width: 800px;">
         <!-- Asosiy Ma'lumotlar -->
         <div style="background: var(--light); padding: 20px; border-radius: 12px; margin-bottom: 20px;">
             <h3 style="margin-bottom: 15px; color: var(--primary);">Asosiy ma'lumotlar</h3>
 
             <div class="form-group">
-                <label for="title">Xizmat nomi</label>
-                <input type="text" id="title" name="title" value="{{ service.title if service else '' }}" required>
+                <label for="title">Xizmat nomi *</label>
+                <input type="text" id="title" name="title" value="{{ service.title if service else '' }}" required
+                    placeholder="Masalan: Web Sayt Yaratish">
             </div>
 
             <div class="form-group">
@@ -38,10 +43,10 @@
             </div>
 
             <div class="form-group">
-                <label for="features">Xususiyatlar (JSON yoki vergul bilan)</label>
+                <label for="features">Xususiyatlar (JSON formatda)</label>
                 <textarea id="features" name="features" style="min-height: 100px;"
                     placeholder='["Feature 1", "Feature 2"]'>{{ service.features if service else '' }}</textarea>
-                <small style="color: var(--gray);">Format: ["Tezkor", "Sifatli"]</small>
+                <small style="color: var(--gray);">Format: ["Tezkor", "Sifatli", "Professional"]</small>
             </div>
         </div>
 
@@ -68,7 +73,8 @@
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
                 <div class="form-group">
                     <label for="price">Narxi</label>
-                    <input type="text" id="price" name="price" value="{{ service.price if service else '' }}">
+                    <input type="text" id="price" name="price" value="{{ service.price if service else '' }}"
+                        placeholder="1,500,000 so'm">
                 </div>
 
                 <div class="form-group">
@@ -111,4 +117,52 @@
         </div>
     </form>
 </div>
+
+<script>
+    document.getElementById('ai-generate-btn').addEventListener('click', async function () {
+        const title = document.getElementById('title').value.trim();
+        if (!title) {
+            alert('Avval "Xizmat nomi" maydonini to\'ldiring!');
+            return;
+        }
+
+        const btn = this;
+        const originalText = btn.innerHTML;
+        btn.innerHTML = '⏳ Generatsiya qilinmoqda...';
+        btn.disabled = true;
+
+        try {
+            const response = await fetch('/admin/services/generate', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ title: title })
+            });
+
+            const data = await response.json();
+
+            if (data.error) {
+                alert('Xatolik: ' + data.error);
+            } else {
+                // Formani to'ldirish
+                if (data.description) document.getElementById('description').value = data.description;
+                if (data.full_description) document.getElementById('full_description').value = data.full_description;
+                if (data.features) document.getElementById('features').value = JSON.stringify(data.features, null, 2);
+                if (data.meta_desc) document.getElementById('meta_desc').value = data.meta_desc;
+                if (data.icon) document.getElementById('icon').value = data.icon;
+                if (data.slug && !document.getElementById('slug').value) {
+                    document.getElementById('slug').value = data.slug;
+                }
+
+                alert('✅ AI muvaffaqiyatli generatsiya qildi! Matnlarni ko\'rib chiqing va zarur bo\'lsa tahrirlang.');
+            }
+        } catch (error) {
+            alert('Xatolik: ' + error.message);
+        } finally {
+            btn.innerHTML = originalText;
+            btn.disabled = false;
+        }
+    });
+</script>
 {% endblock %}
