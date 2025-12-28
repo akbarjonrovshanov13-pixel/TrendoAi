@@ -101,7 +101,7 @@
             </nav>
 
             <!-- Article Header -->
-            <header class="article-header">
+            <div class="article-header">
                 <div class="article-category-badge">{{ post.category or 'Texnologiya' }}</div>
                 <h1>{{ post.title }}</h1>
                 <div class="article-meta">
@@ -111,7 +111,7 @@
                         o'qish</span>
                     <span class="meta-item"><i class="far fa-eye"></i> {{ post.views or 0 }} marta</span>
                 </div>
-            </header>
+            </div>
 
             <!-- Featured Image -->
             {% if post.image_url %}
