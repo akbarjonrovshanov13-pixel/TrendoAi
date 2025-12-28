@@ -17,9 +17,18 @@
     fbq('track', 'ViewContent', {
         content_name: '{{ service.title }}',
         content_category: 'Service',
-        content_ids: ['{{ service.slug }}'],
+        content_ids: ['service_{{ service.slug }}'],
         content_type: 'product'
     });
+
+    function trackAddToCart() {
+        fbq('track', 'AddToCart', {
+            content_name: '{{ service.title }}',
+            content_category: 'Service',
+            content_ids: ['service_{{ service.slug }}'],
+            content_type: 'product'
+        });
+    }
 </script>
 {% endblock %}
 
@@ -92,7 +101,8 @@
                 <div class="service-cta-box">
                     <h3>Ushbu xizmat bo'yicha buyurtma bermoqchimisiz?</h3>
                     <p>Mutaxassislarimiz siz bilan bog'lanib, loyihangizni batafsil muhokama qilishadi.</p>
-                    <a href="{{ url_for('order_page') }}?service={{ service.slug }}" class="primary-btn pulse-glow">
+                    <a href="{{ url_for('order_page') }}?service={{ service.slug }}" class="primary-btn pulse-glow"
+                        onclick="trackAddToCart()">
                         🚀 Hozirroq buyurtma berish
                     </a>
                 </div>

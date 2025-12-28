@@ -249,6 +249,13 @@ qiling.{% endblock %}
             const serviceSelect = document.getElementById('service');
             if (serviceSelect) {
                 serviceSelect.value = serviceParam;
+                // AddToCart event if coming from service page
+                if (typeof fbq !== 'undefined') {
+                    fbq('track', 'AddToCart', {
+                        content_ids: ['service_' + serviceParam.replace('_', '-')],
+                        content_type: 'product'
+                    });
+                }
             }
         }
     });
@@ -257,14 +264,27 @@ qiling.{% endblock %}
     const orderForm = document.querySelector('.order-form');
     if (orderForm && typeof fbq !== 'undefined') {
         orderForm.addEventListener('submit', function () {
+            const serviceId = document.getElementById('service').value;
             const serviceName = document.getElementById('service').selectedOptions[0]?.text || 'Unknown';
-            const budget = document.getElementById('budget').value || 'Not specified';
+            const budget = document.getElementById('budget').value || '0';
 
-            fbq('track', 'InitiateCheckout', {
+            // Map form values to catalog IDs (slugs usually have hyphens, keys have underscores)
+            const catalogId = 'service_' + serviceId.replace('_', '-');
+
+            // Lead/Purchase event for Catalog matching
+            fbq('track', 'Purchase', {
                 content_name: serviceName,
                 content_category: 'Service Order',
-                value: budget,
+                content_ids: [catalogId],
+                content_type: 'product',
+                value: 0.00, // No price fixed yet
                 currency: 'UZS'
+            });
+
+            // Standard Lead event
+            fbq('track', 'Lead', {
+                content_name: serviceName,
+                content_category: 'Service Order'
             });
         });
     }

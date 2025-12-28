@@ -18,9 +18,18 @@
     fbq('track', 'ViewContent', {
         content_name: '{{ item.title }}',
         content_category: '{{ item.category }}',
-        content_ids: ['{{ item.id }}'],
+        content_ids: ['portfolio_{{ item.id }}'],
         content_type: 'product'
     });
+
+    function trackAddToCart() {
+        fbq('track', 'AddToCart', {
+            content_name: '{{ item.title }}',
+            content_category: '{{ item.category }}',
+            content_ids: ['portfolio_{{ item.id }}'],
+            content_type: 'product'
+        });
+    }
 </script>
 {% endblock %}
 
@@ -88,8 +97,8 @@
                     <h3>Sizga ham shunday loyiha kerakmi?</h3>
                     <p>Biz aynan sizning biznesingiz uchun moslashtirilgan yechimni ishlab chiqamiz.</p>
                     <div class="cta-actions">
-                        <a href="{{ url_for('order_page') }}?service={{ item.category }}"
-                            class="primary-btn pulse-glow">
+                        <a href="{{ url_for('order_page') }}?service={{ item.category }}" class="primary-btn pulse-glow"
+                            onclick="trackAddToCart()">
                             🚀 Buyurtma berish
                         </a>
                         {% if item.link %}

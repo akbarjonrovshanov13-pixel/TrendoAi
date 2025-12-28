@@ -27,7 +27,9 @@ Professional IT xizmatlar O'zbekistonda.{% endblock %}
             <span>dan</span> <strong>{{ s.price }}</strong>
         </div>
         <div class="service-actions-grid">
-            <a href="{{ url_for('order_page') }}?service={{ s.slug }}" class="service-order-btn">🚀 Buyurtma berish</a>
+            <a href="{{ url_for('order_page') }}?service={{ s.slug }}" class="service-order-btn"
+                onclick="fbq('track', 'AddToCart', {content_ids: ['service_{{ s.slug }}'], content_type: 'product'})">🚀
+                Buyurtma berish</a>
             <a href="{{ url_for('service_detail', service_key=s.slug) }}" class="service-detail-link">Batafsil ma'lumot
                 →</a>
         </div>
@@ -114,13 +116,27 @@ Professional IT xizmatlar O'zbekistonda.{% endblock %}
     });
 
     const form = document.querySelector('.order-form');
-    if (form) {
+    if (form && typeof fbq !== 'undefined') {
         form.addEventListener('submit', function () {
-            if (typeof fbq !== 'undefined') {
-                fbq('track', 'Lead', {
-                    content_category: document.getElementById('service').value
-                });
-            }
+            const serviceId = document.getElementById('service').value;
+            const serviceName = document.getElementById('service').selectedOptions[0]?.text || 'Unknown';
+            const catalogId = 'service_' + serviceId.replace('_', '-');
+
+            // Lead/Purchase event for Catalog matching
+            fbq('track', 'Purchase', {
+                content_name: serviceName,
+                content_category: 'Service Order',
+                content_ids: [catalogId],
+                content_type: 'product',
+                value: 0.00,
+                currency: 'UZS'
+            });
+
+            // Standard Lead event
+            fbq('track', 'Lead', {
+                content_name: serviceName,
+                content_category: 'Service Order'
+            });
         });
     }
 </script>
