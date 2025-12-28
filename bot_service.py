@@ -134,7 +134,7 @@ def callback_services(call):
 8. 🧠 **AI Chatbotlar** - $200 dan
 9. 📢 **SMM Marketing** - $50/oy dan
 
-📞 Bog'lanish: @rovshanov_me
+📞 Bog'lanish: @Akramjon1984
 🌐 Batafsil: trendoai.uz/services
     """
     bot.answer_callback_query(call.id)
