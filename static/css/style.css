@@ -118,18 +118,34 @@ header {
     border-radius: var(--radius-xl);
     padding: 20px 32px;
     margin: 20px;
-    position: sticky;
-    top: 20px;
+    position: relative;
+    /* Changed from sticky - scrolls with page */
     z-index: 100;
     overflow: hidden;
-    transition: transform 0.3s ease;
 }
 
 /* Auto-hide header on mobile scroll */
-header.header-hidden {
+/* header.header-hidden {
     transform: translateY(-120%);
     opacity: 0;
+} REMOVED as per user request */
+
+@keyframes slideUp {
+    from {
+        transform: translateY(50px);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
 }
+
+.service-header-hero {
+    animation: slideUp 0.8s ease-out forwards;
+}
+
 
 header::before {
     content: '';
