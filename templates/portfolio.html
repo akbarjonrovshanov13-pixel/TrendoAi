@@ -89,10 +89,20 @@ muvaffaqiyatli loyihalar. Bepul konsultatsiya!{% endblock %}
                 {% endfor %}
                 {% endif %}
             </div>
-            {% if item.slug %}
-            <a href="{{ url_for('portfolio_item', slug=item.slug) }}" class="card-detail-btn"
-                onclick="event.stopPropagation()">Batafsil ko'rish →</a>
-            {% endif %}
+
+            <!-- Action Buttons -->
+            <div class="card-actions-bottom">
+                <a href="{{ url_for('order_page') }}?service={{ item.category }}" class="btn-order"
+                    onclick="event.stopPropagation()">
+                    🚀 Buyurtma berish
+                </a>
+                {% if item.slug %}
+                <a href="{{ url_for('portfolio_item', slug=item.slug) }}" class="btn-detail"
+                    onclick="event.stopPropagation()">
+                    Batafsil ma'lumot →
+                </a>
+                {% endif %}
+            </div>
         </div>
     </article>
     {% endfor %}
@@ -508,7 +518,49 @@ muvaffaqiyatli loyihalar. Bepul konsultatsiya!{% endblock %}
         color: var(--text-muted);
     }
 
-    /* Detail button - hidden on desktop, visible on mobile */
+    /* Card Action Buttons */
+    .card-actions-bottom {
+        display: flex;
+        gap: 12px;
+        align-items: center;
+        margin-top: 16px;
+        flex-wrap: wrap;
+    }
+
+    .btn-order {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 10px 20px;
+        background: var(--gradient-main);
+        color: white;
+        text-decoration: none;
+        border-radius: 50px;
+        font-size: 0.85rem;
+        font-weight: 600;
+        transition: var(--transition-smooth);
+        white-space: nowrap;
+    }
+
+    .btn-order:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(99, 102, 241, 0.4);
+    }
+
+    .btn-detail {
+        color: var(--primary);
+        text-decoration: none;
+        font-size: 0.85rem;
+        font-weight: 500;
+        transition: var(--transition-smooth);
+        white-space: nowrap;
+    }
+
+    .btn-detail:hover {
+        color: var(--secondary);
+    }
+
+    /* Detail button - visible on all screens now */
     .card-detail-btn {
         display: none;
     }
@@ -702,19 +754,28 @@ muvaffaqiyatli loyihalar. Bepul konsultatsiya!{% endblock %}
             /* Hide tech tags on mobile 2-col */
         }
 
-        /* Always visible detail button on mobile */
-        .card-detail-btn {
-            display: block;
+        /* Mobile action buttons */
+        .card-actions-bottom {
+            flex-direction: column;
+            gap: 8px;
+            margin-top: 10px;
+        }
+
+        .btn-order {
             width: 100%;
-            padding: 8px;
-            background: var(--gradient-main);
-            color: white;
-            text-align: center;
-            text-decoration: none;
-            border-radius: 6px;
+            justify-content: center;
+            padding: 8px 12px;
             font-size: 0.75rem;
-            font-weight: 600;
-            margin-top: 8px;
+        }
+
+        .btn-detail {
+            font-size: 0.75rem;
+            text-align: center;
+        }
+
+        /* Hide old card-detail-btn */
+        .card-detail-btn {
+            display: none;
         }
 
         .testimonials-section {
