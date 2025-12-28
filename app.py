@@ -1218,6 +1218,46 @@ def migrate_portfolio_columns():
 with app.app_context():
     migrate_portfolio_columns()
 
+# Auto-generate slugs for portfolio items without slugs
+def generate_portfolio_slugs():
+    """Generate slugs for portfolio items that don't have one"""
+    import re
+    try:
+        portfolios = Portfolio.query.filter(
+            (Portfolio.slug == None) | (Portfolio.slug == '')
+        ).all()
+        
+        if not portfolios:
+            return
+        
+        for item in portfolios:
+            if item.title:
+                # Simple slug generation
+                slug = item.title.lower()
+                slug = re.sub(r'[^a-z0-9\s-]', '', slug)
+                slug = re.sub(r'[\s_]+', '-', slug)
+                slug = slug.strip('-')
+                
+                if slug:
+                    # Ensure unique
+                    base_slug = slug
+                    counter = 1
+                    while Portfolio.query.filter_by(slug=slug).first():
+                        slug = f"{base_slug}-{counter}"
+                        counter += 1
+                    
+                    item.slug = slug
+                    print(f"✅ Generated slug: {item.title} -> {slug}")
+        
+        db.session.commit()
+        print("✅ Portfolio slugs generated successfully")
+    except Exception as e:
+        print(f"Slug generation note: {e}")
+
+# Run slug generation
+with app.app_context():
+    generate_portfolio_slugs()
+
 # Avtomatlashtirish va Botni ishga tushirish
 try:
     from scheduler import scheduler
