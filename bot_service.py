@@ -169,27 +169,9 @@ def echo_all(message):
         except Exception as e2:
             bot.reply_to(message, "Uzr, xatolik yuz berdi.")
 
-# ========== WEBHOOK ENDPOINT ==========
-@bot_blueprint.route('/webhook', methods=['POST'])
-def webhook():
-    """Telegram Webhook endpoint"""
-    if request.headers.get('content-type') == 'application/json':
-        try:
-            json_string = request.get_data().decode('utf-8')
-            update = telebot.types.Update.de_json(json_string)
-            bot.process_new_updates([update])
-            return '', 200
-        except Exception as e:
-            print(f"❌ Webhook Error: {e}")
-            return 'Error', 500
-    return 'Bad Request', 400
-
+# ========== WEBHOOK SETUP ==========
 def setup_webhook(app):
-    """Webhook ni sozlash (app start da chaqiriladi)"""
-    # Register blueprint
-    app.register_blueprint(bot_blueprint)
-    
-    # Set webhook URL
+    """Webhook ni sozlash (faqat URL ni Telegramga yuborish)"""
     webhook_url = f"{SITE_URL}/webhook"
     
     def _set_hook():
@@ -206,6 +188,6 @@ def setup_webhook(app):
         except Exception as e:
             print(f"⚠️ Webhook o'rnatishda xatolik: {e}")
 
-    # Run in background thread to not block startup
+    # Run in background thread
     import threading
     threading.Thread(target=_set_hook, daemon=True).start()
