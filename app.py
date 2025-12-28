@@ -1283,6 +1283,23 @@ Sitemap: https://trendoai.uz/sitemap.xml
     return txt, 200, {'Content-Type': 'text/plain'}
 
 
+@app.route('/admin/fix-webhook')
+@login_required
+def admin_fix_webhook():
+    """Manual webhook setup via browser"""
+    from bot_service import bot
+    import time
+    
+    webhook_url = f"{SITE_URL}/webhook"
+    try:
+        bot.remove_webhook()
+        time.sleep(1)
+        bot.set_webhook(url=webhook_url)
+        return f"✅ Webhook muvaffaqiyatli o'rnatildi: {webhook_url}. Botni tekshirib ko'ring!", 200
+    except Exception as e:
+        return f"❌ Xatolik: {e}", 500
+
+
 # ========== ERROR HANDLERS ==========
 
 @app.errorhandler(404)
