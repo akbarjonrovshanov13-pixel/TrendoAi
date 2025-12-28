@@ -87,8 +87,10 @@ muvaffaqiyatli loyihalar. Bepul konsultatsiya!{% endblock %}
                 {% endfor %}
                 {% endif %}
             </div>
+            {% if item.slug %}
             <a href="{{ url_for('portfolio_item', slug=item.slug) }}" class="card-detail-btn"
                 onclick="event.stopPropagation()">Batafsil ko'rish →</a>
+            {% endif %}
         </div>
     </article>
     {% endfor %}
