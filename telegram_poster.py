@@ -155,6 +155,55 @@ def send_to_admin(message, parse_mode="Markdown"):
         return False
 
 
+
+def send_portfolio_to_channel(portfolio_item):
+    """
+    Portfolio loyihasini Telegram kanalga yuborish.
+    """
+    if not TELEGRAM_BOT_TOKEN or not TELEGRAM_CHANNEL_ID:
+        print("❌ Xato: Telegram sozlamalari topilmadi.")
+        return False
+
+    # Formatlash
+    emoji = portfolio_item.emoji or "🚀"
+    title = portfolio_item.title
+    description = portfolio_item.description
+    
+    # Texnologiyalar
+    tech_tags = ""
+    if portfolio_item.technologies:
+        tech_list = [t.strip() for t in portfolio_item.technologies.split(',')]
+        tech_tags = " | ".join([f"#{t.replace(' ', '')}" for t in tech_list])
+
+    # Kategoriya (hashtag)
+    category_tag = f"#{portfolio_item.category}" if portfolio_item.category else ""
+    
+    # Havola
+    link_text = ""
+    if portfolio_item.link:
+        link_text = f"\n🔗 [Loyihani ko'rish]({portfolio_item.link})"
+    
+    # Saytdagi batafsil havola
+    site_link = f"https://trendoai.uz/portfolio/project/{portfolio_item.slug}" if portfolio_item.slug else "https://trendoai.uz/portfolio"
+
+    caption = f"""{emoji} *Yangi Loyiha: {title}*
+
+{description}
+
+🛠 *Texnologiyalar:*
+{tech_tags}
+
+🏷 {category_tag} #TrendoAI
+
+👉 [Batafsil ma'lumot]({site_link}){link_text}"""
+
+    # Rasm bilan yuborish
+    if portfolio_item.image_url:
+        return send_photo_to_channel(portfolio_item.image_url, caption)
+    else:
+        return send_to_telegram_channel(caption)
+
+
 # Test uchun
 if __name__ == '__main__':
     print("=" * 60)
