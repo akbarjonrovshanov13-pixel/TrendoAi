@@ -345,8 +345,16 @@ class Portfolio(db.Model):
     meta_keywords = db.Column(db.String(250))  # SEO kalit so'zlar
     details = db.Column(db.Text)  # Batafsil ma'lumot (Markdown)
     features = db.Column(db.Text)  # Loyiha imkoniyatlari (vergul bilan ajratilgan)
-    price = db.Column(db.String(100))  # Narxi (masalan: "2,500,000 so'm")
+    price = db.deferred(db.Column(db.String(100)))  # Narxi - deferred to handle missing column
     created_at = db.Column(db.DateTime, server_default=db.func.now())
+    
+    @property
+    def safe_price(self):
+        """Safely get price even if column doesn't exist"""
+        try:
+            return self.price
+        except:
+            return None
     
     def __repr__(self):
         return f'<Portfolio {self.title}>'
@@ -1741,7 +1749,7 @@ def facebook_feed():
         SubElement(item, 'g:availability').text = "in stock"
         
         # Price from database
-        raw_price = getattr(p, 'price', None) or '0'
+        raw_price = getattr(p, 'safe_price', None) or '0'
         price_numeric = re.sub(r'[^0-9]', '', raw_price)
         if not price_numeric: price_numeric = "0"
         SubElement(item, 'g:price').text = f"{price_numeric} UZS"
