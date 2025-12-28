@@ -948,6 +948,25 @@ def admin_portfolio_delete(portfolio_id):
     return redirect(url_for('admin_portfolio'))
 
 
+
+@app.route('/admin/portfolio/<int:portfolio_id>/send-telegram', methods=['POST'])
+@login_required
+def admin_portfolio_send_telegram(portfolio_id):
+    """Portfolioni Telegram kanalga yuborish"""
+    portfolio = Portfolio.query.get_or_404(portfolio_id)
+    
+    try:
+        from telegram_poster import send_portfolio_to_channel
+        if send_portfolio_to_channel(portfolio):
+            flash(f'"{portfolio.title}" Telegram kanalga yuborildi!', 'success')
+        else:
+            flash('Telegramga yuborishda xatolik yuz berdi.', 'error')
+    except Exception as e:
+        flash(f'Xatolik: {e}', 'error')
+        
+    return redirect(url_for('admin_portfolio'))
+
+
 @app.route('/admin/api/generate-portfolio')
 @login_required
 def api_generate_portfolio():
