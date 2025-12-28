@@ -1325,13 +1325,27 @@ def webhook():
     """Telegram Bot Webhook"""
     from bot_service import bot
     from telebot.types import Update
-    if request.headers.get('content-type') == 'application/json':
-        json_string = request.get_data().decode('utf-8')
-        update = Update.de_json(json_string)
-        bot.process_new_updates([update])
-        return '', 200
-    else:
-        return jsonify({'status': 'error'}), 403
+    
+    # Detailed logging
+    print(f"📩 Webhook Hit! Headers: {request.headers}")
+    
+    try:
+        if request.headers.get('content-type') and 'application/json' in request.headers.get('content-type'):
+            json_string = request.get_data().decode('utf-8')
+            print(f"📦 Webhook Payload: {json_string[:200]}...") # Log first 200 chars
+            
+            update = Update.de_json(json_string)
+            bot.process_new_updates([update])
+            print("✅ Webhook processed successfully")
+            return '', 200
+        else:
+            print(f"⚠️ Invalid Content-Type: {request.headers.get('content-type')}")
+            return jsonify({'status': 'error', 'message': 'Invalid Content-Type'}), 403
+    except Exception as e:
+        print(f"❌ Webhook Error: {e}")
+        import traceback
+        traceback.print_exc()
+        return jsonify({'status': 'error', 'message': str(e)}), 500
 
 
 # ========== ERROR HANDLERS ==========
