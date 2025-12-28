@@ -65,7 +65,9 @@ def get_ai_response(user_message):
 
 @bot.message_handler(commands=['start', 'help'])
 def send_welcome(message):
-    welcome_text = """
+    print(f"🤖 Bot Handler: /start or /help triggered by {message.from_user.id}")
+    try:
+        welcome_text = """
 🔥 **Assalomu alaykum!** Men TrendoAI assistentiman.
 
 🤖 **Men sizga yordam bera olaman:**
@@ -79,36 +81,38 @@ def send_welcome(message):
 📋 Xizmatlar - Narxlar va xizmatlar ro'yxati
 
 💬 Yoki savolingizni yozing, men javob beraman! 🚀
-    """
-    
-    # Create inline keyboard with Mini App button
-    markup = telebot.types.InlineKeyboardMarkup(row_width=2)
-    
-    # Mini App button
-    web_app = telebot.types.WebAppInfo(url="https://trendoai.uz")
-    mini_app_btn = telebot.types.InlineKeyboardButton(
-        text="🌐 Mini App", 
-        web_app=web_app
-    )
-    
-    # Other buttons
-    services_btn = telebot.types.InlineKeyboardButton(
-        text="📋 Xizmatlar", 
-        callback_data="services"
-    )
-    site_btn = telebot.types.InlineKeyboardButton(
-        text="🔗 Saytga o'tish", 
-        url="https://trendoai.uz"
-    )
-    order_btn = telebot.types.InlineKeyboardButton(
-        text="🚀 Buyurtma berish", 
-        url="https://trendoai.uz/order"
-    )
-    
-    markup.add(mini_app_btn, services_btn)
-    markup.add(site_btn, order_btn)
-    
-    bot.reply_to(message, welcome_text, parse_mode='Markdown', reply_markup=markup)
+        """
+        
+        # Create inline keyboard with Mini App button
+        markup = telebot.types.InlineKeyboardMarkup(row_width=2)
+        
+        # Mini App button
+        web_app = telebot.types.WebAppInfo(url="https://trendoai.uz")
+        mini_app_btn = telebot.types.InlineKeyboardButton(
+            text="🌐 Mini App", 
+            web_app=web_app
+        )
+        
+        # Other buttons
+        services_btn = telebot.types.InlineKeyboardButton(
+            text="📋 Xizmatlar", 
+            callback_data="services"
+        )
+        site_btn = telebot.types.InlineKeyboardButton(
+            text="🔗 Saytga o'tish", 
+            url="https://trendoai.uz"
+        )
+        
+        markup.add(mini_app_btn)
+        markup.add(services_btn, site_btn)
+        
+        bot.reply_to(message, welcome_text, reply_markup=markup, parse_mode='Markdown')
+        print(f"✅ Bot reply sent to {message.from_user.id}")
+    except Exception as e:
+        print(f"❌ Bot Handler Error: {e}")
+        import traceback
+        traceback.print_exc()
+
 
 
 # Callback handler for inline buttons
