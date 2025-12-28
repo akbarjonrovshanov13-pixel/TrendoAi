@@ -405,7 +405,7 @@ def service_detail(service_key):
     service = SERVICES_DATA.get(service_key)
     if not service:
         abort(404)
-    return render_template('service_detail.html', service=service)
+    return render_template('service_detail.html', service=service, services=SERVICES_DATA)
 
 
 @app.route('/portfolio')
@@ -1145,6 +1145,9 @@ def not_found(e):
 @app.errorhandler(500)
 def server_error(e):
     """500 sahifa"""
+    print(f"Server Error (500): {e}")
+    import traceback
+    traceback.print_exc()
     return render_template('errors/500.html'), 500
 
 

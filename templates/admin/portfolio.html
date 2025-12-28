@@ -47,8 +47,10 @@
                 </td>
                 <td>
                     {% if item.technologies %}
-                    {% for tech in item.technologies.split(',') %}
+                    {% for tech in (item.technologies or '').split(',') %}
+                    {% if tech and tech.strip() %}
                     <span class="tech-tag">{{ tech.strip() }}</span>
+                    {% endif %}
                     {% endfor %}
                     {% endif %}
                 </td>
