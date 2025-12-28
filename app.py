@@ -853,6 +853,27 @@ def admin_portfolio_delete(portfolio_id):
     return redirect(url_for('admin_portfolio'))
 
 
+@app.route('/admin/api/generate-portfolio')
+@login_required
+def api_generate_portfolio():
+    """AI yordamida portfolio kontent generatsiya qilish"""
+    from ai_generator import generate_portfolio_content
+    
+    title = request.args.get('title', '')
+    category = request.args.get('category', 'web')
+    
+    if not title:
+        return jsonify({'error': 'Title kerak'}), 400
+    
+    try:
+        result = generate_portfolio_content(title, category)
+        if result:
+            return jsonify(result)
+        return jsonify({'error': 'AI generatsiya muvaffaqiyatsiz'}), 500
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+
 # ========== SEO ROUTES ==========
 
 @app.route('/sitemap.xml')

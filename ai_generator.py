@@ -240,6 +240,62 @@ def generate_custom_content(prompt_text):
     return _retry_with_backoff(_generate)
 
 
+def generate_portfolio_content(title, category):
+    """
+    Portfolio loyiha uchun AI yordamida kontent generatsiya qiladi.
+    
+    Args:
+        title: Loyiha nomi
+        category: Loyiha kategoriyasi (bot, web, ai, mobile)
+        
+    Returns:
+        dict yoki None
+    """
+    category_names = {
+        'bot': 'Telegram Bot',
+        'web': 'Web Sayt',
+        'ai': 'AI Yechim',
+        'mobile': 'Mobile Ilova'
+    }
+    
+    cat_name = category_names.get(category, category)
+    
+    prompt = f"""
+    Siz TrendoAI uchun professional portfolio kontenti yozuvchisiz.
+    
+    Vazifa: "{title}" nomli {cat_name} loyihasi uchun professional marketing kontenti yarating.
+    
+    MUHIM TALABLAR:
+    1. O'zbek tilida (lotin alifbosi) yozing
+    2. Professional va ishonchli ohangda
+    3. Mijozlarni jalb qiluvchi
+    
+    JSON formatida javob bering:
+    {{
+      "description": "Loyiha haqida qisqa tavsif (2-3 jumla, 100-150 belgi)",
+      "technologies": "Python, Flask, PostgreSQL (3-5 ta texnologiya, vergul bilan)",
+      "features": "To'lov tizimi, Admin panel, Real-time xabarlar (5-7 ta feature, vergul bilan)",
+      "details": "## Loyiha haqida\\n\\nBatafsil ma'lumot markdown formatida. 150-200 so'z.",
+      "meta_description": "SEO uchun meta tavsif (150-160 belgi)",
+      "meta_keywords": "telegram bot, python (5-7 kalit so'z, vergul bilan)"
+    }}
+    
+    Faqat JSON qaytaring!
+    """
+    
+    def _generate():
+        response = model.generate_content(prompt)
+        return _parse_json_response(response.text)
+    
+    result = _retry_with_backoff(_generate)
+    
+    if result:
+        return result
+    
+    print("⚠️ Portfolio AI javobi noto'g'ri formatda")
+    return None
+
+
 # Test uchun
 if __name__ == '__main__':
     print("=" * 60)
