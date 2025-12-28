@@ -1384,10 +1384,10 @@ try:
     
     
     # Webhook rejimida bot (polling o'rniga)
-    # Threading ichida ishlaydi, shuning uchun main thread bloklanmaydi
-    setup_webhook(app)
+    # DIQQAT: Webhookni endi scripts/set_webhook.py orqali qo'lda yoki build paytida o'rnatamiz
+    # setup_webhook(app)  <-- O'chirildi, chunki startup da muammo tug'diryapti
     
-    print("🚀 TrendoAI xizmatlari (Scheduler + Webhook Bot) ishga tushdi!")
+    print("🚀 TrendoAI xizmatlari (Scheduler) ishga tushdi!")
 except Exception as e:
     print(f"Service startup error: {e}")
 
