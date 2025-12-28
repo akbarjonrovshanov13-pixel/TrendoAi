@@ -345,16 +345,16 @@ class Portfolio(db.Model):
     meta_keywords = db.Column(db.String(250))  # SEO kalit so'zlar
     details = db.Column(db.Text)  # Batafsil ma'lumot (Markdown)
     features = db.Column(db.Text)  # Loyiha imkoniyatlari (vergul bilan ajratilgan)
-    price = db.deferred(db.Column(db.String(100)))  # Narxi - deferred to handle missing column
+    price = db.Column(db.String(100), nullable=True)  # Narxi - nullable for backward compatibility
     created_at = db.Column(db.DateTime, server_default=db.func.now())
     
     @property
     def safe_price(self):
-        """Safely get price even if column doesn't exist"""
+        """Safely get price"""
         try:
-            return self.price
+            return self.price or ''
         except:
-            return None
+            return ''
     
     def __repr__(self):
         return f'<Portfolio {self.title}>'
@@ -1761,6 +1761,33 @@ def facebook_feed():
     
     return Response(xml_str, mimetype='application/xml')
 
+
+# ========== DATABASE INITIALIZATION ==========
+def init_database():
+    """Bazani yangilash va yangi ustunlarni qo'shish"""
+    with app.app_context():
+        try:
+            # 1. Yangi jadvallarni yaratish (Service va h.k.)
+            db.create_all()
+            print("✅ db.create_all() bajarildi")
+            
+            # 2. Portfolio.price ustunini qo'shish (agar yo'q bo'lsa)
+            try:
+                db.session.execute(db.text("SELECT price FROM portfolio LIMIT 1"))
+            except:
+                try:
+                    db.session.execute(db.text("ALTER TABLE portfolio ADD COLUMN price VARCHAR(100)"))
+                    db.session.commit()
+                    print("✅ Portfolio.price ustuni qo'shildi")
+                except Exception as e:
+                    db.session.rollback()
+                    print(f"⚠️ Portfolio.price: {e}")
+            
+        except Exception as e:
+            print(f"⚠️ Database init error: {e}")
+
+# Run database initialization
+init_database()
 
 # Avtomatlashtirish va Botni ishga tushirish
 try:
