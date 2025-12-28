@@ -3,126 +3,112 @@
 {% block title %}{{ 'Yangi Xizmat' if not service else 'Tahrirlash: ' + service.title }}{% endblock %}
 
 {% block content %}
-<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-    <h1 class="h2">{{ 'Yangi Xizmat Qo\'shish' if not service else 'Tahrirlash' }}</h1>
-</div>
-
-<form method="POST" class="needs-validation" novalidate>
-    <div class="row">
-        <div class="col-md-8">
-            <div class="card mb-4">
-                <div class="card-header">Asosiy ma'lumotlar</div>
-                <div class="card-body">
-                    <div class="mb-3">
-                        <label for="title" class="form-label">Xizmat nomi</label>
-                        <input type="text" class="form-control" id="title" name="title"
-                            value="{{ service.title if service else '' }}" required>
-                    </div>
-
-                    <div class="mb-3">
-                        <label for="slug" class="form-label">Slug (URL) - lotin harflarida</label>
-                        <input type="text" class="form-control" id="slug" name="slug"
-                            value="{{ service.slug if service else '' }}" required
-                            placeholder="masalan: web-development">
-                        <div class="form-text">Sayt manzilida ko'rinadi: trendoai.uz/services/<b>slug</b></div>
-                    </div>
-
-                    <div class="mb-3">
-                        <label for="description" class="form-label">Qisqa tavsif</label>
-                        <textarea class="form-control" id="description" name="description"
-                            rows="3">{{ service.description if service else '' }}</textarea>
-                    </div>
-
-                    <div class="mb-3">
-                        <label for="full_description" class="form-label">To'liq tavsif (Batafsil sahifa uchun)</label>
-                        <textarea class="form-control" id="full_description" name="full_description"
-                            rows="6">{{ service.full_description if service else '' }}</textarea>
-                    </div>
-
-                    <div class="mb-3">
-                        <label for="features" class="form-label">Xususiyatlar (JSON ro'yxat)</label>
-                        <textarea class="form-control" id="features" name="features" rows="4"
-                            placeholder='["Feature 1", "Feature 2"]'>{{ service.features if service else '' }}</textarea>
-                        <div class="form-text">Format: ["Xususiyat 1", "Xususiyat 2"] yoki vergul bilan ajratilgan matn.
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="card mb-4">
-                <div class="card-header">SEO (Facebook & Google)</div>
-                <div class="card-body">
-                    <div class="mb-3">
-                        <label for="image_url" class="form-label">Rasm URL (1:1 kvadrat, 1080x1080px)</label>
-                        <div class="input-group">
-                            <input type="text" class="form-control" id="image_url" name="image_url"
-                                value="{{ service.image_url if service else '' }}" placeholder="https://...">
-                            <button class="btn btn-outline-secondary" type="button"
-                                onclick="window.open('/admin/media', '_blank')">Media</button>
-                        </div>
-                        <div class="form-text">Facebook Katalog uchun shu rasm ishlatiladi.</div>
-                    </div>
-
-                    <div class="mb-3">
-                        <label for="meta_desc" class="form-label">Meta Description</label>
-                        <input type="text" class="form-control" id="meta_desc" name="meta_desc"
-                            value="{{ service.meta_desc if service else '' }}">
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-md-4">
-            <div class="card mb-4">
-                <div class="card-header">Sozlamalar</div>
-                <div class="card-body">
-                    <div class="mb-3">
-                        <label for="price" class="form-label">Narxi</label>
-                        <input type="text" class="form-control" id="price" name="price"
-                            value="{{ service.price if service else '' }}">
-                    </div>
-
-                    <div class="mb-3">
-                        <label for="icon" class="form-label">Icon (Emoji)</label>
-                        <input type="text" class="form-control" id="icon" name="icon"
-                            value="{{ service.icon if service else '🚀' }}">
-                    </div>
-
-                    <div class="mb-3 form-check">
-                        <input type="checkbox" class="form-check-input" id="is_active" name="is_active" {{ 'checked' if
-                            not service or service.is_active else '' }}>
-                        <label class="form-check-label" for="is_active">Saytda ko'rinsin</label>
-                    </div>
-
-                    <div class="mb-3">
-                        <label for="order" class="form-label">Tartib raqami</label>
-                        <input type="number" class="form-control" id="order" name="order"
-                            value="{{ service.order if service else 0 }}">
-                    </div>
-                </div>
-            </div>
-
-            <div class="card mb-4">
-                <div class="card-header">Chegirma (Aksiya)</div>
-                <div class="card-body">
-                    <div class="mb-3">
-                        <label for="discount_percent" class="form-label">Foiz (%)</label>
-                        <input type="number" class="form-control" id="discount_percent" name="discount_percent"
-                            value="{{ service.discount_percent if service else 0 }}">
-                    </div>
-                    <div class="mb-3">
-                        <label for="discount_until" class="form-label">Qachongacha</label>
-                        <input type="text" class="form-control" id="discount_until" name="discount_until"
-                            value="{{ service.discount_until if service else '' }}" placeholder="1-fevral">
-                    </div>
-                </div>
-            </div>
-
-            <div class="d-grid gap-2">
-                <button type="submit" class="btn btn-primary">Saqlash</button>
-                <a href="{{ url_for('admin_services') }}" class="btn btn-outline-secondary">Bekor qilish</a>
-            </div>
-        </div>
+<div class="quick-actions">
+    <div style="margin-bottom: 20px;">
+        <h2>{{ 'Yangi Xizmat Qo\'shish' if not service else 'Tahrirlash: ' + service.title }}</h2>
     </div>
-</form>
+
+    <form method="POST" style="max-width: 800px;">
+        <!-- Asosiy Ma'lumotlar -->
+        <div style="background: var(--light); padding: 20px; border-radius: 12px; margin-bottom: 20px;">
+            <h3 style="margin-bottom: 15px; color: var(--primary);">Asosiy ma'lumotlar</h3>
+
+            <div class="form-group">
+                <label for="title">Xizmat nomi</label>
+                <input type="text" id="title" name="title" value="{{ service.title if service else '' }}" required>
+            </div>
+
+            <div class="form-group">
+                <label for="slug">Slug (URL) - lotin harflarida</label>
+                <input type="text" id="slug" name="slug" value="{{ service.slug if service else '' }}"
+                    placeholder="masalan: web-sites">
+                <small style="color: var(--gray);">Sayt manzilida ko'rinadi: trendoai.uz/services/<b>slug</b></small>
+            </div>
+
+            <div class="form-group">
+                <label for="description">Qisqa tavsif (Tagline)</label>
+                <textarea id="description" name="description"
+                    style="min-height: 80px;">{{ service.description if service else '' }}</textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="full_description">To'liq tavsif (Batafsil sahifa uchun)</label>
+                <textarea id="full_description" name="full_description"
+                    style="min-height: 200px;">{{ service.full_description if service else '' }}</textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="features">Xususiyatlar (JSON yoki vergul bilan)</label>
+                <textarea id="features" name="features" style="min-height: 100px;"
+                    placeholder='["Feature 1", "Feature 2"]'>{{ service.features if service else '' }}</textarea>
+                <small style="color: var(--gray);">Format: ["Tezkor", "Sifatli"]</small>
+            </div>
+        </div>
+
+        <!-- SEO & Media -->
+        <div style="background: var(--light); padding: 20px; border-radius: 12px; margin-bottom: 20px;">
+            <h3 style="margin-bottom: 15px; color: var(--primary);">Rasm va SEO</h3>
+
+            <div class="form-group">
+                <label for="image_url">Rasm URL (Facebook Katalog uchun)</label>
+                <input type="text" id="image_url" name="image_url" value="{{ service.image_url if service else '' }}"
+                    placeholder="https://...">
+            </div>
+
+            <div class="form-group">
+                <label for="meta_desc">Meta Description (Google uchun)</label>
+                <input type="text" id="meta_desc" name="meta_desc" value="{{ service.meta_desc if service else '' }}">
+            </div>
+        </div>
+
+        <!-- Sozlamalar -->
+        <div style="background: var(--light); padding: 20px; border-radius: 12px; margin-bottom: 20px;">
+            <h3 style="margin-bottom: 15px; color: var(--primary);">Sozlamalar va Narx</h3>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                <div class="form-group">
+                    <label for="price">Narxi</label>
+                    <input type="text" id="price" name="price" value="{{ service.price if service else '' }}">
+                </div>
+
+                <div class="form-group">
+                    <label for="icon">Icon (Emoji)</label>
+                    <input type="text" id="icon" name="icon" value="{{ service.icon if service else '🚀' }}">
+                </div>
+            </div>
+
+            <div class="form-group checkbox-group">
+                <input type="checkbox" id="is_active" name="is_active" {{ 'checked' if not service or service.is_active
+                    else '' }}>
+                <label for="is_active">Saytda ko'rinsin</label>
+            </div>
+
+            <div class="form-group">
+                <label for="order">Tartib raqami (0 = eng yuqori)</label>
+                <input type="number" id="order" name="order" value="{{ service.order if service else 0 }}">
+            </div>
+
+            <h4 style="margin: 15px 0 10px;">Chegirma (Aksiya)</h4>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                <div class="form-group">
+                    <label for="discount_percent">Foiz (%)</label>
+                    <input type="number" id="discount_percent" name="discount_percent"
+                        value="{{ service.discount_percent if service else 0 }}">
+                </div>
+                <div class="form-group">
+                    <label for="discount_until">Qachongacha</label>
+                    <input type="text" id="discount_until" name="discount_until"
+                        value="{{ service.discount_until if service else '' }}" placeholder="1-fevral">
+                </div>
+            </div>
+        </div>
+
+        <div style="display: flex; gap: 15px; margin-top: 30px;">
+            <button type="submit" class="btn btn-primary"
+                style="padding: 14px 30px; font-size: 1.1rem;">Saqlash</button>
+            <a href="{{ url_for('admin_services') }}" class="btn" style="background: var(--gray); color: white;">Bekor
+                qilish</a>
+        </div>
+    </form>
+</div>
 {% endblock %}

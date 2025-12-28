@@ -3,25 +3,23 @@
 {% block title %}Xizmatlar - Admin Panel{% endblock %}
 
 {% block content %}
-<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-    <h1 class="h2">Xizmatlar</h1>
-    <div class="btn-toolbar mb-2 mb-md-0">
-        <a href="{{ url_for('admin_service_new') }}" class="btn btn-sm btn-primary">
+<div class="quick-actions">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+        <h2>Xizmatlar</h2>
+        <a href="{{ url_for('admin_service_new') }}" class="btn btn-primary">
             + Yangi Xizmat
         </a>
     </div>
-</div>
 
-<div class="table-responsive">
-    <table class="table table-striped table-sm">
+    <table class="posts-table">
         <thead>
             <tr>
-                <th>Rasm</th>
+                <th width="60">Rasm</th>
                 <th>Nomi</th>
                 <th>Narxi</th>
                 <th>Status</th>
                 <th>Chegirma</th>
-                <th>Amallar</th>
+                <th width="120">Amallar</th>
             </tr>
         </thead>
         <tbody>
@@ -29,41 +27,53 @@
             <tr>
                 <td>
                     {% if service.image_url %}
-                    <img src="{{ service.image_url }}" alt="" style="height: 40px; border-radius: 4px;">
+                    <img src="{{ service.image_url }}" alt=""
+                        style="height: 40px; width: 40px; object-fit: cover; border-radius: 8px;">
                     {% else %}
                     <span style="font-size: 24px;">{{ service.icon }}</span>
                     {% endif %}
                 </td>
                 <td>
                     <b>{{ service.title }}</b><br>
-                    <small class="text-muted">/services/{{ service.slug }}</small>
+                    <small style="color: var(--gray);">/services/{{ service.slug }}</small>
                 </td>
                 <td>{{ service.price }}</td>
                 <td>
                     {% if service.is_active %}
-                    <span class="badge bg-success">Faol</span>
+                    <span class="category-tag" style="background: #d1fae5; color: #059669;">Faol</span>
                     {% else %}
-                    <span class="badge bg-secondary">Nofaol</span>
+                    <span class="category-tag" style="background: #f3f4f6; color: #6b7280;">Nofaol</span>
                     {% endif %}
                 </td>
                 <td>
                     {% if service.discount_percent > 0 %}
-                    <span class="badge bg-danger">-{{ service.discount_percent }}%</span>
+                    <span class="category-tag" style="background: #fee2e2; color: #dc2626;">-{{ service.discount_percent
+                        }}%</span>
                     {% else %}
                     -
                     {% endif %}
                 </td>
                 <td>
-                    <a href="{{ url_for('admin_service_edit', service_id=service.id) }}"
-                        class="btn btn-sm btn-outline-secondary">✏️</a>
-                    <form action="{{ url_for('admin_service_delete', service_id=service.id) }}" method="POST"
-                        style="display:inline;" onsubmit="return confirm('O\'chirmoqchimisiz?');">
-                        <button type="submit" class="btn btn-sm btn-outline-danger">🗑️</button>
-                    </form>
+                    <div style="display: flex; gap: 8px;">
+                        <a href="{{ url_for('admin_service_edit', service_id=service.id) }}" class="btn"
+                            style="padding: 6px 12px; font-size: 0.9rem; background: var(--light);">✏️</a>
+                        <form action="{{ url_for('admin_service_delete', service_id=service.id) }}" method="POST"
+                            style="display:inline;" onsubmit="return confirm('O\'chirmoqchimisiz?');">
+                            <button type="submit" class="btn btn-danger"
+                                style="padding: 6px 12px; font-size: 0.9rem;">🗑️</button>
+                        </form>
+                    </div>
                 </td>
             </tr>
             {% endfor %}
         </tbody>
     </table>
+
+    {% if not services %}
+    <div class="empty-message">
+        <h3>Hozircha xizmatlar yo'q</h3>
+        <p>Yangi xizmat qo'shish uchun yuqoridagi tugmani bosing.</p>
+    </div>
+    {% endif %}
 </div>
 {% endblock %}
