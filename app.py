@@ -1320,6 +1320,42 @@ Crawl-delay: 1
     return Response(content, mimetype='text/plain')
 
 
+# ========== DATABASE MIGRATION ROUTES ==========
+
+@app.route('/admin/migrate-db')
+@login_required
+def admin_migrate_db():
+    """Bazaga yangi ustunlar qo'shish"""
+    results = []
+    
+    try:
+        # Portfolio.price ustunini qo'shish
+        try:
+            db.session.execute(db.text("ALTER TABLE portfolio ADD COLUMN price VARCHAR(100)"))
+            db.session.commit()
+            results.append("✅ Portfolio.price ustuni qo'shildi")
+        except Exception as e:
+            db.session.rollback()
+            if 'already exists' in str(e).lower() or 'duplicate' in str(e).lower():
+                results.append("ℹ️ Portfolio.price ustuni allaqachon mavjud")
+            else:
+                results.append(f"⚠️ Portfolio.price: {e}")
+        
+        # Service jadvalini tekshirish va yaratish
+        try:
+            db.create_all()
+            results.append("✅ db.create_all() bajarildi (yangi jadvallar yaratildi)")
+        except Exception as e:
+            results.append(f"⚠️ db.create_all: {e}")
+            
+        flash('Baza migratsiyasi yakunlandi: ' + '; '.join(results), 'success')
+        
+    except Exception as e:
+        flash(f'Migratsiya xatosi: {e}', 'error')
+    
+    return redirect(url_for('admin_dashboard'))
+
+
 # ========== API ROUTES ==========
 
 @app.route('/api/health')
