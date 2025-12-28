@@ -1319,6 +1319,21 @@ def admin_fix_webhook():
         return f"❌ Xatolik: {e}", 500
 
 
+
+@app.route('/webhook', methods=['POST'])
+def webhook():
+    """Telegram Bot Webhook"""
+    from bot_service import bot
+    from telebot.types import Update
+    if request.headers.get('content-type') == 'application/json':
+        json_string = request.get_data().decode('utf-8')
+        update = Update.de_json(json_string)
+        bot.process_new_updates([update])
+        return '', 200
+    else:
+        return jsonify({'status': 'error'}), 403
+
+
 # ========== ERROR HANDLERS ==========
 
 @app.errorhandler(404)
