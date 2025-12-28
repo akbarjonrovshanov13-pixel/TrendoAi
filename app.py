@@ -1387,10 +1387,19 @@ def generate_portfolio_slugs():
     except Exception as e:
         print(f"Slug generation note: {e}")
 
-# Run slug generation
-with app.app_context():
-    generate_portfolio_slugs()
-
+@app.route('/admin/generate-post')
+@login_required
+def admin_generate_post():
+    """Manual post generation"""
+    try:
+        from scheduler import generate_and_publish_post
+        success = generate_and_publish_post()
+        if success:
+            return "✅ Yangi post muvaffaqiyatli generatsiya qilindi va Telegramga yuborildi!", 200
+        else:
+            return "❌ Post generatsiya qilishda xatolik.", 500
+    except Exception as e:
+        return f"❌ Xatolik: {e}", 500
 # Avtomatlashtirish va Botni ishga tushirish
 try:
     from scheduler import scheduler
