@@ -50,7 +50,7 @@
             </header>
 
             <div class="article-featured-image">
-                <img src="{{ item.image_url }}" alt="{{ item.title }}" class="main-project-img">
+                <img src="{{ item.image_url }}" alt="{{ item.title }}" class="main-project-img" loading="lazy">
             </div>
 
             <div class="article-content">
@@ -107,7 +107,7 @@
             <div class="related-portfolio-sidebar">
                 {% for related in related_items %}
                 <a href="{{ url_for('portfolio_item', slug=related.slug) }}" class="related-project-sidebar">
-                    <img src="{{ related.image_url }}" alt="{{ related.title }}">
+                    <img src="{{ related.image_url }}" alt="{{ related.title }}" loading="lazy">
                     <div class="rp-info">
                         <span class="rp-title">{{ related.title }}</span>
                         <span class="rp-cat">{{ related.category }}</span>

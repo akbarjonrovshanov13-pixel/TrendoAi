@@ -2372,3 +2372,33 @@ footer {
     background: var(--primary);
     color: white;
 }
+
+/* ========== MOBILE TOUCH TARGETS ========== */
+@media (max-width: 768px) {
+
+    /* Ensure minimum 44px touch targets (Apple HIG) */
+    .btn,
+    button,
+    .filter-btn,
+    nav a {
+        min-height: 44px;
+        min-width: 44px;
+    }
+
+    /* Improve form inputs for mobile */
+    input,
+    textarea,
+    select {
+        font-size: 16px !important;
+        /* Prevents zoom on iOS */
+        min-height: 48px;
+    }
+
+    /* Improve spacing between interactive elements */
+    .social-icons a,
+    .footer-social-icon,
+    .action-btn {
+        padding: 12px;
+        margin: 4px;
+    }
+}
