@@ -80,8 +80,10 @@ muvaffaqiyatli loyihalar. Bepul konsultatsiya!{% endblock %}
             <p>{{ item.description }}</p>
             <div class="card-tech">
                 {% if item.technologies %}
-                {% for tech in item.technologies.split(',') %}
+                {% for tech in (item.technologies or '').split(',') %}
+                {% if tech and tech.strip() %}
                 <span>{{ tech.strip() }}</span>
+                {% endif %}
                 {% endfor %}
                 {% endif %}
             </div>

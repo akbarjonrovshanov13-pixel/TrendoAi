@@ -39,9 +39,13 @@
                 <div class="portfolio-cat-badge">{{ item.category | upper }}</div>
                 <h1>{{ item.title }}</h1>
                 <div class="portfolio-meta-tags">
-                    {% for tech in item.technologies.split(',') %}
+                    {% if item.technologies %}
+                    {% for tech in (item.technologies or '').split(',') %}
+                    {% if tech and tech.strip() %}
                     <span class="tech-tag">{{ tech.strip() }}</span>
+                    {% endif %}
                     {% endfor %}
+                    {% endif %}
                 </div>
             </header>
 
@@ -66,11 +70,13 @@
                 <div class="project-features-list">
                     <h3>Imkoniyatlar</h3>
                     <div class="features-grid-landing">
-                        {% for feature in item.features.split(',') %}
+                        {% for feature in (item.features or '').split(',') %}
+                        {% if feature and feature.strip() %}
                         <div class="feature-landing-card">
                             <i class="fas fa-check-circle"></i>
                             <span>{{ feature.strip() }}</span>
                         </div>
+                        {% endif %}
                         {% endfor %}
                     </div>
                 </div>

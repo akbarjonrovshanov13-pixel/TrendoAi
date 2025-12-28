@@ -50,7 +50,8 @@
                 {% elif order.status == 'cancelled' %}❌ Bekor qilindi
                 {% endif %}
             </span>
-            <span class="order-date">{{ order.created_at.strftime('%d.%m.%Y %H:%M') }}</span>
+            <span class="order-date">{{ order.created_at.strftime('%d.%m.%Y %H:%M') if order.created_at else 'N/A'
+                }}</span>
         </div>
 
         <div class="order-body">

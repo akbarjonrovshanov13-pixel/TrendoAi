@@ -36,7 +36,7 @@
                         </a>
                     </td>
                     <td><span class="category-tag">{{ post.category }}</span></td>
-                    <td>👁️ {{ post.views or 0 }}</td>
+                    <td>👁️ {{ post.views|default(0) }}</td>
                     <td>
                         {% if post.is_published %}
                         <span class="status-badge published">✅ Chop etilgan</span>
@@ -44,7 +44,7 @@
                         <span class="status-badge draft">📝 Qoralama</span>
                         {% endif %}
                     </td>
-                    <td>{{ post.created_at.strftime('%d.%m.%Y %H:%M') }}</td>
+                    <td>{{ post.created_at.strftime('%d.%m.%Y %H:%M') if post.created_at else 'N/A' }}</td>
                     <td class="actions">
                         <a href="{{ url_for('admin_edit_post', post_id=post.id) }}" class="btn-sm"
                             style="background: #dbeafe; color: #2563eb; margin-right: 5px;" title="Tahrirlash">✏️</a>
