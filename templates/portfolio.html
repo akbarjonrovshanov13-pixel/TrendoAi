@@ -62,8 +62,10 @@ muvaffaqiyatli loyihalar. Bepul konsultatsiya!{% endblock %}
             <div class="card-overlay">
                 <div class="card-actions">
                     <button class="view-btn" onclick="openModal({{ item.id }})">Modalda Ko'rish</button>
+                    {% if item.slug %}
                     <a href="{{ url_for('portfolio_item', slug=item.slug) }}" class="view-btn full-page-btn"
                         onclick="event.stopPropagation()">To'liq Sahifa →</a>
+                    {% endif %}
                 </div>
             </div>
         </div>
