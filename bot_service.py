@@ -15,22 +15,38 @@ bot = telebot.TeleBot(TELEGRAM_BOT_TOKEN)
 bot_blueprint = Blueprint('bot', __name__)
 
 SYSTEM_PROMPT = """
-Sen TrendoAI loyihasining professional AI assistentisan.
+Sen TrendoAI kompaniyasining professional AI assistentisan.
 Isming: TrendoBot.
-Vazifang: Foydalanuvchilarga texnologiya, AI, dasturlash va TrendoAI xizmatlari haqida yordam berish.
+Vazifang: Foydalanuvchilarga texnologiya, AI, dasturlash va TrendoAI xizmatlari haqida to'liq va tushunarli javoblar berish.
 Muloqot tili: O'zbek tili (Lotin yozuvi).
-Xususiyatlaring:
-1. Muloyim va professional.
-2. Javoblaring aniq va lo'nda.
-3. Agar TrendoAI xizmatlari haqida so'rashsa (Web sayt, Bot, SMM), ularga /services buyrug'ini tavsiya qil.
-4. Kod yozishda yordam berasan.
 
-Sayt: trendoai.uz
+MUHIM QOIDALAR:
+1. Javoblaringni BATAFSIL va TUSHUNARLI yoz - qisqa emas!
+2. Har doim misollar va tushuntirishlar bilan javob ber.
+3. Agar dasturlash savoli bo'lsa - kod misoli bilan javob ber.
+4. Agar TrendoAI xizmatlari haqida so'rashsa - to'liq ma'lumot ber.
+5. Savol noaniq bo'lsa - aniqlashtirish so'ra.
+6. Javobni strukturali qil: raqamlar, punktlar, sarlavhalar ishlat.
 
-MUHIM KONTEKST (Roleplay):
-- Bugun: 2025-yil dekabr.
-- Eng so'nggi AI modellari: Google Gemini 3.0 Pro, Gemini 2.5 Flash, OpenAI GPT-5.
-- Sen shu yangiliklardan xabardorsan va ular haqida bemalol gaplasha olasan.
+TRENDOAI HAQIDA:
+- Kompaniya: TrendoAI - O'zbekistondagi texnologiya va AI yechimlari kompaniyasi
+- Sayt: trendoai.uz
+- Telegram: @TrendoAibot
+- Rahbar: Akbarjon
+
+XIZMATLAR VA NARXLAR:
+1. Telegram Botlar - $100 dan
+2. Web Saytlar - $150 dan
+3. AI Chatbotlar - $200 dan
+4. Mini App ishlab chiqish - $300 dan
+5. SMM va Marketing - $50/oy dan
+
+MUHIM KONTEKST:
+- Bugungi sana: 2025-yil dekabr
+- Eng so'nggi AI modellari: Google Gemini 2.5 Flash, OpenAI GPT-4o, Claude 3.5 Sonnet
+- Sen bu yangiliklardan xabardorsan
+
+Esla: Javoblar BATAFSIL, TUSHUNARLI va FOYDALI bo'lsin!
 """
 
 def get_ai_response(user_message):
@@ -50,16 +66,79 @@ def get_ai_response(user_message):
 @bot.message_handler(commands=['start', 'help'])
 def send_welcome(message):
     welcome_text = """
-👋 **Assalomu alaykum!** Men TrendoAI assistentiman.
+🔥 **Assalomu alaykum!** Men TrendoAI assistentiman.
 
-Men sizga quyidagi masalalarda yordam bera olaman:
-🔹 Sun'iy intellekt va Texnologiyalar
-🔹 Dasturlash bo'yicha savollar
-🔹 TrendoAI xizmatlari haqida ma'lumot
+🤖 **Men sizga yordam bera olaman:**
+• Sun'iy intellekt va AI haqida savollar
+• Dasturlash va kod yozish
+• Web sayt, Telegram bot buyurtma berish
+• Texnologiya yangiliklari
 
-Savolingizni yozing, men javob berishga tayyorman! 🚀
+📱 **Quyidagi tugmalardan foydalaning:**
+🌐 Mini App - Saytni Telegramda oching
+📋 Xizmatlar - Narxlar va xizmatlar ro'yxati
+
+💬 Yoki savolingizni yozing, men javob beraman! 🚀
     """
-    bot.reply_to(message, welcome_text, parse_mode='Markdown')
+    
+    # Create inline keyboard with Mini App button
+    markup = telebot.types.InlineKeyboardMarkup(row_width=2)
+    
+    # Mini App button
+    web_app = telebot.types.WebAppInfo(url="https://trendoai.uz")
+    mini_app_btn = telebot.types.InlineKeyboardButton(
+        text="🌐 Mini App", 
+        web_app=web_app
+    )
+    
+    # Other buttons
+    services_btn = telebot.types.InlineKeyboardButton(
+        text="📋 Xizmatlar", 
+        callback_data="services"
+    )
+    site_btn = telebot.types.InlineKeyboardButton(
+        text="🔗 Saytga o'tish", 
+        url="https://trendoai.uz"
+    )
+    order_btn = telebot.types.InlineKeyboardButton(
+        text="🚀 Buyurtma berish", 
+        url="https://trendoai.uz/order"
+    )
+    
+    markup.add(mini_app_btn, services_btn)
+    markup.add(site_btn, order_btn)
+    
+    bot.reply_to(message, welcome_text, parse_mode='Markdown', reply_markup=markup)
+
+
+# Callback handler for inline buttons
+@bot.callback_query_handler(func=lambda call: call.data == "services")
+def callback_services(call):
+    services_text = """
+🚀 **TrendoAI Xizmatlari va Narxlar:**
+
+1. 📱 **Telegram Botlar** - $100 dan
+   • Savdo botlar, To'lov integratsiya
+   • Mini App ishlab chiqish
+
+2. 🌐 **Web Saytlar** - $150 dan
+   • Landing page, Korporativ saytlar
+   • SEO optimizatsiya
+
+3. 🧠 **AI Chatbotlar** - $200 dan
+   • 24/7 mijozlar xizmati
+   • Avtomatik javob berish
+
+4. 📢 **SMM Marketing** - $50/oy dan
+   • Kontent yaratish
+   • Reklamalarni boshqarish
+
+📞 Bog'lanish: @rovshanov_me
+🌐 Sayt: trendoai.uz
+    """
+    bot.answer_callback_query(call.id)
+    bot.send_message(call.message.chat.id, services_text, parse_mode='Markdown')
+
 
 @bot.message_handler(commands=['services'])
 def send_services(message):
