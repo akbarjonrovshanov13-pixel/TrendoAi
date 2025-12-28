@@ -87,6 +87,8 @@ muvaffaqiyatli loyihalar. Bepul konsultatsiya!{% endblock %}
                 {% endfor %}
                 {% endif %}
             </div>
+            <a href="{{ url_for('portfolio_item', slug=item.slug) }}" class="card-detail-btn"
+                onclick="event.stopPropagation()">Batafsil ko'rish →</a>
         </div>
     </article>
     {% endfor %}
@@ -502,6 +504,11 @@ muvaffaqiyatli loyihalar. Bepul konsultatsiya!{% endblock %}
         color: var(--text-muted);
     }
 
+    /* Detail button - hidden on desktop, visible on mobile */
+    .card-detail-btn {
+        display: none;
+    }
+
     /* Testimonials */
     .testimonials-section {
         background: var(--bg-card);
@@ -640,31 +647,70 @@ muvaffaqiyatli loyihalar. Bepul konsultatsiya!{% endblock %}
             font-size: 0.75rem;
         }
 
+        /* 2-Column Mobile Grid */
         .portfolio-grid {
-            grid-template-columns: 1fr;
-            gap: 12px;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
             margin-bottom: 24px;
+            padding: 0 8px;
         }
 
         .card-image {
-            height: 120px;
+            height: 100px;
         }
 
         .card-emoji {
-            font-size: 3rem;
+            font-size: 2.5rem;
+        }
+
+        /* Hide hover overlay on mobile */
+        .card-overlay {
+            display: none;
         }
 
         .card-content {
-            padding: 16px;
+            padding: 10px;
+        }
+
+        .card-category {
+            font-size: 0.6rem !important;
+            padding: 2px 6px !important;
+            margin-bottom: 4px !important;
         }
 
         .card-content h3 {
-            font-size: 1rem;
+            font-size: 0.85rem;
+            margin-bottom: 4px;
+            line-height: 1.3;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
         }
 
         .card-content p {
-            font-size: 0.85rem;
-            margin-bottom: 10px;
+            display: none;
+            /* Hide description on mobile 2-col */
+        }
+
+        .card-tech {
+            display: none;
+            /* Hide tech tags on mobile 2-col */
+        }
+
+        /* Always visible detail button on mobile */
+        .card-detail-btn {
+            display: block;
+            width: 100%;
+            padding: 8px;
+            background: var(--gradient-main);
+            color: white;
+            text-align: center;
+            text-decoration: none;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-top: 8px;
         }
 
         .testimonials-section {
@@ -687,6 +733,19 @@ muvaffaqiyatli loyihalar. Bepul konsultatsiya!{% endblock %}
 
         .cta-section h3 {
             font-size: 1.2rem;
+        }
+    }
+
+    /* Very small mobile - single column fallback */
+    @media (max-width: 380px) {
+        .portfolio-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .card-content p {
+            display: block;
+            font-size: 0.8rem;
+            margin-bottom: 8px;
         }
     }
 </style>
