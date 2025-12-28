@@ -118,10 +118,11 @@ header {
     border-radius: var(--radius-xl);
     padding: 20px 32px;
     margin: 20px;
-    position: relative;
-    /* Changed from sticky - scrolls with page */
+    position: sticky;
+    top: 20px;
     z-index: 100;
     overflow: hidden;
+    transition: transform 0.3s ease;
 }
 
 /* Auto-hide header on mobile scroll */
