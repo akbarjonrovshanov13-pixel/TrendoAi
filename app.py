@@ -956,7 +956,18 @@ def robots_txt():
     content = f"""User-agent: *
 Allow: /
 
+# Sitemap joylashuvi
 Sitemap: {SITE_URL}/sitemap.xml
+
+# Admin va API sahifalarini yashirish
+Disallow: /admin/
+Disallow: /api/cron/
+
+# Statik fayllarni ruxsat berish
+Allow: /static/
+
+# Crawl-delay (qidiruv botlari uchun)
+Crawl-delay: 1
 
 # TrendoAI - O'zbekiston texnologiya blog platformasi
 """

@@ -4,6 +4,8 @@
 
 {% block meta_description %}{{ service.meta_desc }}{% endblock %}
 
+{% block canonical_url %}https://trendoai.uz/services/{{ service.key }}{% endblock %}
+
 {% block extra_head %}
 <!-- Facebook Ads Optimization -->
 <meta property="og:title" content="{{ service.title }} - TrendoAI">

@@ -4,6 +4,8 @@
 
 {% block meta_description %}{{ item.description | truncate(160) }}{% endblock %}
 
+{% block canonical_url %}https://trendoai.uz/portfolio/{{ item.slug }}{% endblock %}
+
 {% block extra_head %}
 <!-- Facebook Ads Optimization -->
 <meta property="og:title" content="{{ item.title }} - TrendoAI">
