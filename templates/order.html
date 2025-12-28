@@ -252,5 +252,31 @@ qiling.{% endblock %}
             }
         }
     });
+
+    // Facebook Pixel - Form submission tracking
+    const orderForm = document.querySelector('.order-form');
+    if (orderForm && typeof fbq !== 'undefined') {
+        orderForm.addEventListener('submit', function () {
+            const serviceName = document.getElementById('service').selectedOptions[0]?.text || 'Unknown';
+            const budget = document.getElementById('budget').value || 'Not specified';
+
+            fbq('track', 'InitiateCheckout', {
+                content_name: serviceName,
+                content_category: 'Service Order',
+                value: budget,
+                currency: 'UZS'
+            });
+        });
+    }
+
+    // Google Analytics - Form submission tracking  
+    if (orderForm && typeof gtag !== 'undefined') {
+        orderForm.addEventListener('submit', function () {
+            gtag('event', 'generate_lead', {
+                'event_category': 'Order',
+                'event_label': document.getElementById('service').value
+            });
+        });
+    }
 </script>
 {% endblock %}
