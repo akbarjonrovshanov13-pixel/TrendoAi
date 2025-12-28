@@ -693,6 +693,112 @@ main {
     color: var(--primary-dark);
 }
 
+/* ========== POPULAR POSTS SECTION ========== */
+.popular-section {
+    padding: 40px 20px;
+    max-width: 1200px;
+    margin: 0 auto 40px;
+}
+
+.popular-section h2 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 24px;
+    background: var(--gradient-text);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.popular-posts-grid {
+    display: flex;
+    gap: 16px;
+    overflow-x: auto;
+    padding-bottom: 16px;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+}
+
+.popular-posts-grid::-webkit-scrollbar {
+    height: 6px;
+}
+
+.popular-posts-grid::-webkit-scrollbar-thumb {
+    background: var(--primary);
+    border-radius: 3px;
+}
+
+.popular-post-card {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: 16px;
+    min-width: 280px;
+    max-width: 320px;
+    scroll-snap-align: start;
+    transition: var(--transition-smooth);
+    text-decoration: none;
+    flex-shrink: 0;
+}
+
+.popular-post-card:hover {
+    border-color: var(--primary);
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-glow);
+}
+
+.popular-rank {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    background: var(--gradient-main);
+    border-radius: 50%;
+    font-size: 1.2rem;
+    font-weight: 800;
+    color: white;
+    flex-shrink: 0;
+}
+
+.popular-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.popular-info h4 {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 4px;
+    line-height: 1.4;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.popular-meta {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+}
+
+@media (min-width: 768px) {
+    .popular-posts-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        overflow-x: visible;
+    }
+
+    .popular-post-card {
+        min-width: auto;
+        max-width: none;
+    }
+}
+
 /* ========== EMPTY STATE ========== */
 .empty-state {
     text-align: center;

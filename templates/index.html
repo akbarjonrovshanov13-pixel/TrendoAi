@@ -42,6 +42,24 @@
     </div>
 </section>
 
+<!-- Most Read Section -->
+{% if popular_posts %}
+<section class="popular-section">
+    <h2>🔥 Ko'p O'qilganlar</h2>
+    <div class="popular-posts-grid">
+        {% for post in popular_posts %}
+        <a href="{{ url_for('post', post_id=post.id) }}" class="popular-post-card">
+            <span class="popular-rank">{{ loop.index }}</span>
+            <div class="popular-info">
+                <h4>{{ post.title | truncate(50) }}</h4>
+                <span class="popular-meta">👁️ {{ post.views|default(0) }} ko'rish</span>
+            </div>
+        </a>
+        {% endfor %}
+    </div>
+</section>
+{% endif %}
+
 <!-- Posts Grid -->
 <section class="posts-section">
     <h2>📝 So'nggi Maqolalar</h2>

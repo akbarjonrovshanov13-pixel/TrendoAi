@@ -325,9 +325,15 @@ def blog():
         page=page, per_page=POSTS_PER_PAGE, error_out=False
     )
     
+    # Eng ko'p o'qilgan postlar (Top 5)
+    popular_posts = Post.query.filter_by(is_published=True).order_by(
+        Post.views.desc()
+    ).limit(5).all()
+    
     return render_template('index.html', 
                           posts=pagination.items, 
-                          pagination=pagination)
+                          pagination=pagination,
+                          popular_posts=popular_posts)
 
 
 @app.route('/post/<int:post_id>')
@@ -544,17 +550,33 @@ def admin_logout():
 @login_required
 def admin_dashboard():
     """Admin dashboard"""
+    # Post statistikasi
     total_posts = Post.query.count()
     published_posts = Post.query.filter_by(is_published=True).count()
     total_views = db.session.query(db.func.sum(Post.views)).scalar() or 0
     
+    # Buyurtmalar statistikasi
+    total_orders = Order.query.count()
+    new_orders = Order.query.filter_by(status='new').count()
+    
+    # Portfolio statistikasi
+    total_portfolio = Portfolio.query.count()
+    
+    # So'nggi postlar
     recent_posts = Post.query.order_by(Post.created_at.desc()).limit(5).all()
+    
+    # Eng ko'p ko'rilgan postlar
+    top_posts = Post.query.filter_by(is_published=True).order_by(Post.views.desc()).limit(5).all()
     
     return render_template('admin/dashboard.html',
                           total_posts=total_posts,
                           published_posts=published_posts,
                           total_views=total_views,
-                          recent_posts=recent_posts)
+                          total_orders=total_orders,
+                          new_orders=new_orders,
+                          total_portfolio=total_portfolio,
+                          recent_posts=recent_posts,
+                          top_posts=top_posts)
 
 
 @app.route('/admin/posts')

@@ -33,10 +33,26 @@
         </div>
 
         <div class="stat-card">
-            <div class="stat-icon">🤖</div>
+            <div class="stat-icon">📦</div>
             <div class="stat-info">
-                <span class="stat-value">AI</span>
-                <span class="stat-label">Powered</span>
+                <span class="stat-value">{{ total_orders|default(0) }}</span>
+                <span class="stat-label">Buyurtmalar</span>
+            </div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-icon">🆕</div>
+            <div class="stat-info">
+                <span class="stat-value">{{ new_orders|default(0) }}</span>
+                <span class="stat-label">Yangi Buyurtmalar</span>
+            </div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-icon">🎨</div>
+            <div class="stat-info">
+                <span class="stat-value">{{ total_portfolio|default(0) }}</span>
+                <span class="stat-label">Portfolio</span>
             </div>
         </div>
     </div>
@@ -53,9 +69,13 @@
                 <span class="action-icon">🤖</span>
                 <span class="action-label">AI Generatsiya</span>
             </a>
-            <a href="{{ url_for('admin_posts') }}" class="action-card">
-                <span class="action-icon">📋</span>
-                <span class="action-label">Barcha Postlar</span>
+            <a href="{{ url_for('admin_orders') }}" class="action-card">
+                <span class="action-icon">📦</span>
+                <span class="action-label">Buyurtmalar</span>
+            </a>
+            <a href="{{ url_for('admin_portfolio') }}" class="action-card">
+                <span class="action-icon">🎨</span>
+                <span class="action-label">Portfolio</span>
             </a>
             <a href="{{ url_for('index') }}" class="action-card" target="_blank">
                 <span class="action-icon">🌐</span>
@@ -64,41 +84,85 @@
         </div>
     </div>
 
-    <!-- Recent Posts -->
-    <div class="recent-posts">
-        <h2>📝 So'nggi Postlar</h2>
-        {% if recent_posts %}
-        <table class="posts-table">
-            <thead>
-                <tr>
-                    <th>Sarlavha</th>
-                    <th>Kategoriya</th>
-                    <th>Ko'rishlar</th>
-                    <th>Sana</th>
-                    <th>Amallar</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for post in recent_posts %}
-                <tr>
-                    <td>
-                        <a href="{{ url_for('post', post_id=post.id) }}" target="_blank">
-                            {{ post.title[:50] }}{% if post.title|length > 50 %}...{% endif %}
-                        </a>
-                    </td>
-                    <td><span class="category-tag">{{ post.category }}</span></td>
-                    <td>{{ post.views|default(0) }}</td>
-                    <td>{{ post.created_at.strftime('%d.%m.%Y') if post.created_at else 'N/A' }}</td>
-                    <td>
-                        <a href="{{ url_for('admin_edit_post', post_id=post.id) }}" class="btn-sm">✏️</a>
-                    </td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-        {% else %}
-        <p class="empty-message">Hozircha postlar mavjud emas.</p>
-        {% endif %}
+    <div class="dashboard-grid">
+        <!-- Recent Posts -->
+        <div class="recent-posts">
+            <h2>📝 So'nggi Postlar</h2>
+            {% if recent_posts %}
+            <table class="posts-table">
+                <thead>
+                    <tr>
+                        <th>Sarlavha</th>
+                        <th>Kategoriya</th>
+                        <th>Ko'rishlar</th>
+                        <th>Sana</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for post in recent_posts %}
+                    <tr>
+                        <td>
+                            <a href="{{ url_for('post', post_id=post.id) }}" target="_blank">
+                                {{ post.title[:40] }}{% if post.title|length > 40 %}...{% endif %}
+                            </a>
+                        </td>
+                        <td><span class="category-tag">{{ post.category }}</span></td>
+                        <td>{{ post.views|default(0) }}</td>
+                        <td>{{ post.created_at.strftime('%d.%m') if post.created_at else 'N/A' }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            {% else %}
+            <p class="empty-message">Hozircha postlar mavjud emas.</p>
+            {% endif %}
+        </div>
+
+        <!-- Top Posts by Views -->
+        <div class="recent-posts">
+            <h2>🔥 Eng Ko'p Ko'rilganlar</h2>
+            {% if top_posts %}
+            <table class="posts-table">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Sarlavha</th>
+                        <th>Ko'rishlar</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for post in top_posts %}
+                    <tr>
+                        <td><strong>{{ loop.index }}</strong></td>
+                        <td>
+                            <a href="{{ url_for('post', post_id=post.id) }}" target="_blank">
+                                {{ post.title[:35] }}{% if post.title|length > 35 %}...{% endif %}
+                            </a>
+                        </td>
+                        <td><strong>{{ post.views|default(0) }}</strong></td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            {% else %}
+            <p class="empty-message">Ma'lumot mavjud emas.</p>
+            {% endif %}
+        </div>
     </div>
 </div>
+
+<style>
+    .dashboard-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+        gap: 24px;
+        margin-top: 30px;
+    }
+
+    @media (max-width: 900px) {
+        .dashboard-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>
 {% endblock %}
