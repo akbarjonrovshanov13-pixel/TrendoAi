@@ -1769,22 +1769,28 @@ def init_database():
         try:
             # 1. Yangi jadvallarni yaratish (Service va h.k.)
             db.create_all()
-            print("✅ db.create_all() bajarildi")
             
-            # 2. Portfolio.price ustunini qo'shish (agar yo'q bo'lsa)
-            try:
-                db.session.execute(db.text("SELECT price FROM portfolio LIMIT 1"))
-            except:
+            # 2. Raw connection orqali ustunlarni qo'shish (PostgreSQL safe)
+            from sqlalchemy import text
+            with db.engine.connect() as conn:
+                # Portfolio.price
                 try:
-                    db.session.execute(db.text("ALTER TABLE portfolio ADD COLUMN price VARCHAR(100)"))
-                    db.session.commit()
-                    print("✅ Portfolio.price ustuni qo'shildi")
+                    conn.execute(text("ALTER TABLE portfolio ADD COLUMN IF NOT EXISTS price VARCHAR(100)"))
+                    conn.commit()
+                    print("✅ Portfolio.price ustuni tekshirildi/qo'shildi")
                 except Exception as e:
-                    db.session.rollback()
-                    print(f"⚠️ Portfolio.price: {e}")
+                    print(f"⚠️ Portfolio.price migration focus: {e}")
+
+                # Service.price (ba'zan migrate_services da xatolik bo'lishi mumkin)
+                try:
+                    conn.execute(text("ALTER TABLE service ADD COLUMN IF NOT EXISTS price VARCHAR(100)"))
+                    conn.commit()
+                    print("✅ Service.price ustuni tekshirildi/qo'shildi")
+                except Exception as e:
+                    print(f"⚠️ Service.price migration focus: {e}")
             
         except Exception as e:
-            print(f"⚠️ Database init error: {e}")
+            print(f"⚠️ Database init final error: {e}")
 
 # Run database initialization
 init_database()
