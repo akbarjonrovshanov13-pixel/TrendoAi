@@ -173,10 +173,14 @@ def echo_all(message):
 def webhook():
     """Telegram Webhook endpoint"""
     if request.headers.get('content-type') == 'application/json':
-        json_string = request.get_data().decode('utf-8')
-        update = telebot.types.Update.de_json(json_string)
-        bot.process_new_updates([update])
-        return '', 200
+        try:
+            json_string = request.get_data().decode('utf-8')
+            update = telebot.types.Update.de_json(json_string)
+            bot.process_new_updates([update])
+            return '', 200
+        except Exception as e:
+            print(f"❌ Webhook Error: {e}")
+            return 'Error', 500
     return 'Bad Request', 400
 
 def setup_webhook(app):
@@ -187,12 +191,20 @@ def setup_webhook(app):
     # Set webhook URL
     webhook_url = f"{SITE_URL}/webhook"
     
-    try:
-        # Eski webhook ni o'chirish
-        bot.remove_webhook()
-        
-        # Yangi webhook o'rnatish
-        bot.set_webhook(url=webhook_url)
-        print(f"✅ Webhook o'rnatildi: {webhook_url}")
-    except Exception as e:
-        print(f"⚠️ Webhook xatosi: {e}")
+    def _set_hook():
+        import time
+        time.sleep(1) # Wait for app to fully start
+        try:
+            # Eski webhook ni o'chirish
+            bot.remove_webhook()
+            time.sleep(0.5)
+            
+            # Yangi webhook o'rnatish
+            bot.set_webhook(url=webhook_url)
+            print(f"✅ Webhook o'rnatildi: {webhook_url}")
+        except Exception as e:
+            print(f"⚠️ Webhook o'rnatishda xatolik: {e}")
+
+    # Run in background thread to not block startup
+    import threading
+    threading.Thread(target=_set_hook, daemon=True).start()

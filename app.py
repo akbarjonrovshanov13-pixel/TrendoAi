@@ -1287,7 +1287,9 @@ try:
     # Scheduler ishga tushirish
     scheduler.start()
     
+    
     # Webhook rejimida bot (polling o'rniga)
+    # Threading ichida ishlaydi, shuning uchun main thread bloklanmaydi
     setup_webhook(app)
     
     print("🚀 TrendoAI xizmatlari (Scheduler + Webhook Bot) ishga tushdi!")
