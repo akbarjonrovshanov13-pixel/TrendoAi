@@ -1400,6 +1400,75 @@ def admin_generate_post():
             return "❌ Post generatsiya qilishda xatolik.", 500
     except Exception as e:
         return f"❌ Xatolik: {e}", 500
+@app.route('/feed/facebook.xml')
+def facebook_feed():
+    """Facebook/Instagram Catalog Feed (XML)"""
+    from xml.etree.ElementTree import Element, SubElement, tostring
+    import xml.dom.minidom
+    
+    # Root element
+    rss = Element('rss', {'xmlns:g': 'http://base.google.com/ns/1.0', 'version': '2.0'})
+    channel = SubElement(rss, 'channel')
+    
+    # Channel details
+    SubElement(channel, 'title').text = SITE_NAME
+    SubElement(channel, 'link').text = SITE_URL
+    SubElement(channel, 'description').text = SITE_DESCRIPTION
+    
+    # 1. Add Services
+    for key, service in SERVICES_DATA.items():
+        item = SubElement(channel, 'item')
+        
+        SubElement(item, 'g:id').text = f"service_{key}"
+        SubElement(item, 'g:title').text = service['title']
+        SubElement(item, 'g:description').text = service.get('full_description', service['description'])
+        SubElement(item, 'g:link').text = f"{SITE_URL}/services/{key}"
+        
+        # Image (use absolute URL)
+        # Note: You should ensure these images exist in static/images/services/
+        SubElement(item, 'g:image_link').text = f"{SITE_URL}/static/images/{key}.jpg" 
+        SubElement(item, 'g:brand').text = "TrendoAI"
+        SubElement(item, 'g:condition').text = "new"
+        SubElement(item, 'g:availability').text = "in stock"
+        
+        # Price formatting (e.g., "1,500,000 so'm" -> "1500000 UZS")
+        raw_price = service.get('price', '0')
+        price_numeric = re.sub(r'[^0-9]', '', raw_price)
+        if not price_numeric: price_numeric = "0"
+        SubElement(item, 'g:price').text = f"{price_numeric} UZS"
+        
+        SubElement(item, 'g:google_product_category').text = "Software > Business & Productivity Software"
+        
+    # 2. Add Portfolio Items
+    portfolios = Portfolio.query.filter_by(is_published=True).all()
+    for p in portfolios:
+        item = SubElement(channel, 'item')
+        
+        SubElement(item, 'g:id').text = f"portfolio_{p.id}"
+        SubElement(item, 'g:title').text = p.title
+        SubElement(item, 'g:description').text = p.description
+        
+        link = f"{SITE_URL}/portfolio/project/{p.slug}" if p.slug else f"{SITE_URL}/portfolio"
+        SubElement(item, 'g:link').text = link
+        
+        if p.image_url:
+            SubElement(item, 'g:image_link').text = p.image_url
+        else:
+            SubElement(item, 'g:image_link').text = f"{SITE_URL}/static/logo.png"
+            
+        SubElement(item, 'g:brand').text = "TrendoAI"
+        SubElement(item, 'g:condition').text = "new"
+        SubElement(item, 'g:availability').text = "in stock"
+        SubElement(item, 'g:price').text = "0 UZS" # Portfolios usually don't have a direct price, use 0
+        SubElement(item, 'g:custom_label_0').text = p.category # Use custom label for filtering
+        SubElement(item, 'g:google_product_category').text = "Software > Business & Productivity Software"
+
+    # Convert to simple string with header
+    xml_str = xml.dom.minidom.parseString(tostring(rss)).toprettyxml(indent="   ")
+    
+    return Response(xml_str, mimetype='application/xml')
+
+
 # Avtomatlashtirish va Botni ishga tushirish
 try:
     from scheduler import scheduler
