@@ -427,45 +427,9 @@
         </style>
 
         <script>
-            // Smart Header: Hide on scroll down, show on scroll up
-            let lastScroll = 0;
+            // Header scrolls normally with the page (no auto-hide)
+            // Keeping reference in case needed later
             const header = document.querySelector('header');
-
-            window.addEventListener('scroll', () => {
-                const currentScroll = window.pageYOffset;
-                const breadcrumbs = document.querySelector('.breadcrumb-nav');
-                // Generic selector for all types of detail headers
-                const detailHeader = document.querySelector('.article-header, .service-header-hero, .portfolio-detail-header');
-                const featuredImage = document.querySelector('.article-featured-image');
-                const sidebar = document.querySelector('.article-sidebar');
-
-                if (currentScroll > lastScroll && currentScroll > 5) {
-                    // Scrolling DOWN - Full Immersion Mode (Hide almost immediately)
-                    header.classList.add('header-hidden');
-                    document.body.classList.add('is-scrolling-down');
-
-                    // Hide distractions smoothly
-                    [breadcrumbs, detailHeader, featuredImage, sidebar].forEach(el => {
-                        if (el) {
-                            el.style.opacity = '0';
-                            el.style.pointerEvents = 'none';
-                        }
-                    });
-                } else if (currentScroll < lastScroll - 10 || currentScroll <= 5) {
-                    // Scrolling UP significantly or at very top - Show Navigation
-                    header.classList.remove('header-hidden');
-                    document.body.classList.remove('is-scrolling-down');
-
-                    [breadcrumbs, detailHeader, featuredImage, sidebar].forEach(el => {
-                        if (el) {
-                            el.style.opacity = '1';
-                            el.style.pointerEvents = 'auto';
-                        }
-                    });
-                }
-
-                lastScroll = currentScroll;
-            });
 
             // Telegram Popup Logic
             function showTgPopup() {
