@@ -224,6 +224,33 @@ SERVICES_DATA = {
 
 # ========== DATABASE MODELS ==========
 
+
+class Service(db.Model):
+    """Xizmatlar modeli"""
+    id = db.Column(db.Integer, primary_key=True)
+    slug = db.Column(db.String(100), unique=True, nullable=False)
+    title = db.Column(db.String(200), nullable=False)
+    description = db.Column(db.Text)
+    full_description = db.Column(db.Text)
+    price = db.Column(db.String(100))
+    icon = db.Column(db.String(50))
+    image_url = db.Column(db.String(500))
+    features = db.Column(db.Text) # JSON string sifatida saqlanadi
+    is_active = db.Column(db.Boolean, default=True)
+    order = db.Column(db.Integer, default=0)
+    meta_desc = db.Column(db.String(300))
+    discount_percent = db.Column(db.Integer, default=0)
+    discount_until = db.Column(db.String(50))
+
+    def get_features_list(self):
+        if not self.features: return []
+        import json
+        try:
+            return json.loads(self.features)
+        except:
+            return self.features.split(',')
+
+
 class Post(db.Model):
     """Blog post modeli"""
     id = db.Column(db.Integer, primary_key=True)
@@ -497,16 +524,41 @@ def about():
 @app.route('/services')
 def services():
     """Xizmatlar sahifasi"""
-    return render_template('services.html', services=SERVICES_DATA)
+    all_services = Service.query.filter_by(is_active=True).order_by(Service.order.asc()).all()
+    return render_template('services.html', services=all_services)
 
 
 @app.route('/services/<service_key>')
 def service_detail(service_key):
-    """Xizmat batafsil sahifasi (Ads Landing Page)"""
-    service = SERVICES_DATA.get(service_key)
-    if not service:
-        abort(404)
-    return render_template('service_detail.html', service=service, services=SERVICES_DATA)
+    """Xizmat batafsil sahifasi"""
+    service = Service.query.filter_by(slug=service_key).first_or_404()
+    
+    # Portfolio projects related to this service (simple matching by category)
+    # Mapping service keys to portfolio categories
+    category_map = {
+        'web_site': 'web',
+        'telegram_bot': 'bot',
+        'smm': 'smm',
+        'design': 'design',
+        'ai': 'ai'
+    }
+    
+    # Try to match category, if not found use generic 'web' or search by slug parts
+    cat = category_map.get(service.slug)
+    if not cat:
+        if 'bot' in service.slug: cat = 'bot'
+        elif 'ai' in service.slug: cat = 'ai'
+        
+    related_portfolio = []
+    if cat:
+        related_portfolio = Portfolio.query.filter_by(category=cat, is_published=True).limit(3).all()
+
+    all_services = Service.query.filter_by(is_active=True).order_by(Service.order.asc()).all()
+
+    return render_template('service_detail.html', 
+                         service=service, 
+                         related_portfolio=related_portfolio,
+                         services=all_services)
 
 
 @app.route('/portfolio')
@@ -674,6 +726,94 @@ def admin_dashboard():
                           top_posts=top_posts)
 
 
+
+# ========== SERVICE ADMIN ROUTES ==========
+
+@app.route('/admin/services')
+@login_required
+def admin_services():
+    """Xizmatlar ro'yxati"""
+    services = Service.query.order_by(Service.order.asc()).all()
+    return render_template('admin/services.html', services=services)
+
+@app.route('/admin/services/new', methods=['GET', 'POST'])
+@login_required
+def admin_service_new():
+    """Yangi xizmat qo'shish"""
+    if request.method == 'POST':
+        try:
+            slug = request.form.get('slug')
+            if not slug:
+                # Auto generate basic slug from title
+                import re
+                slug = re.sub(r'[^a-z0-9-]', '', request.form.get('title').lower().replace(' ', '-'))
+            
+            service = Service(
+                slug=slug,
+                title=request.form.get('title'),
+                description=request.form.get('description'),
+                full_description=request.form.get('full_description'),
+                price=request.form.get('price'),
+                icon=request.form.get('icon', '🚀'),
+                image_url=request.form.get('image_url'),
+                features=request.form.get('features'),
+                is_active=request.form.get('is_active') == 'on',
+                order=int(request.form.get('order', 0)),
+                meta_desc=request.form.get('meta_desc'),
+                discount_percent=int(request.form.get('discount_percent', 0)),
+                discount_until=request.form.get('discount_until')
+            )
+            db.session.add(service)
+            db.session.commit()
+            flash(f'"{service.title}" muvaffaqiyatli qo\'shildi!', 'success')
+            return redirect(url_for('admin_services'))
+        except Exception as e:
+            flash(f'Xatolik: {e}', 'error')
+            
+    return render_template('admin/service_form.html', service=None)
+
+@app.route('/admin/services/<int:service_id>/edit', methods=['GET', 'POST'])
+@login_required
+def admin_service_edit(service_id):
+    """Xizmatni tahrirlash"""
+    service = Service.query.get_or_404(service_id)
+    
+    if request.method == 'POST':
+        try:
+            service.slug = request.form.get('slug')
+            service.title = request.form.get('title')
+            service.description = request.form.get('description')
+            service.full_description = request.form.get('full_description')
+            service.price = request.form.get('price')
+            service.icon = request.form.get('icon')
+            service.image_url = request.form.get('image_url')
+            service.features = request.form.get('features')
+            service.is_active = request.form.get('is_active') == 'on'
+            service.order = int(request.form.get('order', 0))
+            service.meta_desc = request.form.get('meta_desc')
+            service.discount_percent = int(request.form.get('discount_percent', 0))
+            service.discount_until = request.form.get('discount_until')
+            
+            db.session.commit()
+            flash(f'"{service.title}" yangilandi!', 'success')
+            return redirect(url_for('admin_services'))
+        except Exception as e:
+            flash(f'Xatolik: {e}', 'error')
+            
+    return render_template('admin/service_form.html', service=service)
+
+@app.route('/admin/services/<int:service_id>/delete', methods=['POST'])
+@login_required
+def admin_service_delete(service_id):
+    """Xizmatni o'chirish"""
+    service = Service.query.get_or_404(service_id)
+    db.session.delete(service)
+    db.session.commit()
+    flash('Xizmat o\'chirildi!', 'success')
+    return redirect(url_for('admin_services'))
+
+
+# ========== POST ADMIN ROUTES ==========
 @app.route('/admin/posts')
 @login_required
 def admin_posts():
@@ -1464,23 +1604,30 @@ def facebook_feed():
     SubElement(channel, 'description').text = SITE_DESCRIPTION
     
     # 1. Add Services
-    for key, service in SERVICES_DATA.items():
+    services = Service.query.filter_by(is_active=True).all()
+    for service in services:
         item = SubElement(channel, 'item')
         
-        SubElement(item, 'g:id').text = f"service_{key}"
-        SubElement(item, 'g:title').text = service['title']
-        SubElement(item, 'g:description').text = service.get('full_description', service['description'])
-        SubElement(item, 'g:link').text = f"{SITE_URL}/services/{key}"
+        SubElement(item, 'g:id').text = f"service_{service.slug}"
+        SubElement(item, 'g:title').text = service.title
+        SubElement(item, 'g:description').text = service.full_description or service.description
+        SubElement(item, 'g:link').text = f"{SITE_URL}/services/{service.slug}"
         
-        # Image (use absolute URL)
-        # Note: You should ensure these images exist in static/images/services/
-        SubElement(item, 'g:image_link').text = f"{SITE_URL}/static/images/{key}.jpg" 
+        # Image
+        if service.image_url:
+            if service.image_url.startswith('http'):
+                 SubElement(item, 'g:image_link').text = service.image_url
+            else:
+                 SubElement(item, 'g:image_link').text = f"{SITE_URL}{service.image_url}"
+        else:
+            SubElement(item, 'g:image_link').text = f"{SITE_URL}/static/images/services/{service.slug}.jpg"
+            
         SubElement(item, 'g:brand').text = "TrendoAI"
         SubElement(item, 'g:condition').text = "new"
         SubElement(item, 'g:availability').text = "in stock"
         
-        # Price formatting (e.g., "1,500,000 so'm" -> "1500000 UZS")
-        raw_price = service.get('price', '0')
+        # Price
+        raw_price = service.price or '0'
         price_numeric = re.sub(r'[^0-9]', '', raw_price)
         if not price_numeric: price_numeric = "0"
         SubElement(item, 'g:price').text = f"{price_numeric} UZS"

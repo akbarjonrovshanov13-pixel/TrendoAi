@@ -12,14 +12,14 @@ Professional IT xizmatlar O'zbekistonda.{% endblock %}
 </section>
 
 <div class="services-grid">
-    {% for key, s in services.items() %}
-    <article class="service-card {% if s.key == 'ai_content' %}featured{% endif %}">
-        {% if s.key == 'ai_content' %}<div class="service-badge">⭐ Asosiy</div>{% endif %}
+    {% for s in services %}
+    <article class="service-card {% if s.slug == 'ai_content' %}featured{% endif %}">
+        {% if s.slug == 'ai_content' %}<div class="service-badge">⭐ Asosiy</div>{% endif %}
         <div class="service-icon">{{ s.icon }}</div>
         <h3>{{ s.title }}</h3>
         <p>{{ s.description }}</p>
         <ul class="service-features">
-            {% for feature in s.features %}
+            {% for feature in s.get_features_list() %}
             <li>✓ {{ feature }}</li>
             {% endfor %}
         </ul>
@@ -27,8 +27,8 @@ Professional IT xizmatlar O'zbekistonda.{% endblock %}
             <span>dan</span> <strong>{{ s.price }}</strong>
         </div>
         <div class="service-actions-grid">
-            <a href="{{ url_for('order_page') }}?service={{ s.key }}" class="service-order-btn">🚀 Buyurtma berish</a>
-            <a href="{{ url_for('service_detail', service_key=s.key) }}" class="service-detail-link">Batafsil ma'lumot
+            <a href="{{ url_for('order_page') }}?service={{ s.slug }}" class="service-order-btn">🚀 Buyurtma berish</a>
+            <a href="{{ url_for('service_detail', service_key=s.slug) }}" class="service-detail-link">Batafsil ma'lumot
                 →</a>
         </div>
     </article>

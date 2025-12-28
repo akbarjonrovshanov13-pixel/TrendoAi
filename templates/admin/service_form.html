@@ -1,0 +1,128 @@
+{% extends 'admin/base_admin.html' %}
+
+{% block title %}{{ 'Yangi Xizmat' if not service else 'Tahrirlash: ' + service.title }}{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h1 class="h2">{{ 'Yangi Xizmat Qo\'shish' if not service else 'Tahrirlash' }}</h1>
+</div>
+
+<form method="POST" class="needs-validation" novalidate>
+    <div class="row">
+        <div class="col-md-8">
+            <div class="card mb-4">
+                <div class="card-header">Asosiy ma'lumotlar</div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <label for="title" class="form-label">Xizmat nomi</label>
+                        <input type="text" class="form-control" id="title" name="title"
+                            value="{{ service.title if service else '' }}" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="slug" class="form-label">Slug (URL) - lotin harflarida</label>
+                        <input type="text" class="form-control" id="slug" name="slug"
+                            value="{{ service.slug if service else '' }}" required
+                            placeholder="masalan: web-development">
+                        <div class="form-text">Sayt manzilida ko'rinadi: trendoai.uz/services/<b>slug</b></div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="description" class="form-label">Qisqa tavsif</label>
+                        <textarea class="form-control" id="description" name="description"
+                            rows="3">{{ service.description if service else '' }}</textarea>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="full_description" class="form-label">To'liq tavsif (Batafsil sahifa uchun)</label>
+                        <textarea class="form-control" id="full_description" name="full_description"
+                            rows="6">{{ service.full_description if service else '' }}</textarea>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="features" class="form-label">Xususiyatlar (JSON ro'yxat)</label>
+                        <textarea class="form-control" id="features" name="features" rows="4"
+                            placeholder='["Feature 1", "Feature 2"]'>{{ service.features if service else '' }}</textarea>
+                        <div class="form-text">Format: ["Xususiyat 1", "Xususiyat 2"] yoki vergul bilan ajratilgan matn.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card mb-4">
+                <div class="card-header">SEO (Facebook & Google)</div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <label for="image_url" class="form-label">Rasm URL (1:1 kvadrat, 1080x1080px)</label>
+                        <div class="input-group">
+                            <input type="text" class="form-control" id="image_url" name="image_url"
+                                value="{{ service.image_url if service else '' }}" placeholder="https://...">
+                            <button class="btn btn-outline-secondary" type="button"
+                                onclick="window.open('/admin/media', '_blank')">Media</button>
+                        </div>
+                        <div class="form-text">Facebook Katalog uchun shu rasm ishlatiladi.</div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="meta_desc" class="form-label">Meta Description</label>
+                        <input type="text" class="form-control" id="meta_desc" name="meta_desc"
+                            value="{{ service.meta_desc if service else '' }}">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card mb-4">
+                <div class="card-header">Sozlamalar</div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <label for="price" class="form-label">Narxi</label>
+                        <input type="text" class="form-control" id="price" name="price"
+                            value="{{ service.price if service else '' }}">
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="icon" class="form-label">Icon (Emoji)</label>
+                        <input type="text" class="form-control" id="icon" name="icon"
+                            value="{{ service.icon if service else '🚀' }}">
+                    </div>
+
+                    <div class="mb-3 form-check">
+                        <input type="checkbox" class="form-check-input" id="is_active" name="is_active" {{ 'checked' if
+                            not service or service.is_active else '' }}>
+                        <label class="form-check-label" for="is_active">Saytda ko'rinsin</label>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="order" class="form-label">Tartib raqami</label>
+                        <input type="number" class="form-control" id="order" name="order"
+                            value="{{ service.order if service else 0 }}">
+                    </div>
+                </div>
+            </div>
+
+            <div class="card mb-4">
+                <div class="card-header">Chegirma (Aksiya)</div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <label for="discount_percent" class="form-label">Foiz (%)</label>
+                        <input type="number" class="form-control" id="discount_percent" name="discount_percent"
+                            value="{{ service.discount_percent if service else 0 }}">
+                    </div>
+                    <div class="mb-3">
+                        <label for="discount_until" class="form-label">Qachongacha</label>
+                        <input type="text" class="form-control" id="discount_until" name="discount_until"
+                            value="{{ service.discount_until if service else '' }}" placeholder="1-fevral">
+                    </div>
+                </div>
+            </div>
+
+            <div class="d-grid gap-2">
+                <button type="submit" class="btn btn-primary">Saqlash</button>
+                <a href="{{ url_for('admin_services') }}" class="btn btn-outline-secondary">Bekor qilish</a>
+            </div>
+        </div>
+    </div>
+</form>
+{% endblock %}

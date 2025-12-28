@@ -4,7 +4,7 @@
 
 {% block meta_description %}{{ service.meta_desc }}{% endblock %}
 
-{% block canonical_url %}https://trendoai.uz/services/{{ service.key }}{% endblock %}
+{% block canonical_url %}https://trendoai.uz/services/{{ service.slug }}{% endblock %}
 
 {% block extra_head %}
 <!-- Facebook Ads Optimization -->
@@ -17,7 +17,7 @@
     fbq('track', 'ViewContent', {
         content_name: '{{ service.title }}',
         content_category: 'Service',
-        content_ids: ['{{ service.key }}'],
+        content_ids: ['{{ service.slug }}'],
         content_type: 'product'
     });
 </script>
@@ -42,9 +42,9 @@
                 <p class="service-tagline">{{ service.description }}</p>
                 <div class="service-price-badge">Narxi: {{ service.price }}</div>
 
-                {% if service.discount %}
+                {% if service.discount_percent > 0 %}
                 <div class="discount-badge">
-                    🔥 {{ service.discount.percent }}% Chegirma ({{ service.discount.until }}gacha)
+                    🔥 {{ service.discount_percent }}% Chegirma ({{ service.discount_until }}gacha)
                 </div>
                 <style>
                     .discount-badge {
@@ -81,7 +81,7 @@
                 <p>{{ service.full_description }}</p>
 
                 <div class="features-grid-landing">
-                    {% for feature in service.features %}
+                    {% for feature in service.get_features_list() %}
                     <div class="feature-landing-card">
                         <i class="fas fa-check-circle"></i>
                         <span>{{ feature }}</span>
@@ -92,7 +92,7 @@
                 <div class="service-cta-box">
                     <h3>Ushbu xizmat bo'yicha buyurtma bermoqchimisiz?</h3>
                     <p>Mutaxassislarimiz siz bilan bog'lanib, loyihangizni batafsil muhokama qilishadi.</p>
-                    <a href="{{ url_for('order_page') }}?service={{ service.key }}" class="primary-btn pulse-glow">
+                    <a href="{{ url_for('order_page') }}?service={{ service.slug }}" class="primary-btn pulse-glow">
                         🚀 Hozirroq buyurtma berish
                     </a>
                 </div>
@@ -104,8 +104,8 @@
         <div class="sidebar-card">
             <h3>Boshqa xizmatlar</h3>
             <div class="related-services-sidebar">
-                {% for key, s in services.items() if key != service.key %}
-                <a href="{{ url_for('service_detail', service_key=key) }}" class="related-service-item">
+                {% for s in services if s.slug != service.slug %}
+                <a href="{{ url_for('service_detail', service_key=s.slug) }}" class="related-service-item">
                     <span class="rs-icon">{{ s.icon }}</span>
                     <span class="rs-title">{{ s.title }}</span>
                 </a>

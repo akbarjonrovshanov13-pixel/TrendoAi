@@ -403,6 +403,11 @@
                     class="{% if request.endpoint == 'admin_dashboard' %}active{% endif %}">
                     📊 Dashboard
                 </a>
+                <a class="nav-link {% if 'services' in request.endpoint %}active{% endif %}"
+                    href="{{ url_for('admin_services') }}">
+                    <span data-feather="briefcase"></span>
+                    Xizmatlar
+                </a>
                 <a href="{{ url_for('admin_orders') }}"
                     class="{% if request.endpoint == 'admin_orders' %}active{% endif %}">
                     📦 Buyurtmalar
