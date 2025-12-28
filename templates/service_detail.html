@@ -41,6 +41,39 @@
                 <h1>{{ service.title }}</h1>
                 <p class="service-tagline">{{ service.description }}</p>
                 <div class="service-price-badge">Narxi: {{ service.price }}</div>
+
+                {% if service.discount %}
+                <div class="discount-badge">
+                    🔥 {{ service.discount.percent }}% Chegirma ({{ service.discount.until }}gacha)
+                </div>
+                <style>
+                    .discount-badge {
+                        display: inline-block;
+                        margin-left: 10px;
+                        padding: 10px 20px;
+                        background: linear-gradient(135deg, #ff416c, #ff4b2b);
+                        border-radius: 50px;
+                        color: white;
+                        font-weight: bold;
+                        box-shadow: 0 4px 15px rgba(255, 65, 108, 0.4);
+                        animation: pulse 2s infinite;
+                    }
+
+                    @keyframes pulse {
+                        0% {
+                            transform: scale(1);
+                        }
+
+                        50% {
+                            transform: scale(1.05);
+                        }
+
+                        100% {
+                            transform: scale(1);
+                        }
+                    }
+                </style>
+                {% endif %}
             </div>
 
             <div class="article-content">

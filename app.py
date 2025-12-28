@@ -123,6 +123,101 @@ SERVICES_DATA = {
         'price': '500,000 so\'m/soat dan',
         'full_description': "Sizning g'oyangizni qanday qilib texnologiya orqali amalga oshirish yoki mavjud tizimingizni qanday optimallashtirish bo'yicha professional maslahat beramiz. AI asrida biznesingizni yangi bosqichga olib chiqishda yo'l ko'rsatamiz.",
         'meta_desc': "Professional IT konsalting va AI audit xizmatlari. Biznesingizni raqamli transformatsiya qiling."
+    },
+    'crm_integration': {
+        'key': 'crm_integration',
+        'title': 'CRM Integratsiya',
+        'icon': '⚙️',
+        'description': "Sotuv jarayonlarini avtomatlashtirish va mijozlar bazasini tartibga solish.",
+        'features': [
+            'AmoCRM / Bitrix24 integratsiyasi',
+            'Telegram botdan CRM ga lidlar tushishi',
+            'Sotuv voronkalarini avtomatlashtirish',
+            'Menejerlar faoliyatini nazorat qilish'
+        ],
+        'price': '2,000,000 so\'m',
+        'discount': {
+            'percent': 30,
+            'until': '1-fevral'
+        },
+        'full_description': "Biznesingizda tartib o'rnating! Buyurtmalarni Excel yoki daftarda emas, zamonaviy CRM tizimlarida yuriting. Biz sizning Telegram botingiz, saytingiz va Instagram sahifangizni yagona CRM bazasiga ulab beramiz. Har bir mijoz nazoratda bo'ladi.",
+        'meta_desc': "CRM tizimlarini (AmoCRM, Bitrix24) joriy qilish va integratsiya xizmatlari. Biznes jarayonlarni avtomatlashtirish."
+    },
+    'voice_ai': {
+        'key': 'voice_ai',
+        'title': 'AI Ovozli Assistent',
+        'icon': '📞',
+        'description': "Call-markazlar o'rniga sun'iy intellekt asosidagi aqlli ovozli operatorlar.",
+        'features': [
+            'Kiruvchi qo\'ng\'iroqlarga javob berish',
+            'Mijozlarga avtomatik qo\'ng\'iroq qilish (Cold calling)',
+            'Inson ovozidan farq qilmaydigan muloqot',
+            '24/7 ish tartibi'
+        ],
+        'price': '3,000,000 so\'m dan',
+        'discount': {
+            'percent': 30,
+            'until': '1-fevral'
+        },
+        'full_description': "Endi katta call-markaz ushlash shart emas. Bizning AI ovozli assistentlarimiz mijozlaringiz bilan xuddi insondek gaplashadi, savollarga javob beradi va buyurtma qabul qiladi. Bu xarajatlarni 70% ga qisqartiradi.",
+        'meta_desc': "AI ovozli assistentlar va virtual call-markaz xizmatlari. Sun'iy intellekt orqali mijozlar bilan ovozli muloqot."
+    },
+    'marketplace_auto': {
+        'key': 'marketplace_auto',
+        'title': 'Marketpleys Avtomatlashtirish',
+        'icon': '🛍️',
+        'description': "Uzum va Wildberries da savdo qiluvchilar uchun maxsus botlar va dasturlar.",
+        'features': [
+            'Tovarlarni avtomatik yuklash',
+            'Raqobatchilar narxini kuzatish',
+            'Sotuvlar analitikasi (Bot orqali)',
+            'Ombor qoldiqlarini boshqarish'
+        ],
+        'price': '1,500,000 so\'m',
+        'discount': {
+            'percent': 30,
+            'until': '1-fevral'
+        },
+        'full_description': "E-tijoratda vaqt bu pul. Uzum Market yoki Wildberries do'koningizni boshqarishni avtomatlashtiring. Bizning yechimlarimiz orqali siz narxlarni tezkor o'zgartirishingiz va kunlik foydani telefoningizdan kuzatib borishingiz mumkin.",
+        'meta_desc': "Uzum va Wildberries marketpleyslari uchun avtomatlashtirish xizmatlari. Savdoni oshirish uchun maxsus dasturlar."
+    },
+    'data_analytics': {
+        'key': 'data_analytics',
+        'title': 'Data Analitika',
+        'icon': '📊',
+        'description': "Biznes ko'rsatkichlarini real vaqtda kuzatib borish uchun Dashboardlar.",
+        'features': [
+            'Sotuv va xarajatlar Dashboardi',
+            'Telegram orqali kunlik hisobotlar',
+            'Power BI / Google Data Studio integratsiyasi',
+            'Marketing samaradorligi tahlili'
+        ],
+        'price': '2,500,000 so\'m',
+        'discount': {
+            'percent': 30,
+            'until': '1-fevral'
+        },
+        'full_description': "Raqamlarga asoslanib qaror qabul qiling. Biz sizning barcha ma'lumotlaringizni (Excel, CRM, 1C) yagona tushunarli Dashboardga yig'ib beramiz. Endi biznesingiz holatini bir qarashda tushunasiz.",
+        'meta_desc': "Biznes uchun Data Analitika va Dashboardlar yaratish. Power BI va Google Data Studio xizmatlari."
+    },
+    'ai_education': {
+        'key': 'ai_education',
+        'title': 'AI Ta\'lim (Korporativ)',
+        'icon': '🎓',
+        'description': "Xodimlaringizga sun'iy intellekt (ChatGPT, Midjourney) dan foydalanishni o'rgatamiz.",
+        'features': [
+            'Prompt Engineering asoslari',
+            'Ish jarayonida AI dan foydalanish',
+            'Marketing va SMM uchun AI',
+            'Amaliy master-klasslar'
+        ],
+        'price': '1,000,000 so\'m (guruh)',
+        'discount': {
+            'percent': 30,
+            'until': '1-fevral'
+        },
+        'full_description': "Raqobatchilardan oldinda bo'ling! Xodimlaringizga sun'iy intellektdan foydalanishni o'rgating va ish samaradorligini 10 barobar oshiring. Biz har bir soha (sotuv, marketing, HR) uchun maxsus o'quv dasturlarini taklif qilamiz.",
+        'meta_desc': "Sun'iy intellekt (AI) bo'yicha korporativ treninglar va kurslar. ChatGPT va Midjourney dan foydalanishni o'rganing."
     }
 }
 

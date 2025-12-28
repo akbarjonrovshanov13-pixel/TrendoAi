@@ -117,24 +117,21 @@ def callback_services(call):
     services_text = """
 🚀 **TrendoAI Xizmatlari va Narxlar:**
 
-1. 📱 **Telegram Botlar** - $100 dan
-   • Savdo botlar, To'lov integratsiya
-   • Mini App ishlab chiqish
+🔥 **YANGI! 1-fevralgacha 30% CHEGIRMA:**
+1. 📞 **AI Ovozli Assistent** - Call-markaz o'rniga
+2. ⚙️ **CRM Integratsiya** - Biznes avtomatlashtirish
+3. 🛍️ **Marketpleys Botlar** - Uzum/Wildberries uchun
+4. 📊 **Data Analitika** - Dashboardlar
+5. 🎓 **AI Ta'lim** - Xodimlar uchun trening
 
-2. 🌐 **Web Saytlar** - $150 dan
-   • Landing page, Korporativ saytlar
-   • SEO optimizatsiya
-
-3. 🧠 **AI Chatbotlar** - $200 dan
-   • 24/7 mijozlar xizmati
-   • Avtomatik javob berish
-
-4. 📢 **SMM Marketing** - $50/oy dan
-   • Kontent yaratish
-   • Reklamalarni boshqarish
+💼 **ASOSIY XIZMATLAR:**
+6. 📱 **Telegram Botlar** - $100 dan
+7. 🌐 **Web Saytlar** - $150 dan
+8. 🧠 **AI Chatbotlar** - $200 dan
+9. 📢 **SMM Marketing** - $50/oy dan
 
 📞 Bog'lanish: @rovshanov_me
-🌐 Sayt: trendoai.uz
+🌐 Batafsil: trendoai.uz/services
     """
     bot.answer_callback_query(call.id)
     bot.send_message(call.message.chat.id, services_text, parse_mode='Markdown')
