@@ -86,6 +86,13 @@
     <link rel="icon" type="image/svg+xml" href="{{ url_for('static', filename='favicon.svg') }}">
     <link rel="apple-touch-icon" href="{{ url_for('static', filename='favicon.svg') }}">
 
+    <!-- PWA -->
+    <link rel="manifest" href="{{ url_for('static', filename='manifest.json') }}">
+    <meta name="theme-color" content="#6366f1">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -144,7 +151,13 @@
                             d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z" />
                     </svg>
                 </a>
+                <!-- Theme Toggle -->
+                <button class="theme-toggle" id="themeToggle" title="Rejimni almashtirish">
+                    <span class="moon-icon">🌙</span>
+                    <span class="sun-icon">☀️</span>
+                </button>
             </div>
+
         </div>
     </header>
 
@@ -214,255 +227,288 @@
             </a>
             <button class="tg-popup-later" onclick="closeTgPopup()">Keyinroq</button>
         </div>
+    </div>
 
-        <!-- Back to Top Button -->
-        <button id="back-to-top" class="back-to-top" aria-label="Yuqoriga qaytish" title="Yuqoriga qaytish">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M18 15l-6-6-6 6" />
-            </svg>
-        </button>
+    <!-- Back to Top Button -->
+    <button id="back-to-top" class="back-to-top" aria-label="Yuqoriga qaytish" title="Yuqoriga qaytish">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M18 15l-6-6-6 6" />
+        </svg>
+    </button>
 
-        <style>
-            /* Back to Top Button */
+    <style>
+        /* Back to Top Button */
+        .back-to-top {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, #6366f1, #a855f7);
+            border: none;
+            border-radius: 50%;
+            color: white;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 20px rgba(99, 102, 241, 0.4);
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(20px);
+            transition: all 0.3s ease;
+            z-index: 999;
+        }
+
+        .back-to-top.visible {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .back-to-top:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 30px rgba(99, 102, 241, 0.5);
+        }
+
+        .back-to-top:active {
+            transform: translateY(0);
+        }
+
+        @media (max-width: 768px) {
             .back-to-top {
-                position: fixed;
-                bottom: 30px;
-                right: 30px;
-                width: 50px;
-                height: 50px;
-                background: linear-gradient(135deg, #6366f1, #a855f7);
-                border: none;
-                border-radius: 50%;
-                color: white;
-                cursor: pointer;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                box-shadow: 0 4px 20px rgba(99, 102, 241, 0.4);
-                opacity: 0;
-                visibility: hidden;
-                transform: translateY(20px);
-                transition: all 0.3s ease;
-                z-index: 999;
+                bottom: 20px;
+                right: 20px;
+                width: 45px;
+                height: 45px;
+            }
+        }
+    </style>
+
+    <style>
+        /* Telegram Popup Styles */
+        .tg-popup-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(8px);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 10000;
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+            transition: opacity 0.4s ease;
+        }
+
+        .tg-popup-overlay.active {
+            display: flex;
+            opacity: 1;
+            visibility: visible;
+            pointer-events: auto;
+        }
+
+        .tg-popup-content {
+            background: linear-gradient(135deg, rgba(30, 30, 50, 0.95), rgba(20, 20, 40, 0.98));
+            border: 1px solid rgba(99, 102, 241, 0.3);
+            border-radius: 24px;
+            padding: 40px 32px;
+            max-width: 400px;
+            width: 90%;
+            text-align: center;
+            position: relative;
+            transform: translateY(30px) scale(0.95);
+            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            box-shadow: 0 25px 80px rgba(99, 102, 241, 0.3);
+        }
+
+        .tg-popup-overlay.active .tg-popup-content {
+            transform: translateY(0) scale(1);
+        }
+
+        .tg-popup-close {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            color: white;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            font-size: 24px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            line-height: 1;
+        }
+
+        .tg-popup-close:hover {
+            background: rgba(239, 68, 68, 0.8);
+            transform: rotate(90deg);
+        }
+
+        .tg-popup-icon {
+            font-size: 4rem;
+            margin-bottom: 16px;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                transform: scale(1);
             }
 
-            .back-to-top.visible {
-                opacity: 1;
-                visibility: visible;
-                transform: translateY(0);
+            50% {
+                transform: scale(1.1);
             }
+        }
 
-            .back-to-top:hover {
-                transform: translateY(-3px);
-                box-shadow: 0 8px 30px rgba(99, 102, 241, 0.5);
-            }
+        .tg-popup-content h3 {
+            font-size: 1.5rem;
+            color: white;
+            margin-bottom: 12px;
+            background: linear-gradient(135deg, #6366f1, #a855f7);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
 
-            .back-to-top:active {
-                transform: translateY(0);
-            }
+        .tg-popup-content p {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.95rem;
+            line-height: 1.6;
+            margin-bottom: 24px;
+        }
 
-            @media (max-width: 768px) {
-                .back-to-top {
-                    bottom: 20px;
-                    right: 20px;
-                    width: 45px;
-                    height: 45px;
-                }
-            }
-        </style>
+        .tg-popup-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: linear-gradient(135deg, #0088cc, #00aaee);
+            color: white;
+            padding: 14px 28px;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 1rem;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 25px rgba(0, 136, 204, 0.4);
+        }
 
-        <style>
-            /* Telegram Popup Styles */
-            .tg-popup-overlay {
-                position: fixed;
-                inset: 0;
-                background: rgba(0, 0, 0, 0.7);
-                backdrop-filter: blur(8px);
-                display: none;
-                align-items: center;
-                justify-content: center;
-                z-index: 10000;
-                opacity: 0;
-                visibility: hidden;
-                pointer-events: none;
-                transition: opacity 0.4s ease;
-            }
+        .tg-popup-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 35px rgba(0, 136, 204, 0.5);
+        }
 
-            .tg-popup-overlay.active {
-                display: flex;
-                opacity: 1;
-                visibility: visible;
-                pointer-events: auto;
-            }
+        .tg-icon {
+            font-size: 1.2rem;
+        }
 
+        .tg-popup-later {
+            display: block;
+            width: 100%;
+            background: transparent;
+            border: none;
+            color: rgba(255, 255, 255, 0.5);
+            padding: 12px;
+            margin-top: 16px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: color 0.3s ease;
+        }
+
+        .tg-popup-later:hover {
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        @media (max-width: 480px) {
             .tg-popup-content {
-                background: linear-gradient(135deg, rgba(30, 30, 50, 0.95), rgba(20, 20, 40, 0.98));
-                border: 1px solid rgba(99, 102, 241, 0.3);
-                border-radius: 24px;
-                padding: 40px 32px;
-                max-width: 400px;
-                width: 90%;
-                text-align: center;
-                position: relative;
-                transform: translateY(30px) scale(0.95);
-                transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
-                box-shadow: 0 25px 80px rgba(99, 102, 241, 0.3);
-            }
-
-            .tg-popup-overlay.active .tg-popup-content {
-                transform: translateY(0) scale(1);
-            }
-
-            .tg-popup-close {
-                position: absolute;
-                top: 16px;
-                right: 16px;
-                background: rgba(255, 255, 255, 0.1);
-                border: none;
-                color: white;
-                width: 36px;
-                height: 36px;
-                border-radius: 50%;
-                font-size: 24px;
-                cursor: pointer;
-                transition: all 0.3s ease;
-                line-height: 1;
-            }
-
-            .tg-popup-close:hover {
-                background: rgba(239, 68, 68, 0.8);
-                transform: rotate(90deg);
+                padding: 32px 20px;
             }
 
             .tg-popup-icon {
-                font-size: 4rem;
-                margin-bottom: 16px;
-                animation: pulse 2s infinite;
-            }
-
-            @keyframes pulse {
-
-                0%,
-                100% {
-                    transform: scale(1);
-                }
-
-                50% {
-                    transform: scale(1.1);
-                }
+                font-size: 3rem;
             }
 
             .tg-popup-content h3 {
-                font-size: 1.5rem;
-                color: white;
-                margin-bottom: 12px;
-                background: linear-gradient(135deg, #6366f1, #a855f7);
-                -webkit-background-clip: text;
-                -webkit-text-fill-color: transparent;
-                background-clip: text;
+                font-size: 1.3rem;
             }
+        }
+    </style>
 
-            .tg-popup-content p {
-                color: rgba(255, 255, 255, 0.7);
-                font-size: 0.95rem;
-                line-height: 1.6;
-                margin-bottom: 24px;
+    <script>
+        // Header scrolls normally with the page (no auto-hide)
+        const header = document.querySelector('header');
+
+        // Telegram Popup Logic
+        function showTgPopup() {
+            document.getElementById('tg-popup').classList.add('active');
+        }
+
+        function closeTgPopup() {
+            document.getElementById('tg-popup').classList.remove('active');
+            localStorage.setItem('tg_popup_shown', 'true');
+        }
+
+        // Show popup after 1 minute if not already shown
+        if (!localStorage.getItem('tg_popup_shown')) {
+            setTimeout(showTgPopup, 60000); // 60 seconds = 1 minute
+        }
+
+        // Back to Top Button Logic
+        const backToTopBtn = document.getElementById('back-to-top');
+
+        window.addEventListener('scroll', function () {
+            if (window.pageYOffset > 300) {
+                backToTopBtn.classList.add('visible');
+            } else {
+                backToTopBtn.classList.remove('visible');
             }
+        });
 
-            .tg-popup-btn {
-                display: inline-flex;
-                align-items: center;
-                gap: 10px;
-                background: linear-gradient(135deg, #0088cc, #00aaee);
-                color: white;
-                padding: 14px 28px;
-                border-radius: 50px;
-                font-weight: 600;
-                font-size: 1rem;
-                text-decoration: none;
-                transition: all 0.3s ease;
-                box-shadow: 0 8px 25px rgba(0, 136, 204, 0.4);
-            }
-
-            .tg-popup-btn:hover {
-                transform: translateY(-3px);
-                box-shadow: 0 12px 35px rgba(0, 136, 204, 0.5);
-            }
-
-            .tg-icon {
-                font-size: 1.2rem;
-            }
-
-            .tg-popup-later {
-                display: block;
-                width: 100%;
-                background: transparent;
-                border: none;
-                color: rgba(255, 255, 255, 0.5);
-                padding: 12px;
-                margin-top: 16px;
-                cursor: pointer;
-                font-size: 0.9rem;
-                transition: color 0.3s ease;
-            }
-
-            .tg-popup-later:hover {
-                color: rgba(255, 255, 255, 0.8);
-            }
-
-            @media (max-width: 480px) {
-                .tg-popup-content {
-                    padding: 32px 20px;
-                }
-
-                .tg-popup-icon {
-                    font-size: 3rem;
-                }
-
-                .tg-popup-content h3 {
-                    font-size: 1.3rem;
-                }
-            }
-        </style>
-
-        <script>
-            // Header scrolls normally with the page (no auto-hide)
-            const header = document.querySelector('header');
-
-            // Telegram Popup Logic
-            function showTgPopup() {
-                document.getElementById('tg-popup').classList.add('active');
-            }
-
-            function closeTgPopup() {
-                document.getElementById('tg-popup').classList.remove('active');
-                localStorage.setItem('tg_popup_shown', 'true');
-            }
-
-            // Show popup after 1 minute if not already shown
-            if (!localStorage.getItem('tg_popup_shown')) {
-                setTimeout(showTgPopup, 60000); // 60 seconds = 1 minute
-            }
-
-            // Back to Top Button Logic
-            const backToTopBtn = document.getElementById('back-to-top');
-
-            window.addEventListener('scroll', function () {
-                if (window.pageYOffset > 300) {
-                    backToTopBtn.classList.add('visible');
-                } else {
-                    backToTopBtn.classList.remove('visible');
-                }
+        backToTopBtn.addEventListener('click', function () {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
             });
+        });
 
-            backToTopBtn.addEventListener('click', function () {
-                window.scrollTo({
-                    top: 0,
-                    behavior: 'smooth'
-                });
+        // Theme Toggle Logic
+        const themeToggle = document.getElementById('themeToggle');
+        const savedTheme = localStorage.getItem('theme') || 'dark';
+
+        // Apply saved theme on load
+        if (savedTheme === 'light') {
+            document.documentElement.setAttribute('data-theme', 'light');
+        }
+
+        themeToggle.addEventListener('click', function () {
+            const currentTheme = document.documentElement.getAttribute('data-theme');
+            const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+
+            document.documentElement.setAttribute('data-theme', newTheme === 'light' ? 'light' : '');
+            localStorage.setItem('theme', newTheme);
+        });
+
+        // Service Worker Registration (PWA)
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', function () {
+                navigator.serviceWorker.register('/static/sw.js')
+                    .then(function (registration) {
+                        console.log('TrendoAI SW registered:', registration.scope);
+                    })
+                    .catch(function (error) {
+                        console.log('TrendoAI SW registration failed:', error);
+                    });
             });
-        </script>
+        }
+    </script>
+
+
 </body>
 
 </html>
