@@ -1245,31 +1245,6 @@ def facebook_catalog():
     return Response(xml, mimetype='application/xml')
 
 
-@app.route('/robots.txt')
-def robots_txt():
-    """robots.txt fayli"""
-    from flask import Response
-    
-    content = f"""User-agent: *
-Allow: /
-
-# Sitemap joylashuvi
-Sitemap: {SITE_URL}/sitemap.xml
-
-# Admin va API sahifalarini yashirish
-Disallow: /admin/
-Disallow: /api/cron/
-
-# Statik fayllarni ruxsat berish
-Allow: /static/
-
-# Crawl-delay (qidiruv botlari uchun)
-Crawl-delay: 1
-
-# TrendoAI - O'zbekiston texnologiya blog platformasi
-"""
-    return Response(content, mimetype='text/plain')
-
 
 # ========== DATABASE MIGRATION ROUTES ==========
 
