@@ -1223,8 +1223,8 @@ def api_chat():
         api_key = app.config.get('GEMINI_API_KEY')
         genai.configure(api_key=api_key)
         
-        # Gemini 2.0 Flash - tez va samarali model
-        model = genai.GenerativeModel('gemini-2.0-flash')
+        # Gemini 2.5 Flash (User requested)
+        model = genai.GenerativeModel('gemini-2.5-flash')
 
 
         
@@ -1289,9 +1289,8 @@ def api_chat_audio():
         api_key = app.config.get('GEMINI_API_KEY')
         genai.configure(api_key=api_key)
         
-        # Gemini 2.5 Flash Native Audio (Preview - Dec 2025)
-        # Bu model audioni "native" tushunadi (transkripsiya shart emas)
-        model = genai.GenerativeModel('models/gemini-2.5-flash-native-audio-preview-12-2025')
+        # Gemini 2.5 Flash (User requested)
+        model = genai.GenerativeModel('gemini-2.5-flash')
         
         # TrendoAI konteksti
         system_prompt = """Siz TrendoAI AI assistentisiz. 
