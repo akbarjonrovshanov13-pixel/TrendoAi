@@ -1185,63 +1185,6 @@ def api_generate_portfolio():
         return jsonify({'error': str(e)}), 500
 
 
-# ========== SEO ROUTES ==========
-
-@app.route('/sitemap.xml')
-def sitemap_xml():
-    """Dinamik sitemap.xml generatsiyasi"""
-    from flask import Response
-    
-    base_url = SITE_URL
-    
-    # Statik sahifalar
-    pages = [
-        {'loc': base_url, 'priority': '1.0', 'changefreq': 'daily'},
-        {'loc': f'{base_url}/about', 'priority': '0.8', 'changefreq': 'monthly'},
-        {'loc': f'{base_url}/services', 'priority': '0.8', 'changefreq': 'monthly'},
-        {'loc': f'{base_url}/portfolio', 'priority': '0.8', 'changefreq': 'weekly'},
-    ]
-    
-    # Kategoriyalar
-    for cat in CATEGORIES:
-        pages.append({
-            'loc': f'{base_url}/?category={cat}',
-            'priority': '0.7',
-            'changefreq': 'daily'
-        })
-    
-    # Barcha postlar
-    posts = Post.query.filter_by(is_published=True).order_by(Post.created_at.desc()).all()
-    for post in posts:
-        if post.slug:
-            url = f'{base_url}/blog/{post.slug}'
-        else:
-            url = f'{base_url}/post/{post.id}'
-        
-        lastmod = post.updated_at or post.created_at
-        pages.append({
-            'loc': url,
-            'lastmod': lastmod.strftime('%Y-%m-%d') if lastmod else None,
-            'priority': '0.6',
-            'changefreq': 'weekly'
-        })
-    
-    # XML generatsiya
-    xml = '<?xml version="1.0" encoding="UTF-8"?>\n'
-    xml += '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
-    
-    for page in pages:
-        xml += '  <url>\n'
-        xml += f'    <loc>{page["loc"]}</loc>\n'
-        if page.get('lastmod'):
-            xml += f'    <lastmod>{page["lastmod"]}</lastmod>\n'
-        xml += f'    <changefreq>{page["changefreq"]}</changefreq>\n'
-        xml += f'    <priority>{page["priority"]}</priority>\n'
-        xml += '  </url>\n'
-    
-    xml += '</urlset>'
-    
-    return Response(xml, mimetype='application/xml')
 
 
 @app.route('/api/catalog.xml')
@@ -1502,37 +1445,6 @@ def cron_status():
         }), 500
 
 
-# ========== SEO ROUTES ==========
-
-@app.route('/sitemap.xml')
-def sitemap():
-    """Dynamic sitemap"""
-    posts = Post.query.filter_by(is_published=True).order_by(Post.created_at.desc()).all()
-    
-    xml = '<?xml version="1.0" encoding="UTF-8"?>\n'
-    xml += '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
-    
-    # Static pages
-    for route in ['index', 'about', 'services']:
-        xml += f'  <url><loc>https://trendoai.uz/{route if route != "index" else ""}</loc></url>\n'
-    
-    # Posts
-    for post in posts:
-        xml += f'  <url><loc>https://trendoai.uz/post/{post.id}</loc></url>\n'
-    
-    xml += '</urlset>'
-    
-    return xml, 200, {'Content-Type': 'application/xml'}
-
-
-@app.route('/robots.txt')
-def robots():
-    """Robots.txt"""
-    txt = """User-agent: *
-Allow: /
-Sitemap: https://trendoai.uz/sitemap.xml
-"""
-    return txt, 200, {'Content-Type': 'text/plain'}
 
 
 @app.route('/admin/fix-webhook')
