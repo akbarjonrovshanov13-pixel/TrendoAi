@@ -5,7 +5,6 @@ TrendoAI uchun moslashtirilgan.
 Har soatda 06:00 dan 22:00 gacha post chiqaradi.
 """
 from apscheduler.schedulers.background import BackgroundScheduler
-from app import app, db, Post
 from ai_generator import generate_post_for_seo
 from telegram_poster import send_to_telegram_channel
 from config import SITE_URL, TIMEZONE, CATEGORIES
@@ -111,6 +110,7 @@ def generate_and_publish_post(topic=None, category=None):
     print(f"📌 Mavzu: {selected_topic}")
     print(f"📂 Kategoriya: {selected_category}")
     
+    from app import app, db, Post
     with app.app_context():
         try:
             post_data = generate_post_for_seo(selected_topic)
