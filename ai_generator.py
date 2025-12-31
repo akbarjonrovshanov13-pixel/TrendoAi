@@ -51,19 +51,9 @@ def _switch_to_backup():
 # Dastlabki API kalitni sozlash
 _configure_api(GEMINI_API_KEY)
 
-# Google Search grounding - real internet ma'lumotlarini olish
-from google.generativeai.types import Tool
-
-google_search_tool = Tool(
-    name="google_search",
-    description="Search the web for current information"
-)
-
-# Modelni yaratish (Google Search grounding bilan)
-model = genai.GenerativeModel(
-    GEMINI_MODEL,
-    tools=[google_search_tool]
-)
+# Modelni yaratish
+# Note: Google Search grounding requires specific API setup
+model = genai.GenerativeModel(GEMINI_MODEL)
 
 
 
