@@ -457,8 +457,9 @@ def login_required(f):
 
 @app.route('/')
 def index():
-    """Bosh sahifa — xizmatlar sahifasiga redirect"""
-    return redirect(url_for('services'))
+    """Bosh sahifa — xizmatlar sahifasi"""
+    all_services = Service.query.filter_by(is_active=True).order_by(Service.order.asc()).all()
+    return render_template('services.html', services=all_services)
 
 
 @app.route('/blog')
