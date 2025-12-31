@@ -1265,8 +1265,10 @@ def api_chat_audio():
         # Gemini modelni sozlash
         genai.configure(api_key=GEMINI_API_KEY)
         
-        # Gemini 1.5 Flash - Stabil va tezkor
-        model = genai.GenerativeModel('gemini-1.5-flash')
+        # Gemini 2.5 Flash Native Audio (Preview)
+        # Bu model audioni "native" tushunadi (transkripsiya qilmasdan)
+        # Intonatsiya, hissiyot va fon shovqinlarini farqlaydi
+        model = genai.GenerativeModel('models/gemini-2.5-flash-native-audio-preview-12-2025')
         
         # TrendoAI konteksti
         system_prompt = """Siz TrendoAI AI assistentisiz. TrendoAI - O'zbekistondagi IT kompaniya.
