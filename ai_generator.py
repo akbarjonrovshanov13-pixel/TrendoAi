@@ -51,8 +51,20 @@ def _switch_to_backup():
 # Dastlabki API kalitni sozlash
 _configure_api(GEMINI_API_KEY)
 
-# Modelni yaratish
-model = genai.GenerativeModel(GEMINI_MODEL)
+# Google Search grounding - real internet ma'lumotlarini olish
+from google.generativeai.types import Tool
+
+google_search_tool = Tool(
+    name="google_search",
+    description="Search the web for current information"
+)
+
+# Modelni yaratish (Google Search grounding bilan)
+model = genai.GenerativeModel(
+    GEMINI_MODEL,
+    tools=[google_search_tool]
+)
+
 
 
 def _retry_with_backoff(func, *args, **kwargs):
@@ -148,9 +160,11 @@ def generate_post_for_seo(topic):
     prompt = f"""
     Siz TrendoAI uchun professional SEO-maqola yozuvchi ekspertisiz.
     
-    === MUHIM KONTEKST ===
-    Bugun 2026-yil yanvar oyi. Maqolani 2026-yil boshiga nisbatan yozing.
-    Eng so'nggi texnologiyalar: GPT-5, Gemini 2.5, Claude 4, AI Agentlar, RAG tizimlar.
+    === MUHIM KONTEKST (2025-YIL DEKABR) ===
+    Bugun 2025-yil dekabr oyi oxiri. Real internetdan eng yangi ma'lumotlarni oling.
+    Eng so'nggi texnologiyalar: GPT-5.2, Gemini 3, Claude Opus 4.5, AI Agentlar, RAG tizimlar.
+    
+    MUHIM: Google Search orqali mavzu haqida eng yangi ma'lumotlarni toping va ulardan foydalaning!
     
     === 80/20 QOIDASI (JUDA MUHIM!) ===
     - 80% FOYDALI MA'LUMOT: O'quvchiga haqiqiy qiymat bering
@@ -162,6 +176,7 @@ def generate_post_for_seo(topic):
     
     === VAZIFA ===
     "{topic}" mavzusida professional maqola yozing.
+
     
     === SEO TALABLARI (Google/Yandex uchun) ===
     1. Sarlavha: Kalit so'z + raqam yoki savol (masalan: "5 ta usul", "Qanday qilib...")

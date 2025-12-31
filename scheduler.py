@@ -28,15 +28,17 @@ TOPICS = [
     "AI Agent xavfsizligi: Risklar va himoya usullari",
     "Biznes uchun AI Agent: Xarajatlarni 70% kamaytirish",
     
-    # ============ YANGI AI MODELLARI (2026) ============
-    "GPT-5 vs Gemini 2.5 vs Claude 4: Qaysi biri yaxshi?",
-    "Gemini 2.5 Flash: Tezkor va arzon AI yechim",
-    "OpenAI o1 reasoning modeli: Mantiqiy fikrlash AI",
-    "Anthropic Claude 4: Uzun kontekst va xavfsizlik",
-    "Meta Llama 4: Ochiq kodli AI inqilobi",
-    "Mistral AI: Yevropa AI giganti haqida",
-    "AI modellarni tanlash: Biznes ehtiyojlariga mos AI",
+    # ============ YANGI AI MODELLARI (2025 DEKABR - REAL) ============
+    "GPT-5.2 vs Gemini 3 vs Claude Opus 4.5: 2025 yil eng kuchli AI modellari",
+    "GPT-5.2 Thinking: OpenAI ning yangi reasoning modeli qanday ishlaydi",
+    "Gemini 3 Pro va Deep Think: Google ning eng yangi AI modellari",
+    "Claude Opus 4.5: Anthropic ning coding va reasoning ustasi",
+    "Gemini 3 Flash Preview: Tezkor va arzon AI yechim 2025",
+    "OpenAI o1 vs GPT-5.2: Mantiqiy fikrlash modellarini solishtirish",
+    "Claude Sonnet 4.5 vs Claude Haiku 4.5: Qaysi biri sizga mos",
+    "AI modellarni tanlash 2025: Biznes ehtiyojlariga mos AI",
     "Fine-tuning vs RAG: Qaysi usul sizga mos?",
+
     
     # ============ WEB SAYTLAR (80% QIYMAT) ============
     "2026-yil Landing page trendlari: Konversiyani 2x oshirish",
