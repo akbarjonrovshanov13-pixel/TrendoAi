@@ -1948,8 +1948,16 @@ def facebook_feed():
 
 # ========== SEO ROUTES ==========
 
+@app.route('/sw.js')
+def service_worker():
+    """Service Worker faylini root'dan uzatish"""
+    from flask import send_from_directory, make_response
+    response = make_response(send_from_directory('static', 'sw.js'))
+    response.headers['Content-Type'] = 'application/javascript'
+    return response
+
 @app.route('/sitemap.xml')
-def sitemap_xml():
+def sitemap():
     """Dinamik sitemap.xml - barcha sahifalar va postlar"""
     from datetime import datetime
     
