@@ -874,6 +874,9 @@
                 });
         }
 
+    </script>
+
+    <script>
         // ========== AI CHATBOT LOGIC ==========
         const chatbotToggle = document.getElementById('chatbotToggle');
         const chatbotWindow = document.getElementById('chatbotWindow');
@@ -1023,8 +1026,7 @@
             // Add typing indicator
             const typingDiv = document.createElement('div');
             typingDiv.className = 'chat-message bot typing';
-            typingDiv.innerHTML = '<span class="typing-dot"></span><span class="typing-dot"></span><span
-            class="typing-dot" ></span > ';
+            typingDiv.innerHTML = '<span class="typing-dot"></span><span class="typing-dot"></span><span class="typing-dot"></span>';
             chatbotMessages.appendChild(typingDiv);
             chatbotMessages.scrollTop = chatbotMessages.scrollHeight;
 
