@@ -1875,7 +1875,14 @@ def google_verification(verification_code):
 @app.route('/yandex_<verification_code>.html')
 def yandex_verification(verification_code):
     """Yandex Webmaster verification"""
-    return f'<html><head><meta name="yandex-verification" content="{verification_code}" /></head><body>Verification: {verification_code}</body></html>'
+    html_content = f'''<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+    <body>Verification: {verification_code}</body>
+</html>'''
+    return Response(html_content, mimetype='text/html')
+
 
 
 # ========== DATABASE INITIALIZATION ==========
