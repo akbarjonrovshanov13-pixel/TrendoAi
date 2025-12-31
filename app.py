@@ -1220,7 +1220,8 @@ def api_chat():
             return jsonify({'error': 'Xabar bo\'sh'}), 400
         
         # Gemini modelni sozlash
-        genai.configure(api_key=GEMINI_API_KEY)
+        api_key = app.config.get('GEMINI_API_KEY')
+        genai.configure(api_key=api_key)
         
         # Gemini 2.0 Flash - tez va samarali model
         model = genai.GenerativeModel('gemini-2.0-flash')
@@ -1285,7 +1286,8 @@ def api_chat_audio():
         audio_bytes = base64.b64decode(audio_base64)
         
         # Gemini modelni sozlash
-        genai.configure(api_key=GEMINI_API_KEY)
+        api_key = app.config.get('GEMINI_API_KEY')
+        genai.configure(api_key=api_key)
         
         # Gemini 2.5 Flash Native Audio (Preview - Dec 2025)
         # Bu model audioni "native" tushunadi (transkripsiya shart emas)
