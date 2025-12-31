@@ -1761,8 +1761,125 @@ def facebook_feed():
     
     return Response(xml_str, mimetype='application/xml')
 
+# ========== SEO ROUTES ==========
+
+@app.route('/sitemap.xml')
+def sitemap_xml():
+    """Dinamik sitemap.xml - barcha sahifalar va postlar"""
+    from datetime import datetime
+    
+    pages = []
+    
+    # Asosiy sahifalar
+    static_pages = [
+        ('/', '1.0', 'daily'),
+        ('/services', '0.9', 'weekly'),
+        ('/portfolio', '0.8', 'weekly'),
+        ('/blog', '0.9', 'daily'),
+        ('/about', '0.7', 'monthly'),
+        ('/order', '0.8', 'monthly'),
+    ]
+    
+    for url, priority, changefreq in static_pages:
+        pages.append({
+            'loc': f'{SITE_URL}{url}',
+            'priority': priority,
+            'changefreq': changefreq,
+            'lastmod': datetime.now().strftime('%Y-%m-%d')
+        })
+    
+    # Xizmatlar sahifalari
+    services = Service.query.filter_by(is_active=True).all()
+    for service in services:
+        pages.append({
+            'loc': f'{SITE_URL}/services/{service.slug}',
+            'priority': '0.8',
+            'changefreq': 'weekly',
+            'lastmod': datetime.now().strftime('%Y-%m-%d')
+        })
+    
+    # Blog postlar
+    posts = Post.query.filter_by(is_published=True).order_by(Post.created_at.desc()).all()
+    for post in posts:
+        lastmod = post.updated_at or post.created_at
+        pages.append({
+            'loc': f'{SITE_URL}/blog/{post.slug or post.id}',
+            'priority': '0.7',
+            'changefreq': 'monthly',
+            'lastmod': lastmod.strftime('%Y-%m-%d') if lastmod else datetime.now().strftime('%Y-%m-%d')
+        })
+    
+    # Portfolio loyihalar
+    portfolios = Portfolio.query.filter_by(is_published=True).all()
+    for p in portfolios:
+        pages.append({
+            'loc': f'{SITE_URL}/portfolio/project/{p.slug}',
+            'priority': '0.6',
+            'changefreq': 'monthly',
+            'lastmod': datetime.now().strftime('%Y-%m-%d')
+        })
+    
+    # XML yaratish
+    xml_content = '<?xml version="1.0" encoding="UTF-8"?>\n'
+    xml_content += '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
+    
+    for page in pages:
+        xml_content += '  <url>\n'
+        xml_content += f'    <loc>{page["loc"]}</loc>\n'
+        xml_content += f'    <lastmod>{page["lastmod"]}</lastmod>\n'
+        xml_content += f'    <changefreq>{page["changefreq"]}</changefreq>\n'
+        xml_content += f'    <priority>{page["priority"]}</priority>\n'
+        xml_content += '  </url>\n'
+    
+    xml_content += '</urlset>'
+    
+    return Response(xml_content, mimetype='application/xml')
+
+
+@app.route('/robots.txt')
+def robots_txt():
+    """robots.txt - qidiruv robotlari uchun"""
+    robots_content = f"""User-agent: *
+Allow: /
+
+# Sitemap
+Sitemap: {SITE_URL}/sitemap.xml
+
+# Admin sahifalarni yopish
+Disallow: /admin/
+Disallow: /api/
+Disallow: /cron/
+
+# Static files
+Allow: /static/
+
+# Qidiruv botlari uchun
+User-agent: Googlebot
+Allow: /
+
+User-agent: Yandexbot
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+"""
+    return Response(robots_content, mimetype='text/plain')
+
+
+@app.route('/google<verification_code>.html')
+def google_verification(verification_code):
+    """Google Search Console verification"""
+    return f'google-site-verification: google{verification_code}.html'
+
+
+@app.route('/yandex_<verification_code>.html')
+def yandex_verification(verification_code):
+    """Yandex Webmaster verification"""
+    return f'<html><head><meta name="yandex-verification" content="{verification_code}" /></head><body>Verification: {verification_code}</body></html>'
+
 
 # ========== DATABASE INITIALIZATION ==========
+
 def init_database():
     """Bazani yangilash va yangi ustunlarni qo'shish"""
     with app.app_context():
