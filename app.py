@@ -952,6 +952,66 @@ def admin_delete_order(order_id):
     return redirect(url_for('admin_orders'))
 
 
+
+
+def notify_all_subscribers(title, message, url):
+    """Barcha obunachilarga push xabar yuborish"""
+    try:
+        from pywebpush import webpush, WebPushException
+        import json
+        
+        # VAPID Keyni faylga o'tkazish (agar string bo'lsa)
+        vapid_private_key_path = app.config['VAPID_PRIVATE_KEY']
+        temp_pem_path = None
+        
+        if not os.path.exists(str(vapid_private_key_path)):
+            try:
+                with tempfile.NamedTemporaryFile(suffix='.pem', delete=False, mode='w', encoding='utf-8') as temp_pem:
+                    key_content = str(vapid_private_key_path).strip()
+                    # Headerlar yo'q bo'lsa qo'shamiz
+                    if "-----BEGIN PRIVATE KEY-----" not in key_content:
+                        key_content = f"-----BEGIN PRIVATE KEY-----\n{key_content}\n-----END PRIVATE KEY-----"
+                    temp_pem.write(key_content)
+                    temp_pem_path = temp_pem.name
+                    vapid_private_key_path = temp_pem_path
+            except Exception as e:
+                print(f"VAPID Temp file error: {e}")
+                return 0
+
+        subscriptions = PushSubscription.query.all()
+        count = 0
+        
+        for sub in subscriptions:
+            try:
+                webpush(
+                    subscription_info=sub.to_json(),
+                    data=json.dumps({'title': title, 'body': message, 'url': url}),
+                    vapid_private_key=vapid_private_key_path,
+                    vapid_claims={
+                        'sub': app.config.get('VAPID_CLAIMS_SUB', 'mailto:admin@trendoai.uz')
+                    }
+                )
+                count += 1
+            except WebPushException as ex:
+                if ex.response and ex.response.status_code == 410:
+                    db.session.delete(sub)
+            except Exception as e:
+                print(f"Individual push error: {e}")
+        
+        db.session.commit()
+        
+        # Temp faylni o'chirish
+        if temp_pem_path and os.path.exists(temp_pem_path):
+            try:
+                os.unlink(temp_pem_path)
+            except:
+                pass
+                
+        return count
+    except Exception as e:
+        print(f"Push notification error: {e}")
+        return 0
+
 @app.route('/admin/posts/new', methods=['GET', 'POST'])
 @login_required
 def admin_new_post():
@@ -979,6 +1039,18 @@ def admin_new_post():
         
         post.slug = post.generate_slug()
         db.session.commit()
+        
+        # Avtomatik Push Xabar yuborish
+        if is_published:
+            try:
+                post_url = url_for('post_detail', slug=post.slug, _external=True)
+                notify_all_subscribers(
+                    title=f"🆕 Yangi Maqola: {title}",
+                    message=f"{category} | {topic}\nO'qish uchun bosing!",
+                    url=post_url
+                )
+            except Exception as e:
+                print(f"Auto push error: {e}")
         
         flash('Post muvaffaqiyatli yaratildi!', 'success')
         return redirect(url_for('admin_posts'))
