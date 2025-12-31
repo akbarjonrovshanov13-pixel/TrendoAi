@@ -1202,9 +1202,9 @@ def api_chat():
         # Gemini modelni sozlash
         genai.configure(api_key=GEMINI_API_KEY)
         
-        # Gemini 2.5 Flash Native Audio model (2025-yil dekabr)
-        # Bu model audio ma'lumotlar bilan ishlash uchun optimallashtirilgan
-        model = genai.GenerativeModel('models/gemini-2.5-flash-native-audio-preview-12-2025')
+        # Gemini 2.0 Flash - tez va samarali model
+        model = genai.GenerativeModel('gemini-2.0-flash')
+
 
         
         # TrendoAI konteksti
@@ -1265,8 +1265,8 @@ def api_chat_audio():
         # Gemini modelni sozlash
         genai.configure(api_key=GEMINI_API_KEY)
         
-        # Gemini 2.5 Flash Native Audio model
-        model = genai.GenerativeModel('models/gemini-2.5-flash-native-audio-preview-12-2025')
+        # Gemini 2.0 Flash - Multimodal (Audio, Video, Text)
+        model = genai.GenerativeModel('gemini-2.0-flash')
         
         # TrendoAI konteksti
         system_prompt = """Siz TrendoAI AI assistentisiz. TrendoAI - O'zbekistondagi IT kompaniya.
