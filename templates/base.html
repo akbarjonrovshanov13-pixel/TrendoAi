@@ -644,6 +644,38 @@
             cursor: not-allowed;
         }
 
+        /* Microphone Button */
+        .chatbot-mic {
+            padding: 12px 14px !important;
+            background: var(--bg-elevated) !important;
+            border: 1px solid var(--border) !important;
+            font-size: 1.2rem;
+        }
+
+        .chatbot-mic:hover {
+            background: var(--primary) !important;
+            border-color: var(--primary) !important;
+        }
+
+        .chatbot-mic.recording {
+            background: #ef4444 !important;
+            border-color: #ef4444 !important;
+            animation: pulse-red 1s infinite;
+        }
+
+        @keyframes pulse-red {
+
+            0%,
+            100% {
+                box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.4);
+            }
+
+            50% {
+                box-shadow: 0 0 0 10px rgba(239, 68, 68, 0);
+            }
+        }
+
+
         @media (max-width: 480px) {
             .chatbot-window {
                 bottom: 80px;
@@ -682,8 +714,10 @@
         </div>
         <div class="chatbot-input">
             <input type="text" id="chatbotInput" placeholder="Xabar yozing..." autocomplete="off">
+            <button id="chatbotMic" class="chatbot-mic" title="Ovozli xabar">🎤</button>
             <button id="chatbotSend">Yuborish</button>
         </div>
+
     </div>
 
     <script>
@@ -844,6 +878,99 @@
                 sendChatMessage();
             }
         });
+
+        // ========== VOICE RECORDING ==========
+        const chatbotMic = document.getElementById('chatbotMic');
+        let mediaRecorder = null;
+        let audioChunks = [];
+        let isRecording = false;
+
+        chatbotMic.addEventListener('click', async function () {
+            if (isRecording) {
+                // Stop recording
+                mediaRecorder.stop();
+                chatbotMic.classList.remove('recording');
+                chatbotMic.textContent = '🎤';
+                isRecording = false;
+            } else {
+                // Start recording
+                try {
+                    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                    mediaRecorder = new MediaRecorder(stream);
+                    audioChunks = [];
+
+                    mediaRecorder.ondataavailable = (event) => {
+                        audioChunks.push(event.data);
+                    };
+
+                    mediaRecorder.onstop = async () => {
+                        const audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
+                        stream.getTracks().forEach(track => track.stop());
+
+                        // Send audio to server
+                        await sendAudioMessage(audioBlob);
+                    };
+
+                    mediaRecorder.start();
+                    chatbotMic.classList.add('recording');
+                    chatbotMic.textContent = '⏹️';
+                    isRecording = true;
+
+                    // Add recording indicator
+                    chatbotInput.placeholder = '🔴 Yozib olinmoqda...';
+                } catch (error) {
+                    alert('Mikrofonga ruxsat berilmadi. Iltimos, brauzer sozlamalarini tekshiring.');
+                }
+            }
+        });
+
+        async function sendAudioMessage(audioBlob) {
+            chatbotInput.placeholder = 'Xabar yozing...';
+
+            // Show user message
+            const userDiv = document.createElement('div');
+            userDiv.className = 'chat-message user';
+            userDiv.textContent = '🎤 Ovozli xabar yuborildi';
+            chatbotMessages.appendChild(userDiv);
+
+            // Add typing indicator
+            const typingDiv = document.createElement('div');
+            typingDiv.className = 'chat-message bot typing';
+            typingDiv.innerHTML = '<span class="typing-dot"></span><span class="typing-dot"></span><span class="typing-dot"></span>';
+            chatbotMessages.appendChild(typingDiv);
+            chatbotMessages.scrollTop = chatbotMessages.scrollHeight;
+
+            try {
+                // Convert to base64
+                const reader = new FileReader();
+                reader.readAsDataURL(audioBlob);
+
+                reader.onloadend = async () => {
+                    const base64Audio = reader.result.split(',')[1];
+
+                    const response = await fetch('/api/chat/audio', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ audio: base64Audio })
+                    });
+
+                    const data = await response.json();
+                    typingDiv.remove();
+
+                    const botDiv = document.createElement('div');
+                    botDiv.className = 'chat-message bot';
+                    botDiv.textContent = data.response || data.error || 'Xatolik yuz berdi';
+                    chatbotMessages.appendChild(botDiv);
+                    chatbotMessages.scrollTop = chatbotMessages.scrollHeight;
+                };
+            } catch (error) {
+                typingDiv.remove();
+                const errorDiv = document.createElement('div');
+                errorDiv.className = 'chat-message bot';
+                errorDiv.textContent = 'Audio yuborishda xatolik.';
+                chatbotMessages.appendChild(errorDiv);
+            }
+        }
     </script>
 
 

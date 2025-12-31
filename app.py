@@ -1244,6 +1244,62 @@ Agar mijoz xizmat so'rasa, Telegram orqali bog'lanishni tavsiya qiling."""
         }), 500
 
 
+@app.route('/api/chat/audio', methods=['POST'])
+def api_chat_audio():
+    """AI Chatbot audio endpoint - Gemini 2.5 Flash Native Audio bilan"""
+    import google.generativeai as genai
+    import base64
+    import tempfile
+    import os
+    
+    try:
+        data = request.get_json()
+        audio_base64 = data.get('audio', '')
+        
+        if not audio_base64:
+            return jsonify({'error': 'Audio topilmadi'}), 400
+        
+        # Base64 ni decode qilish
+        audio_bytes = base64.b64decode(audio_base64)
+        
+        # Gemini modelni sozlash
+        genai.configure(api_key=GEMINI_API_KEY)
+        
+        # Gemini 2.5 Flash Native Audio model
+        model = genai.GenerativeModel('models/gemini-2.5-flash-native-audio-preview-12-2025')
+        
+        # TrendoAI konteksti
+        system_prompt = """Siz TrendoAI AI assistentisiz. TrendoAI - O'zbekistondagi IT kompaniya.
+
+XIZMATLARIMIZ: Telegram Botlar, AI Chatbotlar, Web Saytlar, CRM Integratsiya, SMM Avtomatlashtirish, AI Ovozli Assistentlar.
+
+ALOQA: Telegram: @Akramjon1984, Kanal: @trendoai, Sayt: trendoai.uz
+
+Foydalanuvchi ovozli xabar yubordi. Uning so'roviga o'zbek tilida do'stona javob bering."""
+
+        # Audio faylni yuklash va javob olish
+        # Gemini Native Audio model audio bytes ni to'g'ridan-to'g'ri qabul qiladi
+        audio_part = {
+            "mime_type": "audio/webm",
+            "data": audio_bytes
+        }
+        
+        response = model.generate_content([system_prompt, audio_part])
+        
+        return jsonify({
+            'success': True,
+            'response': response.text
+        })
+        
+    except Exception as e:
+        print(f"Audio chatbot error: {e}")
+        # Fallback: oddiy matnli javob
+        return jsonify({
+            'error': f'Audio qayta ishlashda xatolik: {str(e)}',
+            'response': "Kechirasiz, ovozli xabaringizni qayta ishlay olmadim. Iltimos, matn orqali yozing yoki qayta urinib ko'ring."
+        }), 500
+
+
 @app.route('/api/catalog.xml')
 def facebook_catalog():
     """Facebook Product Catalog Feed (RSS 2.0 formatda)"""
