@@ -8,8 +8,16 @@ from flask import request, Blueprint
 genai.configure(api_key=GEMINI_API_KEY)
 model = genai.GenerativeModel(GEMINI_MODEL)
 
-# Create bot instance
-bot = telebot.TeleBot(TELEGRAM_BOT_TOKEN)
+# Create bot instance safely
+bot = None
+if TELEGRAM_BOT_TOKEN:
+    try:
+        bot = telebot.TeleBot(TELEGRAM_BOT_TOKEN)
+        print("✅ Telegram bot instansiyasi yaratildi.")
+    except Exception as e:
+        print(f"⚠️ Telegram bot initialization error: {e}")
+else:
+    print("⚠️ TELEGRAM_BOT_TOKEN topilmadi. Bot xizmatlari o'chirildi.")
 
 # Create Blueprint for webhook
 bot_blueprint = Blueprint('bot', __name__)
@@ -63,7 +71,7 @@ def get_ai_response(user_message):
         print(f"❌ Gemini AI Error: {e}")
         return "Uzr, hozirda serverda xatolik yuz berdi. Birozdan so'ng urinib ko'ring."
 
-@bot.message_handler(commands=['start', 'help'])
+@bot.message_handler(commands=['start', 'help']) if bot else lambda f: f
 def send_welcome(message):
     print(f"🤖 Bot Handler: /start or /help triggered by {message.from_user.id}")
     try:
@@ -116,7 +124,7 @@ def send_welcome(message):
 
 
 # Callback handler for inline buttons
-@bot.callback_query_handler(func=lambda call: call.data == "services")
+@bot.callback_query_handler(func=lambda call: call.data == "services") if bot else lambda f: f
 def callback_services(call):
     services_text = """
 🚀 **TrendoAI Xizmatlari va Narxlar:**
@@ -141,7 +149,7 @@ def callback_services(call):
     bot.send_message(call.message.chat.id, services_text, parse_mode='Markdown')
 
 
-@bot.message_handler(commands=['services'])
+@bot.message_handler(commands=['services']) if bot else lambda f: f
 def send_services(message):
     services_text = """
 🚀 **TrendoAI Xizmatlari:**
@@ -156,7 +164,7 @@ Yoki menga "Web sayt kerak" deb yozing.
     """
     bot.reply_to(message, services_text, parse_mode='Markdown')
 
-@bot.message_handler(func=lambda message: True)
+@bot.message_handler(func=lambda message: True) if bot else lambda f: f
 def echo_all(message):
     bot.send_chat_action(message.chat.id, 'typing')
     ai_reply = get_ai_response(message.text)
@@ -172,6 +180,10 @@ def echo_all(message):
 # ========== WEBHOOK SETUP ==========
 def setup_webhook(app):
     """Webhook ni sozlash (faqat URL ni Telegramga yuborish)"""
+    if not bot:
+        print("⚠️ Bot sozlanmagan, webhook o'rnatilmadi.")
+        return
+
     webhook_url = f"{SITE_URL}/webhook"
     
     def _set_hook():
