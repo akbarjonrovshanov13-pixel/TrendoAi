@@ -1204,7 +1204,7 @@ def api_chat():
         
         # Gemini 2.5 Flash Native Audio model (2025-yil dekabr)
         # Bu model audio ma'lumotlar bilan ishlash uchun optimallashtirilgan
-        model = genai.GenerativeModel('models/gemini-2.5-flash-preview-04-17')
+        model = genai.GenerativeModel('models/gemini-2.5-flash-native-audio-preview-12-2025')
 
         
         # TrendoAI konteksti
