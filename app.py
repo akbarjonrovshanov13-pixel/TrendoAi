@@ -1022,6 +1022,7 @@ def admin_new_post():
         topic = request.form.get('topic', 'Umumiy')
         category = request.form.get('category', 'Texnologiya')
         keywords = request.form.get('keywords', '')
+        image_url = request.form.get('image_url', '')
         is_published = request.form.get('is_published') == 'on'
         
         post = Post(
@@ -1030,6 +1031,7 @@ def admin_new_post():
             topic=topic,
             category=category,
             keywords=keywords,
+            image_url=image_url,
             is_published=is_published
         )
         post.reading_time = post.calculate_reading_time()
@@ -1070,6 +1072,7 @@ def admin_edit_post(post_id):
         post.topic = request.form.get('topic')
         post.category = request.form.get('category')
         post.keywords = request.form.get('keywords')
+        post.image_url = request.form.get('image_url', '')
         post.is_published = request.form.get('is_published') == 'on'
         post.reading_time = post.calculate_reading_time()
         
