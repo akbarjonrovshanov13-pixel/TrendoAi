@@ -178,34 +178,50 @@ def generate_post_for_seo(topic):
     "{topic}" mavzusida professional maqola yozing.
 
     
-    === SEO TALABLARI (Google/Yandex uchun) ===
-    1. Sarlavha: Kalit so'z + raqam yoki savol (masalan: "5 ta usul", "Qanday qilib...")
-    2. Kalit so'zlar: Asosiy kalit so'z + 4-5 ta LSI kalit so'zlar
-    3. Birinchi paragrafda asosiy kalit so'z bo'lsin
-    4. H2/H3 sarlavhalarda kalit so'zlar ishlating
-    5. 800-1200 so'z uzunlik (chuqurroq kontent)
+    === SEO TALABLARI (Google/Yandex uchun - JUDA MUHIM!) ===
+    
+    SARLAVHA OPTIMIZATSIYASI:
+    - Asosiy kalit so'z ALBATTA sarlavhada bo'lsin
+    - Raqam ishlating: "7 ta usul", "2025 yilda", "5 qadam"
+    - Savol yoki muammo: "Qanday qilib...", "Nima uchun...", "Eng yaxshi..."
+    - Misol: "Telegram Bot Yaratish 2025: 7 ta Muhim Qadam" ✅
+    - Noto'g'ri: "Bot haqida umumiy ma'lumot" ❌
+    
+    KALIT SO'ZLAR OPTIMIZATSIYASI:
+    - 1-kalit: Asosiy qidiruv so'zi (masalan: "telegram bot yaratish")
+    - 2-kalit: Boshqa variant (masalan: "telegram bot qilish")
+    - 3-kalit: Texnologiya nomi (masalan: "python telegram bot")
+    - 4-kalit: Muammo/yechim (masalan: "bot orqali pul ishlash")
+    - 5-kalit: Mahalliy (masalan: "o'zbekistonda telegram bot")
+    
+    KONTENT ICHIDA SEO:
+    - Birinchi 100 so'zda asosiy kalit so'z bo'lsin
+    - Har bir H2/H3 sarlavhada kalit so'z variant bo'lsin
+    - Kalit so'zlarni tabiiy tarzda 3-5 marta takrorlang
+    - 1000-1500 so'z uzunlik (Google chuqur kontentni yaxshi ko'radi)
     
     === KONTENT TALABLARI ===
     1. O'zbek tilida (lotin alifbosi)
     2. Professional lekin tushunarli til
-    3. Amaliy misollar va statistika
+    3. Amaliy misollar va statistika (raqamlar bilan)
     4. FAQAT Markdown formatlash (## ### ** - 1.)
     5. HTML teglar YO'Q
     
     === STRUKTURA ===
-    - **Kirish**: Muammoni tushuntiring (150-200 so'z)
-    - **Asosiy qism**: 3-4 bo'lim, har birida amaliy ma'lumot
+    - **Kirish**: Muammoni tushuntiring, asosiy kalit so'z (150-200 so'z)
+    - **Asosiy qism**: 4-5 bo'lim, har bir H2 da kalit so'z varianti
     - **Xulosa**: Qisqa takrorlash + TrendoAI eslatmasi (80/20)
     
     JSON formatida javob bering:
     {{
-      "title": "SEO-optimallashtirilgan sarlavha (50-65 belgi)",
-      "keywords": "asosiy_kalit, lsi_kalit1, lsi_kalit2, lsi_kalit3, lsi_kalit4",
-      "content": "To'liq Markdown maqola matni (800-1200 so'z)"
+      "title": "Asosiy kalit so'z + raqam/savol sarlavha (50-65 belgi)",
+      "keywords": "asosiy_kalit, variant_kalit, texnologiya, muammo_yechim, mahalliy",
+      "content": "To'liq SEO-optimallashtirilgan Markdown maqola (1000-1500 so'z)"
     }}
     
     Faqat JSON qaytaring!
     """
+
 
     
     def _generate():
