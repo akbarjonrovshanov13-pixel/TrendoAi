@@ -866,7 +866,12 @@
                 })
                 .then(function (responseData) {
                     if (responseData.success) {
-                    });
+                        // Subscription sent successfully
+                    }
+                })
+                .catch(function (error) {
+                    console.error('Error sending subscription to backend:', error);
+                });
         }
 
         // ========== AI CHATBOT LOGIC ==========
@@ -910,8 +915,7 @@
             // Add typing indicator
             const typingDiv = document.createElement('div');
             typingDiv.className = 'chat-message bot typing';
-            typingDiv.innerHTML = '<span class="typing-dot"></span><span class="typing-dot"></span><span
-            class="typing-dot" ></span > ';
+            typingDiv.innerHTML = '<span class="typing-dot"></span><span class="typing-dot"></span><span class="typing-dot"></span>';
             chatbotMessages.appendChild(typingDiv);
 
             // Scroll to bottom
