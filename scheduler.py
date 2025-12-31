@@ -11,84 +11,94 @@ from config import SITE_URL, TIMEZONE, CATEGORIES
 import random
 from datetime import datetime
 
-# 80/20 QOIDASI BO'YICHA MAVZULAR
+# 80/20 QOIDASI BO'YICHA MAVZULAR (2026-YIL UCHUN YANGILANDI)
 # 80% - Mijozga qiymat beradigan foydali ma'lumotlar
 # 20% - Xizmatlarimiz haqida yengil eslatmalar
 
 TOPICS = [
+    # ============ AI AGENTLAR (2026 TREND) ============
+    "AI Agent nima: Sun'iy intellekt agentlari haqida to'liq qo'llanma 2026",
+    "CrewAI bilan multi-agent tizim yaratish: Amaliy loyiha",
+    "LangChain Agents: Aqlli AI yordamchi yaratish bosqichma-bosqich",
+    "AutoGPT va AgentGPT: Avtonom AI tizimlar qanday ishlaydi",
+    "AI Agent + Telegram Bot: Aqlli biznes assistenti yaratish",
+    "RAG (Retrieval-Augmented Generation): Ma'lumotlar bazasi bilan AI",
+    "AI Agent ish oqimlarini avtomatlashtirish: Real misollar",
+    "Multi-agent arxitektura: Bir nechta AI birgalikda ishlashi",
+    "AI Agent xavfsizligi: Risklar va himoya usullari",
+    "Biznes uchun AI Agent: Xarajatlarni 70% kamaytirish",
+    
+    # ============ YANGI AI MODELLARI (2026) ============
+    "GPT-5 vs Gemini 2.5 vs Claude 4: Qaysi biri yaxshi?",
+    "Gemini 2.5 Flash: Tezkor va arzon AI yechim",
+    "OpenAI o1 reasoning modeli: Mantiqiy fikrlash AI",
+    "Anthropic Claude 4: Uzun kontekst va xavfsizlik",
+    "Meta Llama 4: Ochiq kodli AI inqilobi",
+    "Mistral AI: Yevropa AI giganti haqida",
+    "AI modellarni tanlash: Biznes ehtiyojlariga mos AI",
+    "Fine-tuning vs RAG: Qaysi usul sizga mos?",
+    
     # ============ WEB SAYTLAR (80% QIYMAT) ============
-    # Landing Page va Konversiya
-    "Landing page yaratishda 7 ta muhim element: Konversiyani oshirish sirlari",
-    "Veb-sayt tezligini 2 barobar oshirish usullari: Google Core Web Vitals",
-    "Responsive dizayn: Mobil qurilmalar uchun sayt optimizatsiyasi",
-    "Veb-saytda SEO optimizatsiya: Google'da birinchi o'ringa chiqish yo'llari",
-    "E-commerce sayt yaratish: Online do'kon uchun to'liq qo'llanma",
-    "WordPress vs Custom sayt: Qaysi birini tanlash kerak?",
-    "Veb-sayt xavfsizligi: SSL, HTTPS va himoya usullari",
-    "Contact forma yaratish: Mijozlarni yo'qotmaslik sirlari",
-    "Veb-saytda A/B testing: Konversiyani 50% oshirish",
-    "Single Page Application (SPA) nima va qachon kerak?",
+    "2026-yil Landing page trendlari: Konversiyani 2x oshirish",
+    "Next.js 15 bilan professional sayt yaratish",
+    "Veb-sayt tezligi optimizatsiyasi: Core Web Vitals 2026",
+    "SEO 2026: Google AI Overview va yangi qoidalar",
+    "E-commerce sayt: Uzum, Wildberries integratsiyasi",
+    "Progressive Web App (PWA): Sayt-ilova yaratish",
+    "Headless CMS: Strapi, Sanity bilan ishlash",
+    "Veb-sayt xavfsizligi 2026: Zamonaviy himoya usullari",
     
     # ============ TELEGRAM BOTLAR (80% QIYMAT) ============
-    # Bot yaratish va funksiyalar
-    "Telegram bot yaratish: Boshlang'ichlar uchun to'liq qo'llanma 2025",
-    "Telegram botda to'lov qabul qilish: Click, Payme, Uzcard integratsiyasi",
-    "Telegram Mini App yaratish: Web ilovalarni botga ulash",
-    "Aiogram 3.0 bilan professional bot yaratish",
-    "Telegram bot orqali avtomatik xabar yuborish: Marketing strategiyasi",
-    "Telegram kanal va guruh uchun admin bot yaratish",
-    "Telegram botda inline tugmalar: Foydalanuvchi tajribasini yaxshilash",
-    "CRM bot yaratish: Mijozlarni boshqarish avtomatlashtirish",
-    "Telegram botda webhook vs polling: Qaysi biri yaxshi?",
-    "Bot monetizatsiya: Telegram bot orqali pul ishlash yo'llari",
+    "Telegram Bot 2026: Yangi API imkoniyatlari",
+    "Telegram Mini App 2.0: Web ilovalar evolyutsiyasi",
+    "AI-powered Telegram bot: Gemini integratsiyasi",
+    "Telegram botda to'lov: Click, Payme, Uzum Pay",
+    "Telegram bot + CRM: Mijozlarni avtomatik boshqarish",
+    "Telegram bot monetizatsiya: Premium funksiyalar sotish",
+    "Telegram Stars: Botda pul ishlashning yangi usuli",
+    "Voice message bot: Ovozli xabarlarni AI bilan qayta ishlash",
     
     # ============ AI CHATBOTLAR (80% QIYMAT) ============
-    # Chatbot yaratish va qo'llash
-    "AI chatbot nima: Biznes uchun sun'iy intellekt yordamchisi",
-    "ChatGPT API bilan o'zbek tilida chatbot yaratish",
-    "Mijozlarga 24/7 xizmat ko'rsatuvchi AI chatbot",
-    "AI chatbot vs oddiy bot: Farqlari va afzalliklari",
-    "Chatbot orqali sotuvni 3 barobar oshirish strategiyasi",
-    "Gemini API bilan aqlli chatbot integratsiyasi",
-    "AI chatbot uchun to'g'ri prompt yozish san'ati",
-    "Chatbotda NLP: Tabiiy tilni qayta ishlash asoslari",
-    "Voice chatbot: Ovozli AI yordamchi yaratish",
-    "Chatbot analytics: Samaradorlikni o'lchash va yaxshilash",
+    "AI Chatbot 2026: Eng so'nggi texnologiyalar",
+    "Gemini API bilan o'zbek tilida chatbot yaratish",
+    "Chatbot + RAG: Kompaniya ma'lumotlari bilan AI",
+    "Voice AI chatbot: Telefonda gaplashuvchi sun'iy intellekt",
+    "WhatsApp AI chatbot integratsiyasi",
+    "Chatbot analytics: Samaradorlikni o'lchash 2026",
+    "24/7 mijoz xizmati: AI bilan xarajatlarni kamaytirish",
+    "Chatbot UX: Foydalanuvchi tajribasini yaxshilash",
     
-    # ============ AVTOMATLASHTIRISH (80% QIYMAT) ============
-    # Biznes jarayonlarini avtomatlashtirish
-    "Biznes avtomatlashtirish: Vaqt va pulni tejash yo'llari",
-    "Zapier alternativlari: Make, n8n, va bepul variantlar",
-    "Email marketing avtomatlashtirish: Drip kampaniyalar",
-    "CRM avtomatlashtirish: Mijoz bilan ishlashni soddalashtirish",
-    "Social media avtomatlashtirish: Content scheduling tools",
-    "Invoice va hisob-faktura avtomatlashtirish",
-    "HR jarayonlarini avtomatlashtirish: Ishga qabul va onboarding",
-    "Avtomatik hisobot yaratish: Google Sheets va API integratsiya",
-    "Webhook va API orqali ilovalarni bog'lash",
-    "No-code avtomatlashtirish: Dasturlashsiz yechimlar",
+    # ============ BIZNES AVTOMATLASHTIRISH ============
+    "Biznes avtomatlashtirish 2026: AI bilan yangi imkoniyatlar",
+    "n8n vs Zapier vs Make: Qaysi platformani tanlash",
+    "CRM avtomatlashtirish: AmoCRM + AI yechimlar",
+    "Email marketing 2026: AI bilan personalizatsiya",
+    "HR avtomatlashtirish: Ishga qabul va onboarding",
+    "Moliyaviy avtomatlashtirish: Invoice va hisobotlar",
+    "Omborxona avtomatlashtirish: AI inventory management",
+    "Sotuv jarayonini avtomatlashtirish: Lead nurturing",
     
-    # ============ AMALIY QIYMAT (Case Studies) ============
-    "Kichik biznes uchun Telegram bot: Real natijalar",
-    "Online do'kon uchun chatbot: Savdo 200% oshdi",
-    "Avtomatlashtirish bilan oyiga 40 soat tejash",
-    "Landing page + bot = Konversiya 5 barobarga ko'tarildi",
-    "AI chatbot mijoz xizmatida: 90% so'rovlar avtomatik javob",
+    # ============ AMALIY CASE STUDIES ============
+    "Telegram bot bilan oylik 50 million so'm: Real kejs",
+    "AI chatbot mijoz xizmatida: 90% avtomatizatsiya",
+    "Landing page + AI bot = Konversiya 300% oshdi",
+    "Biznes avtomatlashtirish: 40 soat/oyni tejash",
+    "E-commerce AI: Sotuvni 200% oshirish strategiyasi",
     
-    # ============ TEXNIK YO'RIQNOMALAR ============
-    "Python bilan Telegram bot: Kod misollari",
-    "Next.js bilan zamonaviy sayt yaratish",
-    "FastAPI + Telegram bot integratsiyasi",
-    "Docker bilan bot deploy qilish: Render, Railway",
-    "PostgreSQL ma'lumotlar bazasi: Bot uchun saqlash",
+    # ============ TEXNIK QO'LLANMALAR ============
+    "Python 3.13 yangiliklari: Dasturchilar uchun muhim o'zgarishlar",
+    "FastAPI + LangChain: AI backend yaratish",
+    "Docker bilan AI ilovalarni deploy qilish",
+    "PostgreSQL + pgvector: AI uchun vektor baza",
+    "Redis caching: AI ilovalar tezligini oshirish",
     
-    # ============ TRENDLAR VA YANGILIKLAR ============
-    "2025 yil web development trendlari",
-    "Telegram Bot API yangiliklari 2025",
-    "AI chatbot trendlari: Gemini 2.0, GPT-5",
-    "O'zbekistonda IT xizmatlar bozori",
-    "Freelance dasturchilar uchun imkoniyatlar",
+    # ============ O'ZBEKISTON IT BOZORI ============
+    "O'zbekistonda IT freelance: 2026 imkoniyatlar",
+    "O'zbek tilidagi AI: Mahalliy yechimlar",
+    "IT startaplar uchun AI: Imkoniyatlar va grantlar",
+    "Raqamli O'zbekiston: Davlat xizmatlari avtomatlashtirish",
 ]
+
 
 
 def generate_and_publish_post(topic=None, category=None):

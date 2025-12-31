@@ -146,35 +146,52 @@ def generate_post_for_seo(topic):
         dict: {"title": str, "keywords": str, "content": str} yoki None
     """
     prompt = f"""
-    Siz TrendoAI uchun professional maqola yozuvchisiz.
+    Siz TrendoAI uchun professional SEO-maqola yozuvchi ekspertisiz.
     
-    MUHIM: Bugun 2025-yil dekabr oyi. Maqolani 2025-yil dekabr holatiga nisbatan yozing.
-    Eng so'nggi texnologiyalar, trendlar va yangiliklar haqida yozing.
-    Eski ma'lumotlar emas, faqat 2024-2025 yildagi yangiliklar bo'lsin.
+    === MUHIM KONTEKST ===
+    Bugun 2026-yil yanvar oyi. Maqolani 2026-yil boshiga nisbatan yozing.
+    Eng so'nggi texnologiyalar: GPT-5, Gemini 2.5, Claude 4, AI Agentlar, RAG tizimlar.
     
-    Vazifa: "{topic}" mavzusi bo'yicha professional maqola yozing.
+    === 80/20 QOIDASI (JUDA MUHIM!) ===
+    - 80% FOYDALI MA'LUMOT: O'quvchiga haqiqiy qiymat bering
+    - 20% KOMPANIYA HAQIDA: Faqat oxirida yengil eslatma
     
-    MUHIM TALABLAR:
-    1. O'zbek tilida (lotin alifbosi) yozing
-    2. Kamida 500 so'z bo'lsin
-    3. 2025-yil dekabr holatidagi eng so'nggi ma'lumotlar
-    4. FAQAT Markdown formatlash ishlating:
-       - ## va ### sarlavhalar
-       - **qalin** matn
-       - - yoki * bilan ro'yxatlar
-       - 1. 2. 3. raqamli ro'yxatlar
-    5. HTML teglarni ISHLATMANG (</p>, <h2>, <strong> va h.k.)
-    6. Strukturasi: Kirish, 3-4 bo'lim, Xulosa
+    Maqola oxirida shunday yozing:
+    "Agar sizga ham [mavzu bo'yicha xizmat] kerak bo'lsa, TrendoAI jamoasi yordam beradi. 
+    Bepul konsultatsiya uchun: t.me/Akramjon1984"
+    
+    === VAZIFA ===
+    "{topic}" mavzusida professional maqola yozing.
+    
+    === SEO TALABLARI (Google/Yandex uchun) ===
+    1. Sarlavha: Kalit so'z + raqam yoki savol (masalan: "5 ta usul", "Qanday qilib...")
+    2. Kalit so'zlar: Asosiy kalit so'z + 4-5 ta LSI kalit so'zlar
+    3. Birinchi paragrafda asosiy kalit so'z bo'lsin
+    4. H2/H3 sarlavhalarda kalit so'zlar ishlating
+    5. 800-1200 so'z uzunlik (chuqurroq kontent)
+    
+    === KONTENT TALABLARI ===
+    1. O'zbek tilida (lotin alifbosi)
+    2. Professional lekin tushunarli til
+    3. Amaliy misollar va statistika
+    4. FAQAT Markdown formatlash (## ### ** - 1.)
+    5. HTML teglar YO'Q
+    
+    === STRUKTURA ===
+    - **Kirish**: Muammoni tushuntiring (150-200 so'z)
+    - **Asosiy qism**: 3-4 bo'lim, har birida amaliy ma'lumot
+    - **Xulosa**: Qisqa takrorlash + TrendoAI eslatmasi (80/20)
     
     JSON formatida javob bering:
     {{
-      "title": "Qisqa, qiziqarli sarlavha (50-60 belgi)",
-      "keywords": "kalit1, kalit2, kalit3, kalit4, kalit5",
-      "content": "Markdown formatidagi toza maqola matni"
+      "title": "SEO-optimallashtirilgan sarlavha (50-65 belgi)",
+      "keywords": "asosiy_kalit, lsi_kalit1, lsi_kalit2, lsi_kalit3, lsi_kalit4",
+      "content": "To'liq Markdown maqola matni (800-1200 so'z)"
     }}
     
     Faqat JSON qaytaring!
     """
+
     
     def _generate():
         response = model.generate_content(prompt)
