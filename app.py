@@ -1265,20 +1265,20 @@ def api_chat_audio():
         # Gemini modelni sozlash
         genai.configure(api_key=GEMINI_API_KEY)
         
-        # Gemini 1.5 Flash (Stabil)
-        model = genai.GenerativeModel('gemini-1.5-flash')
+        # Gemini 2.5 Flash Native Audio (Preview - Dec 2025)
+        # Bu model audioni "native" tushunadi (transkripsiya shart emas)
+        model = genai.GenerativeModel('models/gemini-2.5-flash-native-audio-preview-12-2025')
         
         # TrendoAI konteksti
         system_prompt = """Siz TrendoAI AI assistentisiz. 
 Vazifangiz:
-1. Taqdim etilgan audio faylni tinglang va tushuning.
-2. Foydalanuvchi nima deganini aniqlang.
-3. Unga o'zbek tilida, TrendoAI kompaniyasi nomidan xushmuomala javob bering.
+1. Kelayotgan ovozli xabarni to'g'ridan-to'g'ri tushuning (intonatsiya va hissiyotlarni hisobga olgan holda).
+2. Foydalanuvchiga o'zbek tilida, samimiy va professional javob bering.
 
 TrendoAI xizmatlari: Telegram Botlar, Web Saytlar, AI Chatbotlar, SMM.
 Aloqa: @Akramjon1984, trendoai.uz
 
-Javobni to'g'ridan-to'g'ri yozing (hech qanday "Audio transkripsiyasi:" kabi so'zlarsiz)."""
+Javobni matn ko'rinishida yozing."""
 
         # Vaqtinchalik faylga saqlash
         with tempfile.NamedTemporaryFile(suffix='.webm', delete=False) as temp_audio:
@@ -1289,8 +1289,8 @@ Javobni to'g'ridan-to'g'ri yozing (hech qanday "Audio transkripsiyasi:" kabi so'
             # Faylni Gemini File API ga yuklash
             uploaded_file = genai.upload_file(temp_audio_path, mime_type="audio/webm")
             
-            # Fayl tayyor bo'lishini kutish (agar kerak bo'lsa)
-            # Kichik fayllar uchun odatda darhol tayyor bo'ladi
+            # Fayl tayyor bo'lishini kutish
+            # Native model uchun ham fayl yuklash usuli ishlaydi
             
             # Javob olish
             response = model.generate_content([system_prompt, uploaded_file])
