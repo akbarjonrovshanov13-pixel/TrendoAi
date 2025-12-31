@@ -156,6 +156,11 @@
                     <span class="moon-icon">🌙</span>
                     <span class="sun-icon">☀️</span>
                 </button>
+                <!-- Notification Toggle -->
+                <button class="theme-toggle" id="notify-btn" aria-label="Enable Notifications"
+                    style="display: none; margin-left: 10px;">
+                    <i class="fas fa-bell"></i>
+                </button>
             </div>
 
         </div>
@@ -774,17 +779,94 @@
             localStorage.setItem('theme', newTheme);
         });
 
-        // Service Worker Registration (PWA)
+
+        // Service Worker & Push Notifications
         if ('serviceWorker' in navigator) {
-            window.addEventListener('load', function () {
-                navigator.serviceWorker.register('/static/sw.js')
-                    .then(function (registration) {
-                        console.log('TrendoAI SW registered:', registration.scope);
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/sw.js')
+                    .then(registration => {
+                        console.log('SW registered:', registration);
+                        initializeUI(registration);
                     })
-                    .catch(function (error) {
-                        console.log('TrendoAI SW registration failed:', error);
+                    .catch(error => {
+                        console.log('SW registration failed:', error);
                     });
             });
+        }
+
+        function initializeUI(registration) {
+            const notifyBtn = document.getElementById('notify-btn');
+
+            // Check if push is supported
+            if (!('PushManager' in window)) {
+                return;
+            }
+
+            // Check permission
+            if (Notification.permission === 'granted') {
+                notifyBtn.style.display = 'none';
+            } else if (Notification.permission !== 'denied') {
+                notifyBtn.style.display = 'inline-block';
+            }
+
+            notifyBtn.addEventListener('click', () => {
+                Notification.requestPermission().then(permission => {
+                    if (permission === 'granted') {
+                        subscribeUser(registration);
+                        notifyBtn.style.display = 'none';
+                    }
+                });
+            });
+        }
+
+        const VAPID_PUBLIC_KEY = "{{ config['VAPID_PUBLIC_KEY'] }}";
+
+        function urlBase64ToUint8Array(base64String) {
+            const padding = '='.repeat((4 - base64String.length % 4) % 4);
+            const base64 = (base64String + padding)
+                .replace(/\-/g, '+')
+                .replace(/_/g, '/');
+            const rawData = window.atob(base64);
+            const outputArray = new Uint8Array(rawData.length);
+            for (let i = 0; i < rawData.length; ++i) {
+                outputArray[i] = rawData.charCodeAt(i);
+            }
+            return outputArray;
+        }
+
+        function subscribeUser(registration) {
+            const subscribeOptions = {
+                userVisibleOnly: true,
+                applicationServerKey: urlBase64ToUint8Array(VAPID_PUBLIC_KEY)
+            };
+
+            registration.pushManager.subscribe(subscribeOptions)
+                .then(function (pushSubscription) {
+                    console.log('Received PushSubscription:', JSON.stringify(pushSubscription));
+                    sendSubscriptionToBackEnd(pushSubscription);
+                })
+                .catch(function (err) { // Agar xato bo'lsa, konsolga chiqarish
+                    console.log('Subscription failed: ', err);
+                });
+        }
+
+        function sendSubscriptionToBackEnd(subscription) {
+            fetch('/api/push/subscribe', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(subscription)
+            })
+                .then(function (response) {
+                    if (!response.ok) {
+                        throw new Error('Bad status code from server.');
+                    }
+                    return response.json();
+                })
+                .then(function (responseData) {
+                    if (responseData.success) {
+                    });
         }
 
         // ========== AI CHATBOT LOGIC ==========
@@ -828,7 +910,8 @@
             // Add typing indicator
             const typingDiv = document.createElement('div');
             typingDiv.className = 'chat-message bot typing';
-            typingDiv.innerHTML = '<span class="typing-dot"></span><span class="typing-dot"></span><span class="typing-dot"></span>';
+            typingDiv.innerHTML = '<span class="typing-dot"></span><span class="typing-dot"></span><span
+            class="typing-dot" ></span > ';
             chatbotMessages.appendChild(typingDiv);
 
             // Scroll to bottom
@@ -936,7 +1019,8 @@
             // Add typing indicator
             const typingDiv = document.createElement('div');
             typingDiv.className = 'chat-message bot typing';
-            typingDiv.innerHTML = '<span class="typing-dot"></span><span class="typing-dot"></span><span class="typing-dot"></span>';
+            typingDiv.innerHTML = '<span class="typing-dot"></span><span class="typing-dot"></span><span
+            class="typing-dot" ></span > ';
             chatbotMessages.appendChild(typingDiv);
             chatbotMessages.scrollTop = chatbotMessages.scrollHeight;
 

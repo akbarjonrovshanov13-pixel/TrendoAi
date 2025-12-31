@@ -59,3 +59,29 @@ self.addEventListener('activate', event => {
         })
     );
 });
+
+// Push event
+self.addEventListener('push', function (event) {
+    if (event.data) {
+        const data = event.data.json();
+        const title = data.title || 'TrendoAI';
+        const options = {
+            body: data.body,
+            icon: '/static/img/logo.png', // Logo path
+            badge: '/static/img/logo.png',
+            vibrate: [100, 50, 100],
+            data: {
+                url: data.url || '/'
+            }
+        };
+        event.waitUntil(self.registration.showNotification(title, options));
+    }
+});
+
+// Notification click
+self.addEventListener('notificationclick', function (event) {
+    event.notification.close();
+    event.waitUntil(
+        clients.openWindow(event.notification.data.url)
+    );
+});

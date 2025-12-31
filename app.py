@@ -388,6 +388,25 @@ class Portfolio(db.Model):
         }
 
 
+
+class PushSubscription(db.Model):
+    """Web Push obunachilari"""
+    id = db.Column(db.Integer, primary_key=True)
+    endpoint = db.Column(db.String(500), nullable=False, unique=True)
+    p256dh = db.Column(db.String(200), nullable=False)
+    auth = db.Column(db.String(100), nullable=False)
+    created_at = db.Column(db.DateTime, default=datetime.now)
+
+    def to_json(self):
+        return {
+            'endpoint': self.endpoint,
+            'keys': {
+                'p256dh': self.p256dh,
+                'auth': self.auth
+            }
+        }
+
+
 # ========== TEMPLATE FILTERS ==========
 
 @app.template_filter('markdown')
@@ -411,6 +430,7 @@ def inject_globals():
         'config': {
             'SITE_NAME': SITE_NAME,
             'SITE_DESCRIPTION': SITE_DESCRIPTION,
+            'VAPID_PUBLIC_KEY': app.config.get('VAPID_PUBLIC_KEY')
         },
         'GA4_ID': GA4_ID,
         'GOOGLE_ADS_ID': GOOGLE_ADS_ID,
@@ -1248,6 +1268,8 @@ Agar mijoz xizmat so'rasa, Telegram orqali bog'lanishni tavsiya qiling."""
 def api_chat_audio():
     """AI Chatbot audio endpoint - Gemini 2.5 Flash Native Audio bilan"""
     import google.generativeai as genai
+    from pywebpush import webpush, WebPushException
+    import markdown2
     import base64
     import tempfile
     import os
@@ -1315,6 +1337,79 @@ Javobni matn ko'rinishida yozing."""
             'error': 'Ovozni tushunib bo\'lmadi',
             'response': "Ovozli xabarni tushunishda xatolik bo'ldi. Iltimos, donaroq gapiring yoki yozib yuboring."
         }), 500
+
+
+# ========== PUSH NOTIFICATION ROUTES ==========
+
+@app.route('/api/push/subscribe', methods=['POST'])
+def push_subscribe():
+    """Web Push obunasini saqlash"""
+    data = request.json
+    if not data or not data.get('endpoint'):
+        return jsonify({'error': 'Invalid data'}), 400
+
+    endpoint = data['endpoint']
+    keys = data.get('keys', {})
+    p256dh = keys.get('p256dh')
+    auth = keys.get('auth')
+
+    if not p256dh or not auth:
+        return jsonify({'error': 'Missing keys'}), 400
+
+    # Obunani tekshirish
+    subscription = PushSubscription.query.filter_by(endpoint=endpoint).first()
+    if not subscription:
+        subscription = PushSubscription(
+            endpoint=endpoint,
+            p256dh=p256dh,
+            auth=auth
+        )
+        db.session.add(subscription)
+        db.session.commit()
+    
+    return jsonify({'success': True, 'message': 'Obuna bo\'ldi'})
+
+@app.route('/api/push/send', methods=['POST'])
+@login_required
+def push_send():
+    """Push xabar yuborish (Admin)"""
+    data = request.json
+    message = data.get('message', 'Yangi xabar!')
+    url = data.get('url', '/')
+    
+    subscriptions = PushSubscription.query.all()
+    count = 0
+    
+    for sub in subscriptions:
+        try:
+            webpush(
+                subscription_info=sub.to_json(),
+                data=json.dumps({'title': 'TrendoAI', 'body': message, 'url': url}),
+                vapid_private_key=app.config['VAPID_PRIVATE_KEY'],
+                vapid_claims={
+                    'sub': app.config.get('VAPID_CLAIMS_SUB', 'mailto:admin@trendoai.uz')
+                }
+            )
+            count += 1
+        except WebPushException as ex:
+            print(f"Push error: {ex}")
+            # Agar obuna o'chgan bo'lsa (410 Gone), bazadan o'chirish
+            if ex.response and ex.response.status_code == 410:
+                db.session.delete(sub)
+                db.session.commit()
+        except Exception as e:
+            print(f"Genral push error: {e}")
+
+    return jsonify({'success': True, 'sent_count': count})
+
+
+@app.route('/sw.js')
+def service_worker():
+    """Service Worker faylini root'dan uzatish"""
+    response = make_response(send_from_directory('static', 'sw.js'))
+    response.headers['Content-Type'] = 'application/javascript'
+    return response
+
 
 
 @app.route('/api/catalog.xml')

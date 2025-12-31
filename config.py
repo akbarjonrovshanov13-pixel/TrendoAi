@@ -45,6 +45,11 @@ ADMIN_USERNAME = os.getenv("ADMIN_USERNAME", "admin")
 ADMIN_PASSWORD = os.getenv("ADMIN_PASSWORD", "trendoai2025")
 SECRET_KEY = os.getenv("SECRET_KEY", "trendoai-secret-key-change-in-production")
 
+# ========== PUSH NOTIFICATION SOZLAMALARI ==========
+VAPID_PUBLIC_KEY = os.getenv("VAPID_PUBLIC_KEY", "BJt75bqZyZdfqtfNkvQUT3uZpg6ytWSi0mg9riLZl2zOTIarMwxvxJNHCc8OvfVwh8Xe2o60cYXzqa3MBKYOT8s")
+VAPID_PRIVATE_KEY = os.getenv("VAPID_PRIVATE_KEY", "MIGHAgEAMBMGByqGSM49AgEGCCqGSM49AwEHBG0wawIBAQQgctR2TTZXKwU2B62L6mQUTlyqjdEeWBWOMD97+9Q6yjOhRANCAASbe+W6mcmXX6rXzZL0FE97maYOsrVkotJoPa4i2ZdszkyGqzMMb8STRwnPDr31cIfF3tqOtHGF86mtzASmDk/L")
+VAPID_CLAIMS_SUB = "mailto:admin@trendoai.uz"
+
 # ========== SCHEDULER SOZLAMALARI ==========
 TIMEZONE = "Asia/Tashkent"
 SEO_POST_HOUR = 9
