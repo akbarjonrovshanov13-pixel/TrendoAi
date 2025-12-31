@@ -1265,38 +1265,46 @@ def api_chat_audio():
         # Gemini modelni sozlash
         genai.configure(api_key=GEMINI_API_KEY)
         
-        # Gemini 2.0 Flash - Multimodal (Audio, Video, Text)
-        model = genai.GenerativeModel('gemini-2.0-flash')
+        # Gemini 1.5 Flash - Stabil va tezkor
+        model = genai.GenerativeModel('gemini-1.5-flash')
         
         # TrendoAI konteksti
         system_prompt = """Siz TrendoAI AI assistentisiz. TrendoAI - O'zbekistondagi IT kompaniya.
-
 XIZMATLARIMIZ: Telegram Botlar, AI Chatbotlar, Web Saytlar, CRM Integratsiya, SMM Avtomatlashtirish, AI Ovozli Assistentlar.
-
 ALOQA: Telegram: @Akramjon1984, Kanal: @trendoai, Sayt: trendoai.uz
-
 Foydalanuvchi ovozli xabar yubordi. Uning so'roviga o'zbek tilida do'stona javob bering."""
 
-        # Audio faylni yuklash va javob olish
-        # Gemini Native Audio model audio bytes ni to'g'ridan-to'g'ri qabul qiladi
-        audio_part = {
-            "mime_type": "audio/webm",
-            "data": audio_bytes
-        }
-        
-        response = model.generate_content([system_prompt, audio_part])
-        
-        return jsonify({
-            'success': True,
-            'response': response.text
-        })
-        
+        # Vaqtinchalik faylga saqlash (Gemini API talabi bo'yicha barqarorroq)
+        with tempfile.NamedTemporaryFile(suffix='.webm', delete=False) as temp_audio:
+            temp_audio.write(audio_bytes)
+            temp_audio_path = temp_audio.name
+
+        try:
+            # Faylni Gemini File API ga yuklash
+            uploaded_file = genai.upload_file(temp_audio_path, mime_type="audio/webm")
+            
+            # Javob olish
+            response = model.generate_content([system_prompt, uploaded_file])
+            
+            # Faylni o'chirish
+            os.unlink(temp_audio_path)
+            # Cloud dagi faylni o'chirish (ixtiyoriy, lekin tavsiya etiladi)
+            # genai.delete_file(uploaded_file.name)
+
+            return jsonify({
+                'success': True,
+                'response': response.text
+            })
+        except Exception as inner_e:
+            if os.path.exists(temp_audio_path):
+                os.unlink(temp_audio_path)
+            raise inner_e
+            
     except Exception as e:
         print(f"Audio chatbot error: {e}")
-        # Fallback: oddiy matnli javob
         return jsonify({
-            'error': f'Audio qayta ishlashda xatolik: {str(e)}',
-            'response': "Kechirasiz, ovozli xabaringizni qayta ishlay olmadim. Iltimos, matn orqali yozing yoki qayta urinib ko'ring."
+            'error': f'Audio xatolik: {str(e)}',
+            'response': "Kechirasiz, ovozli xabaringizni qayta ishlay olmadim. Iltimos, matn orqali yozing."
         }), 500
 
 
