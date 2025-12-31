@@ -1792,6 +1792,35 @@ def server_error(e):
 
 # ========== STARTUP ==========
 
+@app.route('/api/cron/generate', methods=['GET', 'POST'])
+def cron_generate_post():
+    """Tashqi cron xizmatlari uchun post generatsiya qilish"""
+    secret = request.args.get('secret') or request.headers.get('X-Cron-Secret')
+    
+    # Secret key tekshirish
+    if secret != app.config.get('CRON_SECRET'):
+        return jsonify({'error': 'Unauthorized', 'message': 'Invalid secret key'}), 401
+        
+    topic = request.args.get('topic')
+    category = request.args.get('category')
+    
+    # Taskni asinxron ishga tushirish (timeout bo'lmasligi uchun)
+    from scheduler import generate_and_publish_post
+    thread = threading.Thread(target=generate_and_publish_post, args=(topic, category))
+    thread.daemon = True
+    thread.start()
+    
+    return jsonify({
+        'success': True, 
+        'message': 'Post generation started in background',
+        'timestamp': datetime.now().isoformat()
+    })
+
+@app.route('/api/cron/keep-alive')
+def cron_keep_alive():
+    """Serverni uyg'oq saqlash uchun"""
+    return jsonify({'status': 'alive', 'time': datetime.now().isoformat()})
+
 # Server ishga tushganda bajariladigan amallar (Gunicorn va Local)
 with app.app_context():
     try:
