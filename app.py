@@ -1185,6 +1185,61 @@ def api_generate_portfolio():
         return jsonify({'error': str(e)}), 500
 
 
+# ========== AI CHATBOT API ==========
+
+@app.route('/api/chat', methods=['POST'])
+def api_chat():
+    """AI Chatbot endpoint - Gemini 2.5 Flash Native Audio bilan"""
+    import google.generativeai as genai
+    
+    try:
+        data = request.get_json()
+        user_message = data.get('message', '').strip()
+        
+        if not user_message:
+            return jsonify({'error': 'Xabar bo\'sh'}), 400
+        
+        # Gemini modelni sozlash
+        genai.configure(api_key=GEMINI_API_KEY)
+        
+        # Gemini 2.5 Flash Native Audio model
+        model = genai.GenerativeModel('gemini-2.5-flash-preview-05-20')
+        
+        # TrendoAI konteksti
+        system_prompt = """Siz TrendoAI AI assistentisiz. TrendoAI - O'zbekistondagi IT kompaniya bo'lib, quyidagi xizmatlarni taqdim etadi:
+
+🛠️ XIZMATLARIMIZ:
+1. Telegram Botlar va Mini Applar
+2. AI Chatbotlar (Gemini, GPT bilan)
+3. Web Saytlar va Landing Pagelar
+4. CRM Integratsiya (AmoCRM, Bitrix24)
+5. SMM Avtomatlashtirish
+6. AI Ovozli Assistentlar
+7. Data Analitika
+
+📞 ALOQA:
+- Telegram: @Akramjon1984
+- Kanal: @trendoai
+- Sayt: trendoai.uz
+
+Doimo do'stona, professional va foydali javob bering. O'zbek tilida javob bering.
+Agar mijoz xizmat so'rasa, Telegram orqali bog'lanishni tavsiya qiling."""
+
+        # Javob olish
+        chat = model.start_chat(history=[])
+        response = chat.send_message(f"{system_prompt}\n\nMijoz savoli: {user_message}")
+        
+        return jsonify({
+            'success': True,
+            'response': response.text
+        })
+        
+    except Exception as e:
+        print(f"Chatbot error: {e}")
+        return jsonify({
+            'error': 'AI javob berishda xatolik yuz berdi',
+            'details': str(e)
+        }), 500
 
 
 @app.route('/api/catalog.xml')
