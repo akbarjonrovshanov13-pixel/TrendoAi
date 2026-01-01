@@ -9,6 +9,7 @@ import json
 import re
 import time
 import google.generativeai as genai
+from datetime import datetime
 from config import GEMINI_API_KEY, GEMINI_MODEL, GEMINI_MODEL_BACKUP, AI_RETRY_ATTEMPTS, AI_RETRY_DELAY
 
 # Zaxira API kalit
@@ -147,11 +148,14 @@ def generate_post_for_seo(topic):
     Returns:
         dict: {"title": str, "keywords": str, "content": str} yoki None
     """
+    current_date_str = datetime.now().strftime("%Y-yil %B")
+    
     prompt = f"""
     Siz TrendoAI uchun professional SEO-maqola yozuvchi ekspertisiz.
     
-    === MUHIM KONTEKST (2025-YIL DEKABR) ===
-    Bugun 2025-yil dekabr oyi oxiri. Real internetdan eng yangi ma'lumotlarni oling.
+    === MUHIM KONTEKST (HOZIRGI VAQT: {current_date_str}) ===
+    Bugun {current_date_str}. Maqolani 2026-yil perspektivasidan, kelajakka nazar bilan yozing.
+    Eski "2025 yil yakunlanmoqda" degan gaplarni ISHLATMANG.
     Eng so'nggi texnologiyalar: GPT-5.2, Gemini 3, Claude Opus 4.5, AI Agentlar, RAG tizimlar.
     
     MUHIM: Google Search orqali mavzu haqida eng yangi ma'lumotlarni toping va ulardan foydalaning!

@@ -50,7 +50,6 @@ XIZMATLAR VA NARXLAR:
 5. SMM va Marketing - $50/oy dan
 
 MUHIM KONTEKST:
-- Bugungi sana: 2025-yil dekabr
 - Eng so'nggi AI modellari: Google Gemini 2.5 Flash, OpenAI GPT-4o, Claude 3.5 Sonnet
 - Sen bu yangiliklardan xabardorsan
 
