@@ -705,61 +705,84 @@
                 right: 0;
                 left: 0;
                 width: 100%;
-                height: 85vh;
+                height: 90vh;
+                max-height: 90vh;
                 border-radius: var(--radius-lg) var(--radius-lg) 0 0;
             }
 
             .chatbot-header {
-                padding: 16px 20px;
+                padding: 14px 16px;
             }
 
             .chatbot-header h4 {
-                font-size: 1.1rem;
+                font-size: 1rem;
             }
 
             .chatbot-messages {
-                padding: 20px;
-                gap: 14px;
+                padding: 16px;
+                gap: 12px;
+                flex: 1;
+                min-height: 0;
             }
 
             .chat-message {
-                font-size: 1rem;
-                padding: 14px 18px;
-                max-width: 90%;
+                font-size: 0.95rem;
+                padding: 12px 14px;
+                max-width: 88%;
             }
 
+            /* Mobile-optimized input area */
             .chatbot-input {
-                padding: 16px;
-                gap: 10px;
+                padding: 12px;
+                gap: 8px;
+                flex-wrap: wrap;
+                background: var(--bg-card);
+                border-top: 1px solid var(--border);
             }
 
             .chatbot-input input {
+                flex: 1;
+                min-width: 0;
                 padding: 14px 16px;
-                font-size: 1rem;
+                font-size: 16px;
+                /* Prevents zoom on iOS */
+                border-radius: var(--radius-md);
             }
 
-            .chatbot-input button {
-                padding: 14px 18px;
-                font-size: 0.95rem;
+            /* Send button - clearly visible */
+            .chatbot-input button#chatbotSend {
+                padding: 14px 20px;
+                font-size: 0.9rem;
+                font-weight: 700;
+                border-radius: var(--radius-md);
+                min-width: 80px;
+                background: var(--gradient-main);
+                white-space: nowrap;
             }
 
+            /* Mic button - compact */
             .chatbot-mic {
-                padding: 14px 16px !important;
-                font-size: 1.3rem;
+                padding: 14px !important;
+                font-size: 1.2rem;
+                min-width: 48px;
+                border-radius: var(--radius-md) !important;
             }
 
             .chatbot-toggle {
                 bottom: 20px;
                 right: 16px;
-                width: 60px;
-                height: 60px;
-                font-size: 1.8rem;
+                width: 56px;
+                height: 56px;
+            }
+
+            .chatbot-toggle span {
+                font-size: 1.6rem;
             }
 
             .chatbot-close {
-                width: 36px;
-                height: 36px;
-                font-size: 1.2rem;
+                width: 34px;
+                height: 34px;
+                font-size: 1.1rem;
             }
         }
     </style>
