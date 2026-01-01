@@ -1,12 +1,13 @@
-const CACHE_NAME = 'trendoai-v1';
+const CACHE_NAME = 'trendoai-v2';
 const urlsToCache = [
-    '/',
     '/static/css/style.css',
     '/static/manifest.json'
 ];
 
 // Install event - cache assets
 self.addEventListener('install', event => {
+    // Skip waiting to activate immediately
+    self.skipWaiting();
     event.waitUntil(
         caches.open(CACHE_NAME)
             .then(cache => {
@@ -17,22 +18,31 @@ self.addEventListener('install', event => {
     );
 });
 
-// Fetch event - serve from cache, fallback to network
+// Fetch event - network first for HTML, cache first for static assets
 self.addEventListener('fetch', event => {
+    const url = new URL(event.request.url);
+
+    // For HTML pages (navigation requests) - always go to network first
+    if (event.request.mode === 'navigate' || event.request.destination === 'document') {
+        event.respondWith(
+            fetch(event.request)
+                .catch(() => caches.match(event.request))
+        );
+        return;
+    }
+
+    // For static assets - cache first
     event.respondWith(
         caches.match(event.request)
             .then(response => {
-                // Return cached version or fetch from network
                 if (response) {
                     return response;
                 }
                 return fetch(event.request)
                     .then(response => {
-                        // Don't cache non-successful responses
                         if (!response || response.status !== 200 || response.type !== 'basic') {
                             return response;
                         }
-                        // Clone and cache the response
                         const responseToCache = response.clone();
                         caches.open(CACHE_NAME)
                             .then(cache => {
