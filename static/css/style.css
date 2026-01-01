@@ -240,10 +240,16 @@ header::before {
     text-decoration: none;
 }
 
-.logo-icon {
-    font-size: 2rem;
-    filter: drop-shadow(0 0 20px rgba(244, 114, 182, 0.5));
-    animation: pulse 2s ease-in-out infinite;
+.logo-img {
+    width: 40px;
+    height: 40px;
+    object-fit: contain;
+    filter: drop-shadow(0 0 15px rgba(244, 114, 182, 0.4));
+    transition: transform 0.3s ease;
+}
+
+.logo a:hover .logo-img {
+    transform: scale(1.1);
 }
 
 @keyframes pulse {
