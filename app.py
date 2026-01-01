@@ -29,6 +29,14 @@ app.config['SQLALCHEMY_DATABASE_URI'] = DATABASE_URI
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SECRET_KEY'] = SECRET_KEY
 
+# PostgreSQL connection pool sozlamalari - ulanish uzilganda qayta ulanish
+app.config['SQLALCHEMY_ENGINE_OPTIONS'] = {
+    'pool_pre_ping': True,  # Har bir so'rovdan oldin ulanishni tekshirish
+    'pool_recycle': 300,    # 5 daqiqada ulanishni yangilash
+    'pool_size': 5,         # Ulanishlar soni
+    'max_overflow': 10,     # Qo'shimcha ulanishlar
+}
+
 db = SQLAlchemy(app)
 
 
