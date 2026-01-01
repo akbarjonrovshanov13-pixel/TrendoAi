@@ -2036,6 +2036,28 @@ def sitemap():
     return Response(xml_content, mimetype='application/xml')
 
 
+# ========== TELEGRAM WEBHOOK ==========
+@app.route('/webhook', methods=['POST'])
+def telegram_webhook():
+    """Telegram webhook handler - botga kelgan xabarlarni qayta ishlash"""
+    try:
+        from bot_service import bot
+        import telebot
+        
+        if bot and request.headers.get('content-type') == 'application/json':
+            json_string = request.get_data().decode('utf-8')
+            update = telebot.types.Update.de_json(json_string)
+            bot.process_new_updates([update])
+            return '', 200
+        else:
+            return 'Bot not configured', 400
+    except Exception as e:
+        print(f"❌ Webhook error: {e}")
+        import traceback
+        traceback.print_exc()
+        return 'Error', 500
+
+
 @app.route('/robots.txt')
 def robots_txt():
     """robots.txt - qidiruv robotlari uchun"""
@@ -2122,19 +2144,20 @@ init_database()
 # Avtomatlashtirish va Botni ishga tushirish
 try:
     from scheduler import scheduler
-    from bot_service import setup_webhook
+    from bot_service import setup_webhook, bot
     
     # Scheduler ishga tushirish
     scheduler.start()
     
     
     # Webhook rejimida bot (polling o'rniga)
-    # DIQQAT: Webhookni endi scripts/set_webhook.py orqali qo'lda yoki build paytida o'rnatamiz
-    # setup_webhook(app)  <-- O'chirildi, chunki startup da muammo tug'diryapti
+    setup_webhook(app)
     
-    print("🚀 TrendoAI xizmatlari (Scheduler) ishga tushdi!")
+    print("🚀 TrendoAI xizmatlari (Scheduler + Bot Webhook) ishga tushdi!")
 except Exception as e:
     print(f"Service startup error: {e}")
+    import traceback
+    traceback.print_exc()
 
 
 if __name__ == '__main__':
