@@ -69,18 +69,47 @@
     <link rel="canonical" href="{% block canonical_url %}{{ config.SITE_URL }}{% endblock %}">
 
     <!-- Open Graph / Facebook -->
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="https://trendoai.uz">
+    <meta property="og:type" content="{% block og_type %}website{% endblock %}">
+    <meta property="og:url" content="{% block og_url %}{{ config.SITE_URL }}{{ request.path }}{% endblock %}">
     <meta property="og:title" content="{% block og_title %}TrendoAI - Trending Texnologiyalar{% endblock %}">
     <meta property="og:description"
         content="{% block og_description %}O'zbekistonda trending texnologiya yangiliklari va AI-powered professional blog{% endblock %}">
+    <meta property="og:image" content="{% block og_image %}{{ config.SITE_URL }}/static/img/og-image.png{% endblock %}">
     <meta property="og:locale" content="uz_UZ">
     <meta property="og:site_name" content="TrendoAI">
 
     <!-- Twitter -->
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="TrendoAI">
-    <meta name="twitter:description" content="Trending texnologiyalar va sun'iy intellekt">
+    <meta name="twitter:title" content="{% block twitter_title %}TrendoAI - Trending Texnologiyalar{% endblock %}">
+    <meta name="twitter:description"
+        content="{% block twitter_description %}Trending texnologiyalar va sun'iy intellekt{% endblock %}">
+    <meta name="twitter:image"
+        content="{% block twitter_image %}{{ config.SITE_URL }}/static/img/og-image.png{% endblock %}">
+
+    <!-- JSON-LD Structured Data -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "{% block schema_type %}WebSite{% endblock %}",
+        "name": "TrendoAI",
+        "url": "{{ config.SITE_URL }}",
+        "description": "O'zbekistonda trending texnologiya yangiliklari, sun'iy intellekt va dasturlash haqida professional blog",
+        "publisher": {
+            "@type": "Organization",
+            "name": "TrendoAI",
+            "logo": {
+                "@type": "ImageObject",
+                "url": "{{ config.SITE_URL }}/static/img/logo.png"
+            }
+        },
+        "potentialAction": {
+            "@type": "SearchAction",
+            "target": "{{ config.SITE_URL }}/search?q={search_term_string}",
+            "query-input": "required name=search_term_string"
+        }
+        {% block schema_extra %}{% endblock %}
+    }
+    </script>
 
     <!-- Favicon -->
     <link rel="icon" type="image/svg+xml" href="{{ url_for('static', filename='favicon.svg') }}">
