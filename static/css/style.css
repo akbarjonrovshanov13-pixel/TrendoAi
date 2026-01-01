@@ -2322,8 +2322,8 @@ footer {
     }
 
     nav a {
-        padding: 6px 10px;
-        font-size: 0.75rem;
+        padding: 8px 12px;
+        font-size: 0.9rem;
         flex-shrink: 0;
     }
 
@@ -2535,8 +2535,8 @@ footer {
     }
 
     nav a {
-        padding: 6px 6px;
-        font-size: 0.7rem;
+        padding: 6px 10px;
+        font-size: 0.8rem;
     }
 }
 
