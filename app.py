@@ -1643,35 +1643,7 @@ def api_stats():
 
 
 # ========== CRON API ROUTES ==========
-
-@app.route('/api/cron/generate-post', methods=['POST', 'GET'])
-def cron_generate_post():
-    """
-    Tashqi Cron xizmatlari uchun post generatsiya endpoint (Asinxron).
-    cron-job.org yoki boshqa xizmatlar orqali chaqiriladi.
-    """
-    import os
-    
-    # Secret key tekshirish
-    cron_secret = os.getenv('CRON_SECRET', 'trendoai-cron-secret-2025')
-    provided_secret = request.headers.get('X-Cron-Secret') or request.args.get('secret')
-    
-    if provided_secret != cron_secret:
-        return jsonify({'error': 'Unauthorized'}), 401
-    
-    from scheduler import generate_and_publish_post
-    
-    # Orqa fonda generatsiyani boshlash
-    thread = threading.Thread(target=generate_and_publish_post)
-    thread.daemon = True
-    thread.start()
-    
-    return jsonify({
-        'status': 'accepted',
-        'message': 'Post generatsiyasi orqa fonda boshlandi (Asinxron)',
-        'timestamp': datetime.now().isoformat()
-    }), 202
-
+# Note: Main cron routes defined in STARTUP section
 
 @app.route('/api/init-db')
 def init_database():
