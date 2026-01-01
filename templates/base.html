@@ -121,7 +121,15 @@
                 </a>
             </div>
             <p class="tagline">Trending texnologiyalar va sun'iy intellekt</p>
-            <nav>
+
+            <!-- Mobile Hamburger Menu Button -->
+            <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="Menyu">
+                <span class="hamburger-line"></span>
+                <span class="hamburger-line"></span>
+                <span class="hamburger-line"></span>
+            </button>
+
+            <nav id="mainNav">
                 <a href="{{ url_for('services') }}"
                     class="{% if request.endpoint == 'services' or request.endpoint == 'index' %}active{% endif %}">🛠️
                     Xizmatlar</a>
@@ -787,6 +795,34 @@
     <script>
         // Header scrolls normally with the page (no auto-hide)
         const header = document.querySelector('header');
+
+        // ========== MOBILE HAMBURGER MENU ==========
+        const mobileMenuToggle = document.getElementById('mobileMenuToggle');
+        const mainNav = document.getElementById('mainNav');
+
+        if (mobileMenuToggle && mainNav) {
+            mobileMenuToggle.addEventListener('click', function (e) {
+                e.stopPropagation();
+                mobileMenuToggle.classList.toggle('active');
+                mainNav.classList.toggle('mobile-open');
+            });
+
+            // Close menu when clicking a nav link
+            mainNav.querySelectorAll('a').forEach(link => {
+                link.addEventListener('click', function () {
+                    mobileMenuToggle.classList.remove('active');
+                    mainNav.classList.remove('mobile-open');
+                });
+            });
+
+            // Close menu when clicking outside
+            document.addEventListener('click', function (e) {
+                if (!header.contains(e.target)) {
+                    mobileMenuToggle.classList.remove('active');
+                    mainNav.classList.remove('mobile-open');
+                }
+            });
+        }
 
         // Telegram Popup Logic
         function showTgPopup() {
