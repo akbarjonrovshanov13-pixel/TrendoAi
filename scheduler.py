@@ -24,19 +24,19 @@ TOPICS = [
     "AI Agent + Telegram Bot: Aqlli biznes assistenti yaratish",
     "RAG (Retrieval-Augmented Generation): Ma'lumotlar bazasi bilan AI",
     "AI Agent ish oqimlarini avtomatlashtirish: Real misollar",
-    "Multi-agent arxitektura: Bir nechta AI birgalikda ishlashi",
+    "Multi-agent arxitektura 2026: AI Agentlar Hamkorligi",
     "AI Agent xavfsizligi: Risklar va himoya usullari",
     "Biznes uchun AI Agent: Xarajatlarni 70% kamaytirish",
     
-    # ============ YANGI AI MODELLARI (2025 DEKABR - REAL) ============
-    "GPT-5.2 vs Gemini 3 vs Claude Opus 4.5: 2025 yil eng kuchli AI modellari",
+    # ============ YANGI AI MODELLARI (2026 YIL - REAL) ============
+    "GPT-5.2 vs Gemini 3 vs Claude Opus 4.5: 2026 yil eng kuchli AI modellari",
     "GPT-5.2 Thinking: OpenAI ning yangi reasoning modeli qanday ishlaydi",
     "Gemini 3 Pro va Deep Think: Google ning eng yangi AI modellari",
     "Claude Opus 4.5: Anthropic ning coding va reasoning ustasi",
-    "Gemini 3 Flash Preview: Tezkor va arzon AI yechim 2025",
+    "Gemini 3 Flash Preview: Tezkor va arzon AI yechim 2026",
     "OpenAI o1 vs GPT-5.2: Mantiqiy fikrlash modellarini solishtirish",
     "Claude Sonnet 4.5 vs Claude Haiku 4.5: Qaysi biri sizga mos",
-    "AI modellarni tanlash 2025: Biznes ehtiyojlariga mos AI",
+    "AI modellarni tanlash 2026: Biznes ehtiyojlariga mos AI",
     "Fine-tuning vs RAG: Qaysi usul sizga mos?",
 
     
