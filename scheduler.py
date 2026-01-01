@@ -192,6 +192,19 @@ def generate_and_publish_post(topic=None, category=None):
                     print("✅ Telegram kanalga yuborildi!")
                 else:
                     print("⚠️ Telegram yuborishda muammo yuz berdi")
+                
+                # Push Notification yuborish
+                try:
+                    from app import notify_all_subscribers
+                    print("🔔 Push xabar yuborilmoqda...")
+                    push_count = notify_all_subscribers(
+                        title=f"🆕 Yangi: {new_post.title}",
+                        message=f"{selected_category} | O'qish uchun bosing!",
+                        url=post_url
+                    )
+                    print(f"✅ {push_count} ta obunachiga push yuborildi.")
+                except Exception as push_err:
+                     print(f"⚠️ Push xabar xatosi: {push_err}")
                     
                 return True
             else:
