@@ -1192,6 +1192,15 @@ def admin_portfolio_new():
         portfolio.slug = portfolio.generate_slug()
         db.session.commit()
         
+        # Telegram kanalga yuborish
+        if portfolio.is_published:
+            try:
+                from telegram_poster import send_portfolio_to_channel
+                send_portfolio_to_channel(portfolio)
+                print(f"✅ Portfolio '{portfolio.title}' Telegram kanalga yuborildi")
+            except Exception as e:
+                print(f"⚠️ Telegram yuborishda xato: {e}")
+        
         flash(f'"{portfolio.title}" muvaffaqiyatli qo\'shildi!', 'success')
         return redirect(url_for('admin_portfolio'))
     
