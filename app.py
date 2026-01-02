@@ -349,7 +349,7 @@ class Portfolio(db.Model):
     is_featured = db.Column(db.Boolean, default=False)
     is_published = db.Column(db.Boolean, default=True)
     # SEO fields
-    meta_description = db.Column(db.String(160))  # SEO tavsifi
+    meta_description = db.Column(db.Text)  # SEO tavsifi (uzun bo'lishi mumkin)
     meta_keywords = db.Column(db.String(250))  # SEO kalit so'zlar
     details = db.Column(db.Text)  # Batafsil ma'lumot (Markdown)
     features = db.Column(db.Text)  # Loyiha imkoniyatlari (vergul bilan ajratilgan)
@@ -2134,6 +2134,14 @@ def init_database():
                     print("✅ Service.price ustuni tekshirildi/qo'shildi")
                 except Exception as e:
                     print(f"⚠️ Service.price migration focus: {e}")
+
+                # Portfolio.meta_description ni TEXT ga o'zgartirish (160 belgidan kotta bo'lishi uchun)
+                try:
+                    conn.execute(text("ALTER TABLE portfolio ALTER COLUMN meta_description TYPE TEXT"))
+                    conn.commit()
+                    print("✅ Portfolio.meta_description ustuni TEXT ga o'zgartirildi")
+                except Exception as e:
+                    print(f"⚠️ Portfolio.meta_description migration: {e}")
             
         except Exception as e:
             print(f"⚠️ Database init final error: {e}")
