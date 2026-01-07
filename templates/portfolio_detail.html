@@ -11,24 +11,68 @@
 <meta property="og:title" content="{{ item.title }} - TrendoAI">
 <meta property="og:description" content="{{ item.description | truncate(160) }}">
 <meta property="og:image" content="{{ item.image_url }}">
-<meta property="og:type" content="article">
+<meta property="og:type" content="product">
 <meta property="product:category" content="{{ item.category }}">
+{% if item.price %}
+<meta property="product:price:amount" content="{{ item.price | replace('$', '') | replace(' ', '') }}">
+<meta property="product:price:currency" content="USD">
+{% endif %}
+
+<!-- JSON-LD Product Schema (Facebook Catalog Microdata) -->
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "Product",
+    "name": "{{ item.title }}",
+    "description": "{{ item.description | replace('"', '\\"') | truncate(500) }}",
+    "image": "{{ item.image_url }}",
+    "url": "https://trendoai.uz/portfolio/project/{{ item.slug }}",
+    "brand": {
+        "@type": "Brand",
+        "name": "TrendoAI"
+    },
+    "category": "{{ item.category }}",
+    {% if item.price %}
+    "offers": {
+        "@type": "Offer",
+        "price": "{{ item.price | replace('$', '') | replace(' ', '') }}",
+        "priceCurrency": "USD",
+        "availability": "https://schema.org/InStock",
+        "url": "https://trendoai.uz/portfolio/project/{{ item.slug }}"
+    },
+    {% endif %}
+    "sku": "portfolio_{{ item.id }}",
+    "mpn": "TRND-{{ item.id }}"
+}
+</script>
 
 <script>
-    fbq('track', 'ViewContent', {
+    // Facebook Pixel ViewContent tracking
+    var viewContentData = {
         content_name: '{{ item.title }}',
         content_category: '{{ item.category }}',
         content_ids: ['portfolio_{{ item.id }}'],
         content_type: 'product'
-    });
+    };
+    {% if item.price %}
+    viewContentData.value = {{ item.price | replace('$', '') | replace(' ', '') | int | default (0) }};
+    viewContentData.currency = 'USD';
+    {% endif %}
+    fbq('track', 'ViewContent', viewContentData);
 
     function trackAddToCart() {
-        fbq('track', 'AddToCart', {
+        var addToCartData = {
             content_name: '{{ item.title }}',
             content_category: '{{ item.category }}',
             content_ids: ['portfolio_{{ item.id }}'],
             content_type: 'product'
-        });
+        };
+        {% if item.price %}
+        addToCartData.value = {{ item.price | replace('$', '') | replace(' ', '') | int | default (0) }
+    };
+    addToCartData.currency = 'USD';
+    {% endif %}
+    fbq('track', 'AddToCart', addToCartData);
     }
 </script>
 {% endblock %}
