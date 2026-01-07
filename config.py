@@ -67,7 +67,7 @@ GA4_ID = os.getenv("GA4_ID")
 # Google Ads Remarketing (AW-XXXXXXXXXX formatida)
 GOOGLE_ADS_ID = os.getenv("GOOGLE_ADS_ID")
 # Facebook Pixel ID (faqat raqamlar)
-FACEBOOK_PIXEL_ID = os.getenv("FACEBOOK_PIXEL_ID", "1192818429057379")
+FACEBOOK_PIXEL_ID = os.getenv("FACEBOOK_PIXEL_ID", "886188897254491")
 
 # ========== PAGINATION ==========
 POSTS_PER_PAGE = 10
