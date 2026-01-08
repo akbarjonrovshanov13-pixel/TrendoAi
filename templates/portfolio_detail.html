@@ -55,7 +55,7 @@
         content_type: 'product'
     };
     {% if item.price %}
-    viewContentData.value = {{ item.price | replace('$', '') | replace(' ', '') | int | default (0) }};
+    viewContentData.value = {{ item.price | replace('$', '') | replace(' ', '') | int | default(0) }};};
     viewContentData.currency = 'USD';
     {% endif %}
     fbq('track', 'ViewContent', viewContentData);
@@ -68,7 +68,7 @@
             content_type: 'product'
         };
         {% if item.price %}
-        addToCartData.value = {{ item.price | replace('$', '') | replace(' ', '') | int | default (0) }
+        addToCartData.value = {{ item.price | replace('$', '') | replace(' ', '') | int | default(0) }};
     };
     addToCartData.currency = 'USD';
     {% endif %}
